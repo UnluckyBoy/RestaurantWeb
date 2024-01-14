@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.server.model.mapper.UserMapper">
+
+    <!-- ***当数据库中的字段信息与Bean对象的属性不一致时需要通过resultMap来映射,防止异常-用户信息Bean*** -->
+    <resultMap type="com.server.model.pojo.UserInfo" id="BaseInfoMap" autoMapping="true">
+        <result property="mId" column="uId"/>
+        <result property="mHead" column="uHead"/>
+        <result property="mName" column="uName"/>
+        <result property="mPassword" column="uPassword"/>
+        <result property="mSex" column="uSex"/>
+        <result property="mAccount" column="uAccount"/>
+        <result property="mPhone" column="uPhone"/>
+        <result property="mEmail" column="uEmail"/>
+        <result property="mGptNum" column="uGptNum"/>
+        <result property="mLevel" column="uLevel"/>
+        <result property="mStatus" column="uStatus"/>
+        <result property="mAddressIp" column="uAddressIp"/>
+    </resultMap>
+
+    <!--文章信息Bean-->
+<!--    <resultMap type="com.server.model.pojo.ArticleInfo" id="ArticleBaseMap" autoMapping="true">-->
+<!--        <result property="id" column="mId"/>-->
+<!--        <result property="title" column="mTitle"/>-->
+<!--        <result property="cover" column="mCover"/>-->
+<!--        <result property="description" column="mDescription"/>-->
+<!--        <result property="content" column="mContent"/>-->
+<!--        <result property="author" column="mAuthor"/>-->
+<!--        <result property="hot" column="mHot"/>-->
+<!--    </resultMap>-->
+
+    <!--用户信息处理逻辑-->
+    <!--账号查询-->
+    <select id="infoQuery" parameterType="java.util.HashMap" resultMap="BaseInfoMap">
+        select uId,
+               uHead,
+               uName,
+               uPassword,
+               uSex,
+               uAccount,
+               uPhone,
+               uEmail,
+               uGptNum,
+               uLevel,
+               uStatus,
+               uAddressIp
+        from server_user_info
+        <where>
+            <if test="account!=null">
+                uAccount=#{account}
+            </if>
+            <if test="password!=null">
+                and uPassword=#{password,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <!--登录-->
+    <select id="login" parameterType="java.util.HashMap" resultMap="BaseInfoMap">
+        select uId,
+               uHead,
+               uName,
+               uPassword,
+               uSex,
+               uAccount,
+               uPhone,
+               uEmail,
+               uGptNum,
+               uLevel,
+               uStatus,
+               uAddressIp
+        from server_user_info
+        <where>
+            <if test="account!=null">
+                uAccount=#{account,jdbcType=VARCHAR}
+            </if>
+            <if test="password!=null">
+                and uPassword=#{password,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <!--昵称搜索-->
+    <select id="fuzzyQuery" parameterType="String" resultMap="BaseInfoMap">
+        select uId,
+               uHead,
+               uName,
+               uPassword,
+               uSex,
+               uAccount,
+               uPhone,
+               uEmail,
+               uGptNum,
+               uLevel,
+               uStatus,
+               uAddressIp
+        from server_user_info
+        <where>
+            <if test="name!=null">
+                uName LIKE CONCAT(CONCAT('%', #{name}),'%')
+            </if>
+        </where>
+    </select>
+
+    <!--注册-->
+    <insert id="register" parameterType="java.util.HashMap">
+        insert into server_user_info
+            (uHead,uName,uAccount,uPassword,uSex) values (#{head},#{name},#{account},#{password},#{sex})
+    </insert>
+
+    <!--AI使用次数更新-->
+    <update id="upgptnumber" parameterType="java.util.HashMap">
+        update server_user_info
+       <set >
+           <if test="gptnum>=0">
+               uGptNum=#{gptnum}
+           </if>
+        </set>
+        <where>
+            <if test="account!=null">
+                uAccount=#{account,jdbcType=VARCHAR}
+            </if>
+            <if test="password!=null">
+                and uPassword=#{password,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </update>
+
+    <!--更新登录状态-->
+    <update id="fresh_status_login" parameterType="java.util.HashMap">
+        update server_user_info
+        <set >
+            <if test="status!=0">
+                uStatus=#{status},
+            </if>
+            <if test="addressIp!=null">
+                uAddressIp=#{addressIp}
+            </if>
+        </set>
+        <where>
+            <if test="account!=null">
+                uAccount=#{account,jdbcType=VARCHAR}
+            </if>
+            <if test="password!=null">
+                and uPassword=#{password,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </update>
+
+    <!--登出更新状态-->
+    <update id="fresh_status_logout" parameterType="java.util.HashMap">
+        update  server_user_info
+        <set >
+            <if test="status==0">
+                uStatus=#{status}
+            </if>
+        </set>
+        <where>
+            <if test="account!=null">
+                uAccount=#{account,jdbcType=VARCHAR}
+            </if>
+            <if test="password!=null">
+                and uPassword=#{password,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </update>
+
+    <!--更新头像-->
+    <update id="fresh_head" parameterType="java.util.HashMap">
+        update  server_user_info
+        <set >
+            <if test="head!=null">
+                uHead=#{head}
+            </if>
+        </set>
+        <where>
+            <if test="account!=null">
+                uAccount=#{account,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </update>
+
+<!--    &lt;!&ndash;文章内容处理逻辑&ndash;&gt;-->
+<!--    &lt;!&ndash;获取全部信息&ndash;&gt;-->
+<!--    <select id="get_all" resultType="com.server.model.pojo.ArticleInfo">-->
+<!--        select mId,-->
+<!--               mTitle,-->
+<!--               mCover,-->
+<!--               mDescription,-->
+<!--               mContent,-->
+<!--               mAuthor,-->
+<!--               mHot-->
+<!--        from server_article_info-->
+<!--    </select>-->
+</mapper>
