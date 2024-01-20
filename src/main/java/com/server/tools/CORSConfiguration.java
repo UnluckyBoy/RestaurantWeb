@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -45,7 +44,7 @@ public class CORSConfiguration extends WebMvcConfigurationSupport {
     @Bean
     public InternalResourceViewResolver viewResolver(){
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setPrefix("/WEB-INF/static/views/");
+        viewResolver.setPrefix("/static/views/");
         viewResolver.setSuffix(".jsp");
         viewResolver.setViewClass(JstlView.class);
         return viewResolver;
@@ -58,13 +57,11 @@ public class CORSConfiguration extends WebMvcConfigurationSupport {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String dirPath=System.getProperty("user.dir")+"/BackResource/";
-
+        System.out.println("头像路径:"+dirPath);
         //和页面有关的静态目录都放在项目的static目录下
-        registry.addResourceHandler("/WEB-INF/**").addResourceLocations("classpath:/WEB-INF/");
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/WEB-INF/");
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
         //其中getImage表示图片资源访问的前缀。"file:E:/MatrixProject/BackResource/"是服务器文件真实的存储路径
-        registry.addResourceHandler("/file/**")
-                .addResourceLocations("file:"+dirPath);//file:文件路径
+        registry.addResourceHandler("/**").addResourceLocations("file:"+dirPath);//file:文件路径
     }
-
-
 }

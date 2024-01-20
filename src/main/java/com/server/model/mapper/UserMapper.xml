@@ -14,22 +14,10 @@
         <result property="mAccount" column="uAccount"/>
         <result property="mPhone" column="uPhone"/>
         <result property="mEmail" column="uEmail"/>
-        <result property="mGptNum" column="uGptNum"/>
         <result property="mLevel" column="uLevel"/>
         <result property="mStatus" column="uStatus"/>
         <result property="mAddressIp" column="uAddressIp"/>
     </resultMap>
-
-    <!--文章信息Bean-->
-<!--    <resultMap type="com.server.model.pojo.ArticleInfo" id="ArticleBaseMap" autoMapping="true">-->
-<!--        <result property="id" column="mId"/>-->
-<!--        <result property="title" column="mTitle"/>-->
-<!--        <result property="cover" column="mCover"/>-->
-<!--        <result property="description" column="mDescription"/>-->
-<!--        <result property="content" column="mContent"/>-->
-<!--        <result property="author" column="mAuthor"/>-->
-<!--        <result property="hot" column="mHot"/>-->
-<!--    </resultMap>-->
 
     <!--用户信息处理逻辑-->
     <!--账号查询-->
@@ -42,11 +30,10 @@
                uAccount,
                uPhone,
                uEmail,
-               uGptNum,
                uLevel,
                uStatus,
                uAddressIp
-        from server_user_info
+        from user_info_data
         <where>
             <if test="account!=null">
                 uAccount=#{account}
@@ -67,11 +54,10 @@
                uAccount,
                uPhone,
                uEmail,
-               uGptNum,
                uLevel,
                uStatus,
                uAddressIp
-        from server_user_info
+        from user_info_data
         <where>
             <if test="account!=null">
                 uAccount=#{account,jdbcType=VARCHAR}
@@ -92,11 +78,10 @@
                uAccount,
                uPhone,
                uEmail,
-               uGptNum,
                uLevel,
                uStatus,
                uAddressIp
-        from server_user_info
+        from user_info_data
         <where>
             <if test="name!=null">
                 uName LIKE CONCAT(CONCAT('%', #{name}),'%')
@@ -106,13 +91,13 @@
 
     <!--注册-->
     <insert id="register" parameterType="java.util.HashMap">
-        insert into server_user_info
+        insert into user_info_data
             (uHead,uName,uAccount,uPassword,uSex) values (#{head},#{name},#{account},#{password},#{sex})
     </insert>
 
     <!--AI使用次数更新-->
     <update id="upgptnumber" parameterType="java.util.HashMap">
-        update server_user_info
+        update user_info_data
        <set >
            <if test="gptnum>=0">
                uGptNum=#{gptnum}
@@ -130,7 +115,7 @@
 
     <!--更新登录状态-->
     <update id="fresh_status_login" parameterType="java.util.HashMap">
-        update server_user_info
+        update user_info_data
         <set >
             <if test="status!=0">
                 uStatus=#{status},
@@ -151,7 +136,7 @@
 
     <!--登出更新状态-->
     <update id="fresh_status_logout" parameterType="java.util.HashMap">
-        update  server_user_info
+        update  user_info_data
         <set >
             <if test="status==0">
                 uStatus=#{status}
@@ -169,7 +154,7 @@
 
     <!--更新头像-->
     <update id="fresh_head" parameterType="java.util.HashMap">
-        update  server_user_info
+        update  user_info_data
         <set >
             <if test="head!=null">
                 uHead=#{head}
@@ -181,17 +166,4 @@
             </if>
         </where>
     </update>
-
-<!--    &lt;!&ndash;文章内容处理逻辑&ndash;&gt;-->
-<!--    &lt;!&ndash;获取全部信息&ndash;&gt;-->
-<!--    <select id="get_all" resultType="com.server.model.pojo.ArticleInfo">-->
-<!--        select mId,-->
-<!--               mTitle,-->
-<!--               mCover,-->
-<!--               mDescription,-->
-<!--               mContent,-->
-<!--               mAuthor,-->
-<!--               mHot-->
-<!--        from server_article_info-->
-<!--    </select>-->
 </mapper>
