@@ -15,4 +15,9 @@ import java.util.Map;
 public interface OrderService {
     public List<Object> orderQueryAll();
     public int getAllCount();
+    public int getTradingCount();
+    public int getNotTradingCount();
+    public int sumTradingPrice();
+    public int getNearMonthCount();//最近一个月订单数
+    public int getNearMonthTradingPrice();//最近一个月订单总额
 }

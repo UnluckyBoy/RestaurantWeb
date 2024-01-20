@@ -33,8 +33,39 @@
         from order_info_data
     </select>
 
+    <!--查询所有订单数，包括交易和未交易-->
     <select id="getAllCount" resultType="int">
         SELECT COUNT(*) from order_info_data
+    </select>
+
+    <!--查询交易订单数-->
+    <select id="getTradingCount" resultType="int">
+        SELECT COUNT(*) from order_info_data where mTradingType=1
+<!--        <where>-->
+<!--            <if test="mTradingType!=0">-->
+<!--                mTradingType=#{tradingType}-->
+<!--            </if>-->
+<!--        </where>-->
+    </select>
+    <!--查询未交易订单数-->
+    <select id="getNotTradingCount" resultType="int">
+        SELECT COUNT(*) from order_info_data where mTradingType=0
+    </select>
+    <!--有效订单总和-->
+    <select id="sumTradingPrice" resultType="int">
+        SELECT SUM(mTradingPrice) as TradingPriceSum from order_info_data where mTradingType=1
+    </select>
+    <!--最近一个月内的有效订单数-->
+    <select id="getNearMonthCount" resultType="int">
+        SELECT COUNT(*)
+        from order_info_data
+        where mCreateTime >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) and mTradingType=1
+    </select>
+    <!--最近一个月内的有效订单总额-->
+    <select id="getNearMonthTradingPrice" resultType="int">
+        SELECT SUM(mTradingPrice) as TradingPriceSum
+        from order_info_data
+        where mCreateTime >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) and mTradingType=1
     </select>
 
 </mapper>

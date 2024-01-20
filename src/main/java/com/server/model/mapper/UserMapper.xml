@@ -88,6 +88,14 @@
             </if>
         </where>
     </select>
+    <!--查询普通用户数-->
+    <select id="getUserCount" resultType="int">
+        select COUNT(*) from user_info_data where uLevel=0
+    </select>
+    <!--查询普通用户在线数-->
+    <select id="getUserOnlineCount" resultType="int">
+        select COUNT(*) from user_info_data where uLevel=0 and uStatus=1
+    </select>
 
     <!--注册-->
     <insert id="register" parameterType="java.util.HashMap">

@@ -29,4 +29,29 @@ public class OrderServiceIpml implements OrderService {
     public int getAllCount() {
         return orderMapper.getAllCount();
     }
+
+    @Override
+    public int getTradingCount() {
+        return orderMapper.getTradingCount();
+    }
+
+    @Override
+    public int getNotTradingCount() {
+        return orderMapper.getNotTradingCount();
+    }
+
+    @Override
+    public int sumTradingPrice() {
+        return orderMapper.sumTradingPrice();
+    }
+
+    @Override
+    public int getNearMonthCount() {
+        return orderMapper.getNearMonthCount();
+    }
+
+    @Override
+    public int getNearMonthTradingPrice() {
+        return orderMapper.getNearMonthTradingPrice();
+    }
 }

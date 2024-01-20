@@ -29,7 +29,7 @@ public class OrderController {
 
     private OrderInfo orderInfo;
 
-    @RequestMapping("/GetAll")
+    @RequestMapping("/GetAllOrder")
     public void Login(HttpServletRequest request, Model model, HttpSession session){
         //Map<String,Object> resultMap=new HashMap<>();
         List<Object> orderInfoList=new ArrayList<>();
@@ -38,8 +38,31 @@ public class OrderController {
     }
 
     @RequestMapping("/GetAllCount")
-    public void GetAllCount(HttpServletRequest request, Model model, HttpSession session){
+    public int GetAllCount(){
         int count=orderService.getAllCount();
         System.out.println("所有订单数:\t"+count);
+        return count;
     }
+
+    @RequestMapping("/GetTradingCount")
+    public int GetTradingCount(){
+        int count=orderService.getTradingCount();
+        System.out.println("交易订单数:\t"+count);
+        return count;
+    }
+    @RequestMapping("/GetNotTradingCount")
+    public int GetNotTradingCount(){
+        int count=orderService.getNotTradingCount();
+        System.out.println("取消订单数:\t"+count);
+        return count;
+    }
+//    @RequestMapping("/GetAllTypeCount")
+//    public Map GetAllTypeCount(){
+//        Map<String,Object> resultMap=new HashMap<>();
+//        resultMap.put("AllOrderCount",GetAllCount());
+//        resultMap.put("TradingOrderCount",GetTradingCount());
+//        resultMap.put("NotTradingOrderCount",GetNotTradingCount());
+//        System.out.println("订单数数据:\t"+resultMap.toString());
+//        return resultMap;
+//    }
 }

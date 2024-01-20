@@ -202,14 +202,42 @@
                 <div class="col-lg-3">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <span class="label label-success pull-right">月</span>
-                            <h5>收入</h5>
+                            <span class="label label-success pull-right">全年</span>
+                            <h5>总收入</h5>
                         </div>
                         <div class="ibox-content">
-                            <h1 class="no-margins">40 886,200</h1>
-                            <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
-                            </div>
-                            <small>总收入</small>
+                            <h1 class="no-margins">${order_message.TradingPrice}</h1>
+<%--                            <div class="stat-percent font-bold text-success">100%<i class="fa fa-bolt"></i>--%>
+<%--                            </div>--%>
+<%--                            <small>测试</small>--%>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <span class="label label-primary pull-right">全年</span>
+                            <h5>用户数</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">${order_message.UserCount}</h1>
+<%--                            <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i>--%>
+<%--                            </div>--%>
+<%--                            <small>新访客</small>--%>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <span class="label label-danger pull-right">当前时段</span>
+                            <h5>在线用户</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">${order_message.OnlineCount}</h1>
+<%--                            <div class="stat-percent font-bold text-danger">38% <i class="fa fa-level-down"></i>--%>
+<%--                            </div>--%>
+<%--                            <small>12月</small>--%>
                         </div>
                     </div>
                 </div>
@@ -217,41 +245,13 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <span class="label label-info pull-right">全年</span>
-                            <h5>订单</h5>
+                            <h5>总订单</h5>
                         </div>
                         <div class="ibox-content">
-                            <h1 class="no-margins">275,800</h1>
-                            <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i>
+                            <h1 class="no-margins">${order_message.AllOrderCount}</h1>
+                            <div class="stat-percent font-bold text-info">${order_message.Valid}<i class="fa fa-level-up"></i>
                             </div>
-                            <small>新订单</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <span class="label label-primary pull-right">今天</span>
-                            <h5>访客</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h1 class="no-margins">106,120</h1>
-                            <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i>
-                            </div>
-                            <small>新访客</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <span class="label label-danger pull-right">最近一个月</span>
-                            <h5>活跃用户</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <h1 class="no-margins">80,600</h1>
-                            <div class="stat-percent font-bold text-danger">38% <i class="fa fa-level-down"></i>
-                            </div>
-                            <small>12月</small>
+                            <small>有效订单</small>
                         </div>
                     </div>
                 </div>
@@ -263,9 +263,9 @@
                             <h5>订单</h5>
                             <div class="pull-right">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-xs btn-white active">天</button>
-                                    <button type="button" class="btn btn-xs btn-white">月</button>
-                                    <button type="button" class="btn btn-xs btn-white">年</button>
+<%--                                    <button type="button" class="btn btn-xs btn-white active">天</button>--%>
+<%--                                    <button type="button" class="btn btn-xs btn-white">月</button>--%>
+<%--                                    <button type="button" class="btn btn-xs btn-white">年</button>--%>
                                 </div>
                             </div>
                         </div>
@@ -279,30 +279,30 @@
                                 <div class="col-lg-3">
                                     <ul class="stat-list">
                                         <li>
-                                            <h2 class="no-margins">2,346</h2>
+                                            <h2 class="no-margins">${order_message.AllOrderCount}</h2>
                                             <small>订单总数</small>
-                                            <div class="stat-percent">48% <i class="fa fa-level-up text-navy"></i>
-                                            </div>
+<%--                                            <div class="stat-percent">48% <i class="fa fa-level-up text-navy"></i>--%>
+<%--                                            </div>--%>
                                             <div class="progress progress-mini">
-                                                <div style="width: 48%;" class="progress-bar"></div>
+                                                <div style="width: 100%;" class="progress-bar"></div>
                                             </div>
                                         </li>
                                         <li>
-                                            <h2 class="no-margins ">4,422</h2>
+                                            <h2 class="no-margins ">${order_message.NearMonthCount}</h2>
                                             <small>最近一个月订单</small>
-                                            <div class="stat-percent">60% <i class="fa fa-level-down text-navy"></i>
+                                            <div class="stat-percent">${order_message.NearMonthValid}<i class="fa fa-level-down text-navy"></i>
                                             </div>
                                             <div class="progress progress-mini">
-                                                <div style="width: 60%;" class="progress-bar"></div>
+                                                <div style="width: ${order_message.NearMonthValid};" class="progress-bar"></div>
                                             </div>
                                         </li>
                                         <li>
-                                            <h2 class="no-margins ">9,180</h2>
+                                            <h2 class="no-margins ">${order_message.NearMonthTradingPrice}</h2>
                                             <small>最近一个月销售额</small>
-                                            <div class="stat-percent">22% <i class="fa fa-bolt text-navy"></i>
+                                            <div class="stat-percent">${order_message.NearPriceValid}<i class="fa fa-bolt text-navy"></i>
                                             </div>
                                             <div class="progress progress-mini">
-                                                <div style="width: 22%;" class="progress-bar"></div>
+                                                <div style="width: ${order_message.NearPriceValid};" class="progress-bar"></div>
                                             </div>
                                         </li>
                                     </ul>

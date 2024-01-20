@@ -50,8 +50,14 @@ public class UserServiceIpml implements UserService {
         return userMapper.fresh_head(map);
     }
 
-//    @Override
-//    public List<ArticleInfo> get_all() {
-//        return userMapper.get_all();
-//    }
+    @Override
+    public int getUserCount() {
+        return userMapper.getUserCount();
+    }
+
+    @Override
+    public int getUserOnlineCount() {
+        return userMapper.getUserOnlineCount();
+    }
+
 }

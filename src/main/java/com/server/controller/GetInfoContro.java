@@ -1,5 +1,6 @@
 package com.server.controller;
 
+import com.server.service.OrderService;
 import com.server.tools.*;
 import com.server.model.pojo.UserInfo;
 import com.server.service.UserService;
@@ -14,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.DecimalFormat;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +40,8 @@ public class GetInfoContro {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private OrderService orderService;
 
     /**
      * 在RedisConfig文件中配置了redisTemplate的序列化
@@ -373,15 +378,59 @@ public class GetInfoContro {
         tempMap.put("phone",temp.getmPhone());
         tempMap.put("email",temp.getmEmail());
         //tempMap.put("gptNum",temp.getmGptNum());
-        if(temp.getmLevel()==9){
+        if(temp.getmLevel()==1){
             tempMap.put("level","管理员");
         }else{
             tempMap.put("level","用户");
         }
         tempMap.put("status",temp.getmStatus());
         tempMap.put("ip",temp.getmAddressIp());
-
         return tempMap;
+    }
+
+    /**
+     * 订单数据逻辑
+     * @return
+     */
+    public Map OrderDataMap(){
+        Map<String,Object> orderMap=new HashMap<>();
+        int allOrderCount=orderService.getAllCount();//全部订单
+        int tradingOrderCount=orderService.getTradingCount();//交易订单总数
+        int notTradingOrderCount=orderService.getNotTradingCount();//未交易订单总数
+        String valid=ComputePercent((tradingOrderCount/(float)allOrderCount)*100);//有效订单百分比
+        int sumTradingPrice=orderService.sumTradingPrice();//金额总和
+        int nearMonthCount=orderService.getNearMonthCount();//近一月订单
+        int nearMonthTradingPrice=orderService.getNearMonthTradingPrice();//近一月销售金额
+        String nearMonthValid=ComputePercent((nearMonthCount/(float)tradingOrderCount)*100);//近一月有效订单百分比
+        String nearPriceValid=ComputePercent((nearMonthTradingPrice/(float)sumTradingPrice)*100);//近一月有效金额百分比
+
+        orderMap.put("AllOrderCount",allOrderCount);
+        orderMap.put("TradingOrderCount",tradingOrderCount);
+        orderMap.put("NotTradingOrderCount",notTradingOrderCount);
+        orderMap.put("TradingPrice",sumTradingPrice);
+        orderMap.put("Valid",valid);
+        orderMap.put("UserCount",userService.getUserCount());
+        orderMap.put("OnlineCount",userService.getUserOnlineCount());
+        orderMap.put("NearMonthCount",nearMonthCount);
+        orderMap.put("NearMonthTradingPrice",nearMonthTradingPrice);
+        orderMap.put("NearMonthValid",nearMonthValid);
+        orderMap.put("NearPriceValid",nearPriceValid);
+        return orderMap;
+    }
+
+    /**
+     * 百分比计算
+     * @param number
+     * @return
+     */
+    public String ComputePercent(float number){
+        /**
+         * 创建DecimalFormat对象
+         * 并使用格式字符串#.00指定保留两位小数
+         */
+        DecimalFormat df = new DecimalFormat("#.00");
+        String formatNum = df.format(number)+"%";
+        return formatNum;
     }
 
     /**
@@ -389,9 +438,8 @@ public class GetInfoContro {
      * @param password
      * @return
      */
-    @RequestMapping("/test")
-    public Map Test(@RequestParam String password){
-
+    @RequestMapping("/test_password")
+    public Map TestPassword(@RequestParam String password){
         Map<String,String> resultMap=new HashMap<>();
         //对密码加密
         String mEncryPwd = Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password);
@@ -399,14 +447,26 @@ public class GetInfoContro {
         System.out.println("\nServer_running___"+resultMap.toString());
         return resultMap;
     }
+    @RequestMapping("/test")
+    public void Test(){
+        float valid=(2/(float)3)*100;
+        DecimalFormat df = new DecimalFormat("#.00");//创建DecimalFormat对象,并使用格式字符串#.00指定保留两位小数
+        String formattedValue = df.format(valid);
+        System.out.println("百分比:"+formattedValue);
+    }
 
     @RequestMapping("/IndexPage")
     public String IndexPage(HttpServletRequest request,HttpSession session,Model model){
+        //Map<String,Object> resultMap=new HashMap<>();
         //HttpSession session = request.getSession();
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
             System.out.println("用户已登录:\t"+session.getAttribute("current_user"));
             model.addAttribute("message", session.getAttribute("current_user"));
+            System.out.println("主页消息message:\t"+model.getAttribute("message"));
+
+            model.addAttribute("order_message",OrderDataMap());
+            System.out.println("主页订单消息order_message:\t"+model.getAttribute("order_message"));
             return "index";
         } else {
             // Session为空或不包含"userId"属性，表示用户未登录
