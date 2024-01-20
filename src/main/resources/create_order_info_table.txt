@@ -1,0 +1,12 @@
+create table order_info_data(
+`mId` bigint(20)  not null auto_increment PRIMARY KEY comment '主键',
+`mTitle` varchar(255) comment '订单名',
+`mContent` varchar(25) comment '订单内容',
+`mOrder` varchar(25) comment '订单用户',
+`mShopper` varchar(25) comment '店铺',
+`mTradingPrice` int DEFAULT 0 comment '交易金额',
+`mCreateTime` datetime comment '创建时间',
+`mEditor` varchar(30) DEFAULT null comment '订单修改者',
+`mEditTime` datetime DEFAULT null comment '订单修改时间',
+`mTradingType` int DEFAULT 0 comment '交易状态：0为未成功，1为成功'
+);

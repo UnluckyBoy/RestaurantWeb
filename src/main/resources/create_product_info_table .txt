@@ -1,0 +1,9 @@
+create table product_info_data(
+`pId` bigint(20)  not null auto_increment PRIMARY KEY comment '主键',
+`pName` varchar(255) comment '菜单名',
+`pIcon` varchar(255) DEFAULT '/ProductIcon/defalut.png' comment '商品图片',
+`pDescription` varchar(25) comment '菜单描述',
+`pType` varchar(25) comment '菜单类别',
+`pShopper` varchar(25) comment '店铺',
+`pPrice` int DEFAULT 0 comment '价格'
+);

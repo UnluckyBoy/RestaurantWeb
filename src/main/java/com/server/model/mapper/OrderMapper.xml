@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.server.model.mapper.OrderMapper">
+    <!-- ***当数据库中的字段信息与Bean对象的属性不一致时需要通过resultMap来映射,防止异常-用户信息Bean*** -->
+<!--    <resultMap type="com.server.model.pojo.UserInfo" id="BaseInfoMap" autoMapping="true">-->
+<!--        <result property="mId" column="mId"/>-->
+<!--        <result property="mTitle" column="mTitle"/>-->
+<!--        <result property="mContent" column="mContent"/>-->
+<!--        <result property="mOrder" column="mOrder"/>-->
+<!--        <result property="mShopper" column="mShopper"/>-->
+<!--        <result property="mTradingPrice" column="mTradingPrice"/>-->
+<!--        <result property="mCreateTime" column="mCreateTime"/>-->
+<!--        <result property="mEditor" column="mEditor"/>-->
+<!--        <result property="mEditTime" column="mEditTime"/>-->
+<!--        <result property="mTradingType" column="mTradingType"/>-->
+<!--    </resultMap>-->
+
+    <!--订单信息处理逻辑-->
+    <!--查询所有-->
+    <select id="orderQueryAll" resultType="com.server.model.pojo.OrderInfo">
+        select mId,
+        mTitle,
+        mContent,
+        mOrder,
+        mShopper,
+        mTradingPrice,
+        DATE_FORMAT(mCreateTime, "%Y-%m-%d %H:%i:%s") as mCreateTime,
+        mEditor,
+        DATE_FORMAT(mEditTime, "%Y-%m-%d %H:%i:%s") as mEditTime,
+        mTradingType
+        from order_info_data
+    </select>
+
+    <select id="getAllCount" resultType="int">
+        SELECT COUNT(*) from order_info_data
+    </select>
+
+</mapper>

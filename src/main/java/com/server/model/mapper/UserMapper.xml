@@ -95,24 +95,6 @@
             (uHead,uName,uAccount,uPassword,uSex) values (#{head},#{name},#{account},#{password},#{sex})
     </insert>
 
-    <!--AI使用次数更新-->
-    <update id="upgptnumber" parameterType="java.util.HashMap">
-        update user_info_data
-       <set >
-           <if test="gptnum>=0">
-               uGptNum=#{gptnum}
-           </if>
-        </set>
-        <where>
-            <if test="account!=null">
-                uAccount=#{account,jdbcType=VARCHAR}
-            </if>
-            <if test="password!=null">
-                and uPassword=#{password,jdbcType=VARCHAR}
-            </if>
-        </where>
-    </update>
-
     <!--更新登录状态-->
     <update id="fresh_status_login" parameterType="java.util.HashMap">
         update user_info_data

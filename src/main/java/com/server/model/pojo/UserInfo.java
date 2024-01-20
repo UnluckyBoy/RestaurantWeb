@@ -11,14 +11,13 @@ public class UserInfo implements Serializable {
     private String mAccount;
     private String mPhone;
     private String mEmail;
-    private int mGptNum;
     private int mLevel;
     private int mStatus;
     private String mAddressIp;
 
 
     public UserInfo(int mId,String mHead,String mName,String mPassword,
-                    String mSex,String mAccount,String mPhone,String mEmail,int mGptNum,int mLevel) {
+                    String mSex,String mAccount,String mPhone,String mEmail,int mLevel) {
         this.mId = mId;
         this.mHead = mHead;
         this.mName = mName;
@@ -27,7 +26,6 @@ public class UserInfo implements Serializable {
         this.mAccount = mAccount;
         this.mPhone = mPhone;
         this.mEmail = mEmail;
-        this.mGptNum = mGptNum;
         this.mLevel = mLevel;
     }
 
@@ -93,14 +91,6 @@ public class UserInfo implements Serializable {
 
     public void setmEmail(String mEmail) {
         this.mEmail = mEmail;
-    }
-
-    public int getmGptNum() {
-        return mGptNum;
-    }
-
-    public void setmGptNum(int mGptNum) {
-        this.mGptNum = mGptNum;
     }
 
     public int getmLevel() {

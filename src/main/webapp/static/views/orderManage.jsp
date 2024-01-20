@@ -32,12 +32,17 @@
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
 
-                    <div class="dropdown profile-element"> <span>
-                            <img alt="image" class="img-circle" src="../img/profile_small.jpg" />
-                             </span>
+                    <div class="dropdown profile-element">
+                        <span>
+                            <img alt="image" class="img-circle" src="http://localhost:8080${message.head}"/>
+                        </span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="index.jsp#">
-                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Beaut-zihan</strong>
-                             </span> <span class="text-muted text-xs block">超级管理员 <b class="caret"></b></span> </span>
+                                <span class="clear">
+                                    <span class="block m-t-xs"> <strong class="font-bold">${message.name}</strong>
+                                    </span>
+                                    <span class="text-muted text-xs block">${message.level} <b class="caret"></b>
+                                    </span>
+                                </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
                             <li><a href="">修改头像</a>
@@ -171,7 +176,7 @@
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
                         <span class="m-r-sm text-muted welcome-message"><a href="/UserInfo/IndexPage" title="返回首页">
-                            <i class="fa fa-home"></i></a>欢迎使用
+                            <i class="fa fa-home"></i></a>${message.name} 欢迎使用
                         </span>
                     </li>
                     <li>

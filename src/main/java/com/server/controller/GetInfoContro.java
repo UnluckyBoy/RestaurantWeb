@@ -44,7 +44,6 @@ public class GetInfoContro {
      */
     @Autowired
     private RedisTemplate redisTemplate;
-
     private UserInfo mUser;
     //private List<UserInfo> mListUser;
     private static String PASSWORD_EncryKEY = "EncryptionKey_By-WuMing";//自定义密钥:EncryptionKey_By-WuMing
@@ -385,8 +384,6 @@ public class GetInfoContro {
         return tempMap;
     }
 
-
-
     /**
      * 测试加密
      * @param password
@@ -430,7 +427,11 @@ public class GetInfoContro {
     }
 
     @RequestMapping("/OrderManagerPage")
-    public String OrderManagerPage(){
+    public String OrderManagerPage(HttpServletRequest request,HttpSession session,Model model){
+        if (session != null && session.getAttribute("current_user") != null) {
+            // Session不为空且包含"userId"属性，表示用户已登录
+            model.addAttribute("message", session.getAttribute("current_user"));
+        }
         return "orderManage";
     }
 
@@ -489,7 +490,7 @@ public class GetInfoContro {
 
                     session.setAttribute("current_user", resultMap);
                     //model.addAttribute("message", resultMap);
-                    return "redirect:/UserInfo/IndexPage";
+                    return "redirect:/UserInfo/IndexPage";//重定向到主页
                 }else{
                     resultMap.put("result","error");
                     return "login";

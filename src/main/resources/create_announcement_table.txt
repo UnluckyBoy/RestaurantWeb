@@ -1,0 +1,7 @@
+create table announcement_data(
+`aId` bigint(20)  not null auto_increment PRIMARY KEY comment '主键',
+`aTitle` varchar(255) comment '公告主题',
+`aContent` varchar(25) comment '公告内容描述',
+`aPublisher` varchar(25) comment '公告发布人',
+`aCreateTime` datetime DEFAULT null comment '发布时间'
+);
