@@ -17,17 +17,15 @@
     <meta name="renderer" content="webkit">
 
     <title>私房菜后台管理</title>
-    <link href="../css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
-    <link href="../font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
-
-    <!-- Morris -->
-    <link href="../css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-
+    <link href="../staticRes/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <!--图标库-->
+    <link href="../staticRes/fontawesome_5.15.4/css/fontawesome.css" rel="stylesheet">
+    <link href="../staticRes/fontawesome_5.15.4/css/brands.css" rel="stylesheet">
+    <link href="../staticRes/fontawesome_5.15.4/css/solid.css" rel="stylesheet">
     <!-- Gritter -->
-    <link href="../js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
-
-    <link href="../css/animate.css" rel="stylesheet">
-    <link href="../css/style.css?v=2.2.0" rel="stylesheet">
+    <link href="../staticRes/js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    <link href="../staticRes/css/animate.css" rel="stylesheet">
+    <link href="../staticRes/css/style.css?v=2.2.0" rel="stylesheet">
 
 </head>
 
@@ -122,7 +120,8 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="index.jsp#"><i class="fa fa-desktop"></i> <span class="nav-label">页面</span></a>
+                    <a href="index.jsp#"><i class="fas fa-address-card"></i> <span class="nav-label">个人信息</span>
+                        <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="">联系人</a>
                         </li>
@@ -176,14 +175,9 @@
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-                <div class="navbar-header">
-                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="index.html#"><i class="fa fa-bars"></i> </a>
-                    <form role="search" class="navbar-form-custom" method="post" action="search_results.html">
-                        <div class="form-group">
-                            <input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search" id="top-search">
-                        </div>
-                    </form>
-                </div>
+<%--                <div class="navbar-header">--%>
+<%--                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="/UserInfo/IndexPage"><i class="fas fa-desktop"></i> </a>--%>
+<%--                </div>--%>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
                         <span class="m-r-sm text-muted welcome-message">
@@ -209,9 +203,6 @@
                         </div>
                         <div class="ibox-content">
                             <h1 class="no-margins">&yen; ${order_message.TradingPrice}</h1>
-<%--                            <div class="stat-percent font-bold text-success">100%<i class="fa fa-bolt"></i>--%>
-<%--                            </div>--%>
-<%--                            <small>测试</small>--%>
                         </div>
                     </div>
                 </div>
@@ -223,9 +214,6 @@
                         </div>
                         <div class="ibox-content">
                             <h1 class="no-margins">${order_message.UserCount}</h1>
-<%--                            <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i>--%>
-<%--                            </div>--%>
-<%--                            <small>新访客</small>--%>
                         </div>
                     </div>
                 </div>
@@ -237,9 +225,6 @@
                         </div>
                         <div class="ibox-content">
                             <h1 class="no-margins">${order_message.OnlineCount}</h1>
-<%--                            <div class="stat-percent font-bold text-danger">38% <i class="fa fa-level-down"></i>--%>
-<%--                            </div>--%>
-<%--                            <small>12月</small>--%>
                         </div>
                     </div>
                 </div>
@@ -336,7 +321,6 @@
                                         <table class="table table-hover margin bottom">
                                             <thead>
                                             <tr>
-<%--                                                <th style="width: 1%" class="text-center">序号</th>--%>
                                                 <th>序号</th>
                                                 <th>商品</th>
                                                 <th class="text-center">类别</th>
@@ -346,65 +330,15 @@
                                             <tbody>
                                             <c:forEach var="orderlist" items="${order_message.AllTradingList}">
                                                 <tr>
-<%--                                                    <td class="text-center">${orderlist.id}</td>--%>
                                                     <td>${orderlist.id}</td>
                                                     <td>${orderlist.pName}</td>
                                                     <td class="text-center small">${orderlist.pType}</td>
                                                     <td class="text-center"><span class="label label-primary">&yen;${orderlist.mTradingPrice}</span></td>
                                                 </tr>
                                             </c:forEach>
-                                            <%--                                            <tr>--%>
-<%--                                                <td class="text-center">1</td>--%>
-<%--                                                <td>防盗门</td>--%>
-<%--                                                <td class="text-center small">2014.9.15</td>--%>
-<%--                                                <td class="text-center"><span class="label label-primary">&yen;483.00</span>--%>
-<%--                                                </td>--%>
-
-<%--                                            </tr>--%>
-<%--                                            <tr>--%>
-<%--                                                <td class="text-center">2</td>--%>
-<%--                                                <td>衣柜</td>--%>
-<%--                                                <td class="text-center small">2014.9.15</td>--%>
-<%--                                                <td class="text-center">--%>
-<%--                                                    <span class="label label-primary">&yen;327.00</span>--%>
-<%--                                                </td>--%>
-
-<%--                                            </tr>--%>
-<%--                                            <tr>--%>
-<%--                                                <td class="text-center">3</td>--%>
-<%--                                                <td>防盗门</td>--%>
-<%--                                                <td class="text-center small">2014.9.15</td>--%>
-<%--                                                <td class="text-center"><span class="label label-warning">&yen;125.00</span>--%>
-<%--                                                </td>--%>
-
-<%--                                            </tr>--%>
-<%--                                            <tr>--%>
-<%--                                                <td class="text-center">4</td>--%>
-<%--                                                <td>橱柜</td>--%>
-<%--                                                <td class="text-center small">2014.9.15</td>--%>
-<%--                                                <td class="text-center"><span class="label label-primary">&yen;344.00</span>--%>
-<%--                                                </td>--%>
-<%--                                            </tr>--%>
-<%--                                            <tr>--%>
-<%--                                                <td class="text-center">5</td>--%>
-<%--                                                <td>手机</td>--%>
-<%--                                                <td class="text-center small">2014.9.15</td>--%>
-<%--                                                <td class="text-center"><span class="label label-primary">&yen;235.00</span>--%>
-<%--                                                </td>--%>
-<%--                                            </tr>--%>
-<%--                                            <tr>--%>
-<%--                                                <td class="text-center">6</td>--%>
-<%--                                                <td>显示器</td>--%>
-<%--                                                <td class="text-center small">2014.9.15</td>--%>
-<%--                                                <td class="text-center"><span class="label label-primary">&yen;100.00</span>--%>
-<%--                                                </td>--%>
-<%--                                            </tr>--%>
                                             </tbody>
                                         </table>
                                     </div>
-<%--                                    <div class="col-lg-6">--%>
-<%--                                        <div id="world-map" style="height: 300px;"></div>--%>
-<%--                                    </div>--%>
                                 </div>
                             </div>
                         </div>
@@ -416,46 +350,38 @@
 </div>
 
 <!-- Mainly scripts -->
-<script src="../js/jquery-2.1.1.min.js"></script>
-<script src="../js/bootstrap.min.js?v=3.4.0"></script>
-<script src="../js/plugins/metisMenu/jquery.metisMenu.js"></script>
-<script src="../js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
+<script src="../staticRes/js/jquery-2.1.1.min.js"></script>
+<script src="../staticRes/js/bootstrap.min.js?v=3.4.0"></script>
+<script src="../staticRes/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="../staticRes/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <!-- Custom and plugin javascript -->
-<script src="../js/hplus.js?v=2.2.0"></script>
-<script src="../js/plugins/pace/pace.min.js"></script>
-
+<script src="../staticRes/js/hplus.js?v=2.2.0"></script>
+<script src="../staticRes/js/plugins/pace/pace.min.js"></script>
 <!-- Flot -->
-<script src="../js/plugins/flot/jquery.flot.js"></script>
-<script src="../js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-<script src="../js/plugins/flot/jquery.flot.spline.js"></script>
-<script src="../js/plugins/flot/jquery.flot.resize.js"></script>
-<script src="../js/plugins/flot/jquery.flot.pie.js"></script>
-<script src="../js/plugins/flot/jquery.flot.symbol.js"></script>
+<script src="../staticRes/js/plugins/flot/jquery.flot.js"></script>
+<script src="../staticRes/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+<script src="../staticRes/js/plugins/flot/jquery.flot.spline.js"></script>
+<script src="../staticRes/js/plugins/flot/jquery.flot.resize.js"></script>
+<script src="../staticRes/js/plugins/flot/jquery.flot.pie.js"></script>
+<script src="../staticRes/js/plugins/flot/jquery.flot.symbol.js"></script>
 
 <!-- Peity -->
-<script src="../js/plugins/peity/jquery.peity.min.js"></script>
-<script src="../js/demo/peity-demo.js"></script>
-
+<script src="../staticRes/js/plugins/peity/jquery.peity.min.js"></script>
+<script src="../staticRes/js/demo/peity-demo.js"></script>
 <!-- Custom and plugin javascript -->
-<script src="../js/hplus.js?v=2.2.0"></script>
-<script src="../js/plugins/pace/pace.min.js"></script>
-
+<script src="../staticRes/js/hplus.js?v=2.2.0"></script>
+<script src="../staticRes/js/plugins/pace/pace.min.js"></script>
 <!-- jQuery UI -->
-<script src="../js/plugins/jquery-ui/jquery-ui.min.js"></script>
-
+<script src="../staticRes/js/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Jvectormap -->
-<script src="../js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="../js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-
+<script src="../staticRes/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="../staticRes/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
 <!-- EayPIE -->
-<script src="../js/plugins/easypiechart/jquery.easypiechart.js"></script>
-
+<script src="../staticRes/js/plugins/easypiechart/jquery.easypiechart.js"></script>
 <!-- Sparkline -->
-<script src="../js/plugins/sparkline/jquery.sparkline.min.js"></script>
-
+<script src="../staticRes/js/plugins/sparkline/jquery.sparkline.min.js"></script>
 <!-- Sparkline demo data  -->
-<script src="../js/demo/sparkline-demo.js"></script>
+<script src="../staticRes/js/demo/sparkline-demo.js"></script>
 
 <style>
     .copyrights{text-indent:-9999px;height:0;line-height:0;font-size:0;overflow:hidden;}

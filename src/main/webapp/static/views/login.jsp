@@ -12,10 +12,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="renderer" content="webkit">
 
     <title>阿婆私房菜后台管理- 登录</title>
-    <link href="../css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
-    <link href="../font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
-    <link href="../css/animate.css" rel="stylesheet">
-    <link href="../css/style.css?v=2.2.0" rel="stylesheet">
+    <link href="../staticRes/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="../staticRes/font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
+    <link href="../staticRes/css/animate.css" rel="stylesheet">
+    <link href="../staticRes/css/style.css?v=2.2.0" rel="stylesheet">
 </head>
 
 <body class="gray-bg">
@@ -42,8 +42,8 @@
     </div>
 </div>
 <!-- Mainly scripts -->
-<script src="../js/jquery-2.1.1.min.js"></script>
-<script src="../js/bootstrap.min.js?v=3.4.0"></script>
+<script src="../staticRes/js/jquery-2.1.1.min.js"></script>
+<script src="../staticRes/js/bootstrap.min.js?v=3.4.0"></script>
 </body>
 
 </html>

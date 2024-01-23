@@ -2,6 +2,7 @@ package com.server.controller;
 
 import com.server.model.pojo.AllTradingView;
 import com.server.model.pojo.MonthCountView;
+import com.server.model.pojo.OrderInfo;
 import com.server.service.OrderService;
 import com.server.tools.*;
 import com.server.model.pojo.UserInfo;
@@ -420,6 +421,7 @@ public class GetInfoContro {
         orderMap.put("NearMonAllTrading",getMonAllTradingData(false));//月全订单
         orderMap.put("NearMonValidTrading",getMonAllTradingData(true));//月有效订单
         orderMap.put("AllTradingList",orderService.getAllTradingView());
+        orderMap.put("AllOrderList",orderService.orderQueryAll());
         return orderMap;
     }
 
@@ -480,15 +482,6 @@ public class GetInfoContro {
         return resultList;
     }
 
-    public List<AllTradingView> addSerial_Number(List<AllTradingView> list){
-        //List
-        int num=list.size();
-        for (int i=0;i<num;i++){
-
-        }
-        return null;
-    }
-
     /**
      * 测试加密
      * @param password
@@ -511,8 +504,17 @@ public class GetInfoContro {
         System.out.println("百分比:"+formattedValue);
 
         //System.out.println("月全订单数据:"+getMonAllTradingData().toString());
+
+//        orderMap.put("AllTradingList",orderService.getAllTradingView());
+//        orderMap.put("AllOrderList",orderService.orderQueryAll());
+        List<AllTradingView> test1=orderService.getAllTradingView();
+        List<OrderInfo> test2=orderService.orderQueryAll();
+        System.out.println("test1:"+test1.size()+"\t"+test1.toString());
+        System.out.println("test2:"+test2.size()+"\t"+test2.toString());
+
 //        Map<String,Object> testMap=new HashMap<>();
-//        testMap.put("test",orderService.getAllTradingView());
+//        testMap.put("AllTradingList",orderService.getAllTradingView());
+//        testMap.put("AllOrderList",orderService.orderQueryAll());
 //        System.out.println("testMap:"+testMap.toString());
 
         //生成订单
@@ -530,9 +532,9 @@ public class GetInfoContro {
             System.out.println("用户已登录:\t"+session.getAttribute("current_user"));
             model.addAttribute("message", session.getAttribute("current_user"));
             System.out.println("主页消息message:\t"+model.getAttribute("message"));
-
             model.addAttribute("order_message",OrderDataMap());
             System.out.println("主页订单消息order_message:\t"+model.getAttribute("order_message"));
+            session.setAttribute("session_message",model.getAttribute("order_message"));
             return "index";
         } else {
             // Session为空或不包含"userId"属性，表示用户未登录
@@ -557,6 +559,8 @@ public class GetInfoContro {
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
             model.addAttribute("message", session.getAttribute("current_user"));
+            model.addAttribute("order_message", session.getAttribute("session_message"));
+            System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("message"));
         }
         return "orderManage";
     }
