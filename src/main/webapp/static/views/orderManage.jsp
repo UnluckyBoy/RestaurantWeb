@@ -155,9 +155,9 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href=""><i class="fa fa-comments"></i> <span class="nav-label">即时通讯</span><span class="label label-danger pull-right">New</span></a>
-                </li>
+<%--                <li>--%>
+<%--                    <a href=""><i class="fa fa-comments"></i> <span class="nav-label">即时通讯</span><span class="label label-danger pull-right">New</span></a>--%>
+<%--                </li>--%>
             </ul>
 
         </div>

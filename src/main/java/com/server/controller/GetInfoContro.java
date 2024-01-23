@@ -1,5 +1,7 @@
 package com.server.controller;
 
+import com.server.model.pojo.AllTradingView;
+import com.server.model.pojo.MonthCountView;
 import com.server.service.OrderService;
 import com.server.tools.*;
 import com.server.model.pojo.UserInfo;
@@ -16,10 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.DecimalFormat;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -415,6 +417,9 @@ public class GetInfoContro {
         orderMap.put("NearMonthTradingPrice",nearMonthTradingPrice);
         orderMap.put("NearMonthValid",nearMonthValid);
         orderMap.put("NearPriceValid",nearPriceValid);
+        orderMap.put("NearMonAllTrading",getMonAllTradingData(false));//月全订单
+        orderMap.put("NearMonValidTrading",getMonAllTradingData(true));//月有效订单
+        orderMap.put("AllTradingList",orderService.getAllTradingView());
         return orderMap;
     }
 
@@ -431,6 +436,57 @@ public class GetInfoContro {
         DecimalFormat df = new DecimalFormat("#.00");
         String formatNum = df.format(number)+"%";
         return formatNum;
+    }
+
+    /**
+     * * 获取当前:
+     * 月全订单数、有效订单数
+     * @param allType 有效订单true、全订单标识false
+     * @return
+     */
+    public List getMonAllTradingData(boolean allType){
+        List<MonthCountView> list = null;
+        if(allType){
+            list=orderService.getMonthTradingView();//月有效订单
+        }else{
+            list=orderService.getMonthView();//月全订单
+        }
+        List resultList=new ArrayList();
+        int year = TimeUtil.setTime(list.get(0).getmTime()).getYear();
+        int month = TimeUtil.setTime(list.get(0).getmTime()).getMonthValue();
+        int day = TimeUtil.setTime(list.get(0).getmTime()).getDayOfMonth();
+        if(day>0){
+            for(int x=1;x<day;x++){
+                resultList.add("[gd("+year+","+month+","+x+"),"+0+"]");
+            }
+        }
+        //System.out.println("日期补全:\n"+temp.size()+"\t"+temp.toString());
+        for(int i=0;i<list.size();i++){
+            //resultList.add("[gd("+list.get(i).getmTime().replaceAll("-",",")+"),"+list.get(i).getmCount()+"]");
+            resultList.add("[gd("+TimeUtil.setTime(list.get(i).getmTime()).getYear()+","+
+                    TimeUtil.setTime(list.get(i).getmTime()).getMonthValue()+","+
+                    TimeUtil.setTime(list.get(i).getmTime()).getDayOfMonth()+"),"+list.get(i).getmCount()+"]");
+        }
+        //System.out.println("订单temp:\n"+temp.size()+"\t"+temp.toString());
+        int monEndDay=Month.of(month).length(TimeUtil.LeapYearChecker(list.get(0).getmTime()));
+        int end_day=TimeUtil.setTime(list.get(list.size()-1).getmTime()).getDayOfMonth();
+        //System.out.println("monEndDay:"+monEndDay+"\t"+"end_day:"+end_day);
+        if(end_day<monEndDay){
+            for(int z=end_day+1;z<monEndDay+1;z++){
+                resultList.add("[gd("+year+","+month+","+z+"),"+0+"]");
+            }
+        }
+        System.out.println("订单temp:\n"+resultList.size()+"\t"+resultList.toString());
+        return resultList;
+    }
+
+    public List<AllTradingView> addSerial_Number(List<AllTradingView> list){
+        //List
+        int num=list.size();
+        for (int i=0;i<num;i++){
+
+        }
+        return null;
     }
 
     /**
@@ -453,6 +509,11 @@ public class GetInfoContro {
         DecimalFormat df = new DecimalFormat("#.00");//创建DecimalFormat对象,并使用格式字符串#.00指定保留两位小数
         String formattedValue = df.format(valid);
         System.out.println("百分比:"+formattedValue);
+
+        //System.out.println("月全订单数据:"+getMonAllTradingData().toString());
+        Map<String,Object> testMap=new HashMap<>();
+        testMap.put("test",orderService.getAllTradingView());
+        System.out.println("testMap:"+testMap.toString());
     }
 
     @RequestMapping("/IndexPage")
@@ -471,7 +532,7 @@ public class GetInfoContro {
         } else {
             // Session为空或不包含"userId"属性，表示用户未登录
             System.out.println("用户未登录");
-            return "login";
+            return "redirect:/UserInfo/loginPage";
         }
     }
 

@@ -1,5 +1,7 @@
 package com.server.model.mapper;
 
+import com.server.model.pojo.AllTradingView;
+import com.server.model.pojo.MonthCountView;
 import com.server.model.pojo.OrderInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -22,4 +24,8 @@ public interface OrderMapper {
     public int sumTradingPrice();//总收入
     public int getNearMonthCount();//最近一个月订单数
     public int getNearMonthTradingPrice();//最近一个月订单总额
+    public List<MonthCountView> getCurrentYearAllOrderCount();//查找当前
+    public List<MonthCountView> getMonthView();//查找当前年月的订单量并按照天数分组
+    public List<MonthCountView> getMonthTradingView();//查找当前年月的有效交易量并按照天数分组
+    public List<AllTradingView> getAllTradingView();//查找当月有效订单数据的产品、类别、销售额按照高到低排序
 }

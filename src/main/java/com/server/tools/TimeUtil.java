@@ -7,6 +7,9 @@ package com.server.tools;
  */
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -14,7 +17,7 @@ import java.util.Date;
  */
 public class TimeUtil {
     /**
-     *
+     *获取当前时间
      * @param add_hour 是否添加小时
      * @return
      */
@@ -37,5 +40,42 @@ public class TimeUtil {
 
     public static String formatTime(String time){
         return time.replaceAll("[- :]","");//通过replaceAll将"-"、" "、":"替换为""
+    }
+
+    /**
+     * 时间格式设置
+     * @param time
+     * @return
+     */
+    public static LocalDate setTime(String time){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(time, formatter);
+        return date;
+    }
+
+    /**
+     * 平，润年计算
+     * @param time
+     * @return
+     */
+    public static boolean LeapYearChecker(String time){
+        boolean isLeapYear = LocalDate.of(setTime(time).getYear(), 1, 1).isLeapYear(); // 判断是否为闰年
+        return isLeapYear;
+    }
+
+    /**
+     * 大小月计算
+     * @param time
+     * @return
+     */
+    public static boolean MonthSizeChecker(String time){
+        Month monthEnum = Month.of(setTime(time).getMonthValue()); // 将月份转换为枚举类型
+        if (monthEnum.length(false) == 31) {
+            //System.out.println(" 大月");
+            return true;
+        } else {
+            //System.out.println(" 小月");
+            return false;
+        }
     }
 }

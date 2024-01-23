@@ -1,5 +1,7 @@
 package com.server.service;
 
+import com.server.model.pojo.AllTradingView;
+import com.server.model.pojo.MonthCountView;
 import com.server.model.pojo.OrderInfo;
 import org.springframework.stereotype.Service;
 
@@ -20,4 +22,8 @@ public interface OrderService {
     public int sumTradingPrice();
     public int getNearMonthCount();//最近一个月订单数
     public int getNearMonthTradingPrice();//最近一个月订单总额
+    public List<MonthCountView> getCurrentYearAllOrderCount();//查找当前
+    public List<MonthCountView> getMonthView();
+    public List<MonthCountView> getMonthTradingView();
+    public List<AllTradingView> getAllTradingView();
 }

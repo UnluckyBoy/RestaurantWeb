@@ -1,6 +1,8 @@
 package com.server.service.impl;
 
 import com.server.model.mapper.OrderMapper;
+import com.server.model.pojo.AllTradingView;
+import com.server.model.pojo.MonthCountView;
 import com.server.model.pojo.OrderInfo;
 import com.server.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +55,25 @@ public class OrderServiceIpml implements OrderService {
     @Override
     public int getNearMonthTradingPrice() {
         return orderMapper.getNearMonthTradingPrice();
+    }
+
+    @Override
+    public List<MonthCountView> getCurrentYearAllOrderCount() {
+        return orderMapper.getCurrentYearAllOrderCount();
+    }
+
+    @Override
+    public List<MonthCountView> getMonthView() {
+        return orderMapper.getMonthView();
+    }
+
+    @Override
+    public List<MonthCountView> getMonthTradingView() {
+        return orderMapper.getMonthTradingView();
+    }
+
+    @Override
+    public List<AllTradingView> getAllTradingView() {
+        return orderMapper.getAllTradingView();
     }
 }

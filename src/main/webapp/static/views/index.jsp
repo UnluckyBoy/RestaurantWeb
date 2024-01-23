@@ -5,6 +5,8 @@
   Time: 21:22
   To change this template use File | Settings | File Templates.
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 
@@ -164,9 +166,9 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href=""><i class="fa fa-comments"></i> <span class="nav-label">即时通讯</span><span class="label label-danger pull-right">New</span></a>
-                </li>
+<%--                <li>--%>
+<%--                    <a href=""><i class="fa fa-comments"></i> <span class="nav-label">即时通讯</span><span class="label label-danger pull-right">New</span></a>--%>
+<%--                </li>--%>
             </ul>
 
         </div>
@@ -206,7 +208,7 @@
                             <h5>总收入</h5>
                         </div>
                         <div class="ibox-content">
-                            <h1 class="no-margins">${order_message.TradingPrice}</h1>
+                            <h1 class="no-margins">&yen; ${order_message.TradingPrice}</h1>
 <%--                            <div class="stat-percent font-bold text-success">100%<i class="fa fa-bolt"></i>--%>
 <%--                            </div>--%>
 <%--                            <small>测试</small>--%>
@@ -271,6 +273,7 @@
                         </div>
                         <div class="ibox-content">
                             <div class="row">
+                                <!--柱形图-->
                                 <div class="col-lg-9">
                                     <div class="flot-chart">
                                         <div class="flot-chart-content" id="flot-dashboard-chart"></div>
@@ -297,7 +300,7 @@
                                             </div>
                                         </li>
                                         <li>
-                                            <h2 class="no-margins ">${order_message.NearMonthTradingPrice}</h2>
+                                            <h2 class="no-margins ">&yen; ${order_message.NearMonthTradingPrice}</h2>
                                             <small>最近一个月销售额</small>
                                             <div class="stat-percent">${order_message.NearPriceValid}<i class="fa fa-bolt text-navy"></i>
                                             </div>
@@ -317,7 +320,7 @@
                     <div class="col-lg-12">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <h5>交易地区</h5>
+                                <h5>交易详情</h5>
                                 <div class="ibox-tools">
                                     <a class="collapse-link">
                                         <i class="fa fa-chevron-up"></i>
@@ -334,67 +337,72 @@
                                             <thead>
                                             <tr>
                                                 <th style="width: 1%" class="text-center">序号</th>
-                                                <th>交易</th>
-                                                <th class="text-center">日期</th>
+                                                <th>商品</th>
+                                                <th class="text-center">类别</th>
                                                 <th class="text-center">销售额</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td class="text-center">1</td>
-                                                <td>防盗门
-                                                    </small>
-                                                </td>
-                                                <td class="text-center small">2014.9.15</td>
-                                                <td class="text-center"><span class="label label-primary">&yen;483.00</span>
-                                                </td>
+                                            <c:forEach var="orderlist" items="${order_message.AllTradingList}">
+                                                <tr>
+                                                    <td class="text-center">${orderlist.id}</td>
+                                                    <td>${orderlist.pName}</td>
+                                                    <td class="text-center small">${orderlist.pType}</td>
+                                                    <td class="text-center"><span class="label label-primary">&yen;${orderlist.mTradingPrice}</span></td>
+                                                </tr>
+                                            </c:forEach>
+                                            <%--                                            <tr>--%>
+<%--                                                <td class="text-center">1</td>--%>
+<%--                                                <td>防盗门</td>--%>
+<%--                                                <td class="text-center small">2014.9.15</td>--%>
+<%--                                                <td class="text-center"><span class="label label-primary">&yen;483.00</span>--%>
+<%--                                                </td>--%>
 
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">2</td>
-                                                <td>衣柜
-                                                </td>
-                                                <td class="text-center small">2014.9.15</td>
-                                                <td class="text-center"><span class="label label-primary">&yen;327.00</span>
-                                                </td>
+<%--                                            </tr>--%>
+<%--                                            <tr>--%>
+<%--                                                <td class="text-center">2</td>--%>
+<%--                                                <td>衣柜</td>--%>
+<%--                                                <td class="text-center small">2014.9.15</td>--%>
+<%--                                                <td class="text-center">--%>
+<%--                                                    <span class="label label-primary">&yen;327.00</span>--%>
+<%--                                                </td>--%>
 
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">3</td>
-                                                <td>防盗门
-                                                </td>
-                                                <td class="text-center small">2014.9.15</td>
-                                                <td class="text-center"><span class="label label-warning">&yen;125.00</span>
-                                                </td>
+<%--                                            </tr>--%>
+<%--                                            <tr>--%>
+<%--                                                <td class="text-center">3</td>--%>
+<%--                                                <td>防盗门</td>--%>
+<%--                                                <td class="text-center small">2014.9.15</td>--%>
+<%--                                                <td class="text-center"><span class="label label-warning">&yen;125.00</span>--%>
+<%--                                                </td>--%>
 
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">4</td>
-                                                <td>橱柜</td>
-                                                <td class="text-center small">2014.9.15</td>
-                                                <td class="text-center"><span class="label label-primary">&yen;344.00</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">5</td>
-                                                <td>手机</td>
-                                                <td class="text-center small">2014.9.15</td>
-                                                <td class="text-center"><span class="label label-primary">&yen;235.00</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">6</td>
-                                                <td>显示器</td>
-                                                <td class="text-center small">2014.9.15</td>
-                                                <td class="text-center"><span class="label label-primary">&yen;100.00</span>
-                                                </td>
-                                            </tr>
+<%--                                            </tr>--%>
+<%--                                            <tr>--%>
+<%--                                                <td class="text-center">4</td>--%>
+<%--                                                <td>橱柜</td>--%>
+<%--                                                <td class="text-center small">2014.9.15</td>--%>
+<%--                                                <td class="text-center"><span class="label label-primary">&yen;344.00</span>--%>
+<%--                                                </td>--%>
+<%--                                            </tr>--%>
+<%--                                            <tr>--%>
+<%--                                                <td class="text-center">5</td>--%>
+<%--                                                <td>手机</td>--%>
+<%--                                                <td class="text-center small">2014.9.15</td>--%>
+<%--                                                <td class="text-center"><span class="label label-primary">&yen;235.00</span>--%>
+<%--                                                </td>--%>
+<%--                                            </tr>--%>
+<%--                                            <tr>--%>
+<%--                                                <td class="text-center">6</td>--%>
+<%--                                                <td>显示器</td>--%>
+<%--                                                <td class="text-center small">2014.9.15</td>--%>
+<%--                                                <td class="text-center"><span class="label label-primary">&yen;100.00</span>--%>
+<%--                                                </td>--%>
+<%--                                            </tr>--%>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div id="world-map" style="height: 300px;"></div>
-                                    </div>
+<%--                                    <div class="col-lg-6">--%>
+<%--                                        <div id="world-map" style="height: 300px;"></div>--%>
+<%--                                    </div>--%>
                                 </div>
                             </div>
                         </div>
@@ -469,27 +477,28 @@
             size: 80
         });
 
-        var data2 = [
-            [gd(2012, 1, 1), 7], [gd(2012, 1, 2), 6], [gd(2012, 1, 3), 4], [gd(2012, 1, 4), 8],
-            [gd(2012, 1, 5), 9], [gd(2012, 1, 6), 7], [gd(2012, 1, 7), 5], [gd(2012, 1, 8), 4],
-            [gd(2012, 1, 9), 7], [gd(2012, 1, 10), 8], [gd(2012, 1, 11), 9], [gd(2012, 1, 12), 6],
-            [gd(2012, 1, 13), 4], [gd(2012, 1, 14), 5], [gd(2012, 1, 15), 11], [gd(2012, 1, 16), 8],
-            [gd(2012, 1, 17), 8], [gd(2012, 1, 18), 11], [gd(2012, 1, 19), 11], [gd(2012, 1, 20), 6],
-            [gd(2012, 1, 21), 6], [gd(2012, 1, 22), 8], [gd(2012, 1, 23), 11], [gd(2012, 1, 24), 13],
-            [gd(2012, 1, 25), 7], [gd(2012, 1, 26), 9], [gd(2012, 1, 27), 9], [gd(2012, 1, 28), 8],
-            [gd(2012, 1, 29), 5], [gd(2012, 1, 30), 8], [gd(2012, 1, 31), 25]
-        ];
-
-        var data3 = [
-            [gd(2012, 1, 1), 800], [gd(2012, 1, 2), 500], [gd(2012, 1, 3), 600], [gd(2012, 1, 4), 700],
-            [gd(2012, 1, 5), 500], [gd(2012, 1, 6), 456], [gd(2012, 1, 7), 800], [gd(2012, 1, 8), 589],
-            [gd(2012, 1, 9), 467], [gd(2012, 1, 10), 876], [gd(2012, 1, 11), 689], [gd(2012, 1, 12), 700],
-            [gd(2012, 1, 13), 500], [gd(2012, 1, 14), 600], [gd(2012, 1, 15), 700], [gd(2012, 1, 16), 786],
-            [gd(2012, 1, 17), 345], [gd(2012, 1, 18), 888], [gd(2012, 1, 19), 888], [gd(2012, 1, 20), 888],
-            [gd(2012, 1, 21), 987], [gd(2012, 1, 22), 444], [gd(2012, 1, 23), 999], [gd(2012, 1, 24), 567],
-            [gd(2012, 1, 25), 786], [gd(2012, 1, 26), 666], [gd(2012, 1, 27), 888], [gd(2012, 1, 28), 900],
-            [gd(2012, 1, 29), 178], [gd(2012, 1, 30), 555], [gd(2012, 1, 31), 993]
-        ];
+        // var data2 = [
+        //     [gd(2012, 1, 1), 0], [gd(2012, 1, 2), 6], [gd(2012, 1, 3), 4], [gd(2012, 1, 4), 8],
+        //     [gd(2012, 1, 5), 9], [gd(2012, 1, 6), 7], [gd(2012, 1, 7), 5], [gd(2012, 1, 8), 4],
+        //     [gd(2012, 1, 9), 7], [gd(2012, 1, 10), 8], [gd(2012, 1, 11), 9], [gd(2012, 1, 12), 6],
+        //     [gd(2012, 1, 13), 0], [gd(2012, 1, 14), 5], [gd(2012, 1, 15), 11], [gd(2012, 1, 16), 8],
+        //     [gd(2012, 1, 17), 8], [gd(2012, 1, 18), 11], [gd(2012, 1, 19), 11], [gd(2012, 1, 20), 6],
+        //     [gd(2012, 1, 21), 6], [gd(2012, 1, 22), 8], [gd(2012, 1, 23), 11], [gd(2012, 1, 24), 13],
+        //     [gd(2012, 1, 25), 7], [gd(2012, 1, 26), 9], [gd(2012, 1, 27), 9], [gd(2012, 1, 28), 8],
+        //     [gd(2012, 1, 29), 5], [gd(2012, 1, 30), 8], [gd(2012, 1, 31), 25]
+        // ];
+        // var data3 = [
+        //     [gd(2012, 1, 1), 800], [gd(2012, 1, 2), 500], [gd(2012, 1, 3), 600], [gd(2012, 1, 4), 700],
+        //     [gd(2012, 1, 5), 500], [gd(2012, 1, 6), 456], [gd(2012, 1, 7), 800], [gd(2012, 1, 8), 589],
+        //     [gd(2012, 1, 9), 467], [gd(2012, 1, 10), 876], [gd(2012, 1, 11), 689], [gd(2012, 1, 12), 700],
+        //     [gd(2012, 1, 13), 500], [gd(2012, 1, 14), 600], [gd(2012, 1, 15), 700], [gd(2012, 1, 16), 786],
+        //     [gd(2012, 1, 17), 345], [gd(2012, 1, 18), 888], [gd(2012, 1, 19), 888], [gd(2012, 1, 20), 888],
+        //     [gd(2012, 1, 21), 987], [gd(2012, 1, 22), 444], [gd(2012, 1, 23), 999], [gd(2012, 1, 24), 567],
+        //     [gd(2012, 1, 25), 786], [gd(2012, 1, 26), 666], [gd(2012, 1, 27), 888], [gd(2012, 1, 28), 900],
+        //     [gd(2012, 1, 29), 178], [gd(2012, 1, 30), 555], [gd(2012, 1, 31), 993]
+        // ];
+        var data2=${order_message.NearMonValidTrading};//有效订单
+        var data3=${order_message.NearMonAllTrading};//全部订单
 
         var dataset = [
             {
@@ -576,39 +585,39 @@
         var previousPoint = null,previousLabel = null;
         $.plot($("#flot-dashboard-chart"), dataset, options);
 
-        var mapData = {
-            "US": 298,
-            "SA": 200,
-            "DE": 220,
-            "FR": 540,
-            "CN": 120,
-            "AU": 760,
-            "BR": 550,
-            "IN": 200,
-            "GB": 120,
-        };
-
-        $('#world-map').vectorMap({
-            map: 'world_mill_en',
-            backgroundColor: "transparent",
-            regionStyle: {
-                initial: {
-                    fill: '#e4e4e4',
-                    "fill-opacity": 0.9,
-                    stroke: 'none',
-                    "stroke-width": 0,
-                    "stroke-opacity": 0
-                }
-            },
-
-            series: {
-                regions: [{
-                    values: mapData,
-                    scale: ["#1ab394", "#22d6b1"],
-                    normalizeFunction: 'polynomial'
-                }]
-            },
-        });
+        // var mapData = {
+        //     "US": 298,
+        //     "SA": 200,
+        //     "DE": 220,
+        //     "FR": 540,
+        //     "CN": 120,
+        //     "AU": 760,
+        //     "BR": 550,
+        //     "IN": 200,
+        //     "GB": 120,
+        // };
+        //
+        // $('#world-map').vectorMap({
+        //     map: 'world_mill_en',
+        //     backgroundColor: "transparent",
+        //     regionStyle: {
+        //         initial: {
+        //             fill: '#e4e4e4',
+        //             "fill-opacity": 0.9,
+        //             stroke: 'none',
+        //             "stroke-width": 0,
+        //             "stroke-opacity": 0
+        //         }
+        //     },
+        //
+        //     series: {
+        //         regions: [{
+        //             values: mapData,
+        //             scale: ["#1ab394", "#22d6b1"],
+        //             normalizeFunction: 'polynomial'
+        //         }]
+        //     },
+        // });
     });
 </script>
 

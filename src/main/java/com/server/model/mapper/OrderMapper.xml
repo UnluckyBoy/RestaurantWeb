@@ -67,5 +67,60 @@
         from order_info_data
         where mCreateTime >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) and mTradingType=1
     </select>
+    <!--指定查找当前年所有订单数-->
+    <select id="getCurrentYearAllOrderCount" resultType="com.server.model.pojo.OrderInfo">
+        SELECT COUNT(*)
+        from order_info_data
+        where year(mCreateTime) = year(CURDATE())
+    </select>
+    <!--查找当前年月的订单数据，按照天数分组,包括未交易-->
+    <select id="getMonthView" resultType="com.server.model.pojo.MonthCountView">
+        SELECT DATE(mCreateTime) as mTime, COUNT(*) as mCount
+        from order_info_data
+        where month(mCreateTime) = month(curdate())
+          and year(mCreateTime) = year(curdate())
+        group by mCreateTime
+    </select>
+    <!--查找当前年月的订单数据，按照天数分组,只含已交易-->
+    <select id="getMonthTradingView" resultType="com.server.model.pojo.MonthCountView">
+        SELECT DATE(mCreateTime) as mTime, COUNT(*) as mCount
+        from order_info_data
+        where month(mCreateTime) = month(curdate())
+          and year(mCreateTime) = year(curdate())
+          and mTradingType=1
+        group by mCreateTime
+    </select>
 
+    <!--查找当月有效订单数据的产品、类别、销售额按照高到低排序-->
+<!--    <select id="getAllTradingView" resultType="com.server.model.pojo.AllTradingView">-->
+<!--        SELECT-->
+<!--            ROW_NUMBER() OVER (order by order_info_data.mTradingPrice desc) as id,-->
+<!--            order_info_data.mTradingPrice,-->
+<!--            product_info_data.pName,-->
+<!--            product_info_data.pType-->
+<!--        from order_info_data join product_info_data-->
+<!--        on order_info_data.mShopper = product_info_data.pShopper-->
+<!--        where-->
+<!--            order_info_data.mTradingType=1-->
+<!--        order by order_info_data.mTradingPrice desc-->
+<!--    </select>-->
+    <select id="getAllTradingView" resultType="com.server.model.pojo.AllTradingView">
+        with CTEMP as (
+            SELECT
+                ROW_NUMBER() OVER (order by (SELECT null)) as id,
+                sum(order_info_data.mTradingPrice) as mTradingPrice,
+                product_info_data.pName,
+                product_info_data.pType
+            from order_info_data join product_info_data
+            on order_info_data.mShopper = product_info_data.pShopper
+            where order_info_data.mTradingType=1
+            group by product_info_data.pName, product_info_data.pType
+        )
+        SELECT
+            id,
+            mTradingPrice,
+            pName,
+            pType
+        from CTEMP
+    </select>
 </mapper>

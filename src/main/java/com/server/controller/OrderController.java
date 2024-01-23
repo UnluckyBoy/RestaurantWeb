@@ -1,5 +1,6 @@
 package com.server.controller;
 
+import com.server.model.pojo.AllTradingView;
 import com.server.model.pojo.OrderInfo;
 import com.server.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,13 +57,11 @@ public class OrderController {
         System.out.println("取消订单数:\t"+count);
         return count;
     }
-//    @RequestMapping("/GetAllTypeCount")
-//    public Map GetAllTypeCount(){
-//        Map<String,Object> resultMap=new HashMap<>();
-//        resultMap.put("AllOrderCount",GetAllCount());
-//        resultMap.put("TradingOrderCount",GetTradingCount());
-//        resultMap.put("NotTradingOrderCount",GetNotTradingCount());
-//        System.out.println("订单数数据:\t"+resultMap.toString());
-//        return resultMap;
-//    }
+
+    @RequestMapping("/GetAllTradingView")
+    public List<AllTradingView> GetAllTradingView(){
+        List<AllTradingView> list=orderService.getAllTradingView();
+        System.out.println("订单数:\t"+list.toString());
+        return list;
+    }
 }
