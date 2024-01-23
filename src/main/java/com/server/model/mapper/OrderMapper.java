@@ -17,7 +17,7 @@ import java.util.Map;
 @Mapper //mybatis的mapper类
 @Repository
 public interface OrderMapper {
-    public List<Object> orderQueryAll();//查询所有订单信息
+    List<OrderInfo> orderQueryAll();//查询所有订单信息
     public int getAllCount();//查询所有订单
     public int getTradingCount();//查询交易订单
     public int getNotTradingCount();//查询取消订单

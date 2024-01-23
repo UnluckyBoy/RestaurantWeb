@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @Service
 public interface OrderService {
-    public List<Object> orderQueryAll();
+    List<OrderInfo> orderQueryAll();
     public int getAllCount();
     public int getTradingCount();
     public int getNotTradingCount();

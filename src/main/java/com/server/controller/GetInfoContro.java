@@ -511,9 +511,14 @@ public class GetInfoContro {
         System.out.println("百分比:"+formattedValue);
 
         //System.out.println("月全订单数据:"+getMonAllTradingData().toString());
-        Map<String,Object> testMap=new HashMap<>();
-        testMap.put("test",orderService.getAllTradingView());
-        System.out.println("testMap:"+testMap.toString());
+//        Map<String,Object> testMap=new HashMap<>();
+//        testMap.put("test",orderService.getAllTradingView());
+//        System.out.println("testMap:"+testMap.toString());
+
+        //生成订单
+        System.out.println("随机生成的订单号: " + OrderNumberUtil.randOrderNumber());
+
+
     }
 
     @RequestMapping("/IndexPage")
@@ -622,6 +627,7 @@ public class GetInfoContro {
             resultMap.put("result","error");
             return "login";
         }
-        //return "index";
     }
+
+
 }

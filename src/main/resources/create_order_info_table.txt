@@ -1,6 +1,6 @@
 create table order_info_data(
 `mId` bigint(20)  not null auto_increment PRIMARY KEY comment '主键',
-`mTitle` varchar(255) comment '订单名',
+`mOrderNumber` varchar(255) comment '订单号:UUID前8位加当前时间戳',
 `mContent` varchar(25) comment '订单内容',
 `mOrder` varchar(25) comment '订单用户',
 `mShopper` varchar(25) comment '店铺',

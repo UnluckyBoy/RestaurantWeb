@@ -23,7 +23,7 @@ public class OrderServiceIpml implements OrderService {
     private OrderMapper orderMapper;
 
     @Override
-    public List<Object> orderQueryAll() {
+    public List<OrderInfo> orderQueryAll() {
         return orderMapper.orderQueryAll();
     }
 

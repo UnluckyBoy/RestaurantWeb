@@ -332,11 +332,12 @@
                             </div>
                             <div class="ibox-content">
                                 <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <table class="table table-hover margin bottom">
                                             <thead>
                                             <tr>
-                                                <th style="width: 1%" class="text-center">序号</th>
+<%--                                                <th style="width: 1%" class="text-center">序号</th>--%>
+                                                <th>序号</th>
                                                 <th>商品</th>
                                                 <th class="text-center">类别</th>
                                                 <th class="text-center">销售额</th>
@@ -345,7 +346,8 @@
                                             <tbody>
                                             <c:forEach var="orderlist" items="${order_message.AllTradingList}">
                                                 <tr>
-                                                    <td class="text-center">${orderlist.id}</td>
+<%--                                                    <td class="text-center">${orderlist.id}</td>--%>
+                                                    <td>${orderlist.id}</td>
                                                     <td>${orderlist.pName}</td>
                                                     <td class="text-center small">${orderlist.pType}</td>
                                                     <td class="text-center"><span class="label label-primary">&yen;${orderlist.mTradingPrice}</span></td>

@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public class OrderInfo implements Serializable {
     private int mId;
-    private String mTitle;
+    private String mOrderNumber;
     private String mContent;
     private String mOrder;
     private String mShopper;
@@ -27,12 +27,12 @@ public class OrderInfo implements Serializable {
         this.mId = mId;
     }
 
-    public String getmTitle() {
-        return mTitle;
+    public String getmOrderNumber() {
+        return mOrderNumber;
     }
 
-    public void setmTitle(String mTitle) {
-        this.mTitle = mTitle;
+    public void setmOrderNumber(String mOrderNumber) {
+        this.mOrderNumber = mOrderNumber;
     }
 
     public String getmContent() {
@@ -101,9 +101,8 @@ public class OrderInfo implements Serializable {
 
     @Override
     public String toString() {
-        return "OrderInfo{" +
-                "mId=" + mId +
-                ", mTitle='" + mTitle + '\'' +
+        return "mId=" + mId +
+                ", mOrderNumber='" + mOrderNumber + '\'' +
                 ", mContent='" + mContent + '\'' +
                 ", mOrder='" + mOrder + '\'' +
                 ", mShopper='" + mShopper + '\'' +
@@ -111,7 +110,6 @@ public class OrderInfo implements Serializable {
                 ", mCreateTime='" + mCreateTime + '\'' +
                 ", mEditor='" + mEditor + '\'' +
                 ", mEditTime='" + mEditTime + '\'' +
-                ", mTradingType=" + mTradingType +
-                '}';
+                ", mTradingType=" + mTradingType;
     }
 }

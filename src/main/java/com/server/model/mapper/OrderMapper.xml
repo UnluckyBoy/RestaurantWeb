@@ -21,7 +21,7 @@
     <!--查询所有-->
     <select id="orderQueryAll" resultType="com.server.model.pojo.OrderInfo">
         select mId,
-        mTitle,
+        mOrderNumber,
         mContent,
         mOrder,
         mShopper,

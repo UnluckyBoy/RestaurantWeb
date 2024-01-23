@@ -33,7 +33,7 @@ public class OrderController {
     @RequestMapping("/GetAllOrder")
     public void Login(HttpServletRequest request, Model model, HttpSession session){
         //Map<String,Object> resultMap=new HashMap<>();
-        List<Object> orderInfoList=new ArrayList<>();
+        List<OrderInfo> orderInfoList=new ArrayList<>();
         orderInfoList=orderService.orderQueryAll();
         System.out.println("所有订单:\t"+orderInfoList.toString());
     }

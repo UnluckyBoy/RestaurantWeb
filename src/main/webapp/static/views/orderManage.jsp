@@ -24,6 +24,7 @@
 
     <link href="../css/animate.css" rel="stylesheet">
     <link href="../css/style.css?v=2.2.0" rel="stylesheet">
+
 </head>
 <body>
 <div id="wrapper">
@@ -180,12 +181,36 @@
                         </span>
                     </li>
                     <li>
-                        <a href="">
-                            <i class="fa fa-sign-out"></i> 退出
-                        </a>
+                        <a href=""><i class="fa fa-sign-out"></i> 退出</a>
                     </li>
                 </ul>
             </nav>
+        </div>
+        <div class="wrapper wrapper-content">
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table table-hover margin bottom">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>订单号</th>
+                                <th class="text-center">类别</th>
+                                <th class="text-center">销售额</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="text-center">1</td>
+                                <td>防盗门</td>
+                                <td class="text-center small">2014.9.15</td>
+                                <td class="text-center"><span class="label label-primary">&yen;483.00</span>
+                                </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
