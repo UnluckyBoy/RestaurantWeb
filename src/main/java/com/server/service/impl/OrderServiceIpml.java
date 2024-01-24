@@ -76,4 +76,9 @@ public class OrderServiceIpml implements OrderService {
     public List<AllTradingView> getAllTradingView() {
         return orderMapper.getAllTradingView();
     }
+
+    @Override
+    public boolean freshOrder(Map<String, Object> map) {
+        return orderMapper.freshOrder(map);
+    }
 }

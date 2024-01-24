@@ -8,22 +8,19 @@ import com.server.tools.*;
 import com.server.model.pojo.UserInfo;
 import com.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 控制层
@@ -369,9 +366,8 @@ public class GetInfoContro {
 //     * @return
 //     */
 
-    public Map CommonClass2Map(String result,UserInfo temp){
+    public Map CommonClass2Map(UserInfo temp){
         Map<String,Object> tempMap=new HashMap();
-        tempMap.put("result",result);
         tempMap.put("id",temp.getmId());
         tempMap.put("head",temp.getmHead());
         tempMap.put("name",temp.getmName());
@@ -423,6 +419,16 @@ public class GetInfoContro {
         orderMap.put("AllTradingList",orderService.getAllTradingView());
         orderMap.put("AllOrderList",orderService.orderQueryAll());
         return orderMap;
+    }
+
+    /**
+     * 刷新session
+     * @param session
+     * @param sessionKey
+     * @param map
+     */
+    public void freshSession(HttpSession session,String sessionKey,Map<String,Object> map){
+        session.setAttribute(sessionKey,map);
     }
 
     /**
@@ -529,12 +535,13 @@ public class GetInfoContro {
         //HttpSession session = request.getSession();
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
-            System.out.println("用户已登录:\t"+session.getAttribute("current_user"));
+            //System.out.println("用户已登录:\t"+session.getAttribute("current_user"));
             model.addAttribute("message", session.getAttribute("current_user"));
-            System.out.println("主页消息message:\t"+model.getAttribute("message"));
             model.addAttribute("order_message",OrderDataMap());
+            System.out.println("主页用户消息message:\t"+model.getAttribute("message"));
             System.out.println("主页订单消息order_message:\t"+model.getAttribute("order_message"));
-            session.setAttribute("session_message",model.getAttribute("order_message"));
+            //session.setAttribute("session_message",model.getAttribute("order_message"));
+            freshSession(session,"session_message", (Map<String, Object>) model.getAttribute("order_message"));
             return "index";
         } else {
             // Session为空或不包含"userId"属性，表示用户未登录
@@ -615,11 +622,11 @@ public class GetInfoContro {
             }else{
                 boolean login_status= userService.fresh_status_login(requestMap);
                 if(login_status){
-                    resultMap=CommonClass2Map("success",mUser);
+                    resultMap=CommonClass2Map(mUser);
                     System.out.println("Server_running_login_Map:\n"+resultMap.toString());
 
-                    session.setAttribute("current_user", resultMap);
-                    //model.addAttribute("message", resultMap);
+                    //session.setAttribute("current_user", resultMap);
+                    freshSession(session,"current_user",resultMap);
                     return "redirect:/UserInfo/IndexPage";//重定向到主页
                 }else{
                     resultMap.put("result","error");
@@ -633,5 +640,55 @@ public class GetInfoContro {
         }
     }
 
+    @RequestMapping("/logout")
+    public String SignOut(HttpServletRequest request,HttpSession session,Model model){
+        //System.out.println("用户信息:"+session.getAttribute("current_user").getClass());//java.util.HashMap
+        if (session != null && session.getAttribute("current_user") != null) {
+            // Session不为空且包含"userId"属性，表示用户已登录,先释放session
+            //model.addAttribute("user", session.getAttribute("current_user"));
+            //System.out.println("用户信息:"+model.getAttribute("user").getClass());//model.getAttribute("user"):java.util.HashMap
+            Map<String, Object> requestMap=(Map) session.getAttribute("current_user");
+            System.out.println("用户信息:"+requestMap.get("account"));
+            requestMap.put("status",0);
+            System.out.println("登出请求Map:"+requestMap.toString());
+//            String mEncryPwd = Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password);
+//            requestMap.put("password",mEncryPwd);
+            try{
+                if((userService.infoQuery(requestMap).getmStatus()==1)){
+                    boolean logout= userService.fresh_status_logout(requestMap);
+                    if(logout){
+                        session.invalidate(); //使当前session失效
+                        return "redirect:/UserInfo/loginPage";
+                    }else{
+                        System.out.println("登出异常:"+logout);
+                        return "";
+                    }
+                }else{
+                    System.out.println("登出异常:尚未登录");
+                    return "";
+                }
+            }catch (Exception e){
+                System.out.println("登出异常:"+e.getMessage());
+                return "";
+            }
+            //session.invalidate(); //使当前session失效
+            //session.removeAttribute("attributeName"); // 移除名为"attributeName"的属性
+        }
+        return "";
+    }
+
+    @RequestMapping("/update_order")
+    public ResponseEntity<String> UpOrder(@RequestBody Map<String, Object> order_data, HttpServletRequest request,
+                                          Model model, HttpSession session){
+        System.out.println("订单修改数据:"+order_data.toString());
+        boolean fresh_result=orderService.freshOrder(order_data);
+        if(fresh_result){
+            freshSession(session,"session_message",OrderDataMap());
+            return ResponseEntity.ok("success");
+        }else{
+            return ResponseEntity.ok("error");
+        }
+        //freshSession(session);
+    }
 
 }

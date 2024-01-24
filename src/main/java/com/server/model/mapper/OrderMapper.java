@@ -28,4 +28,6 @@ public interface OrderMapper {
     public List<MonthCountView> getMonthView();//查找当前年月的订单量并按照天数分组
     public List<MonthCountView> getMonthTradingView();//查找当前年月的有效交易量并按照天数分组
     public List<AllTradingView> getAllTradingView();//查找当月有效订单数据的产品、类别、销售额按照高到低排序
+
+    public boolean freshOrder(Map<String,Object> map);//更新订单信息
 }

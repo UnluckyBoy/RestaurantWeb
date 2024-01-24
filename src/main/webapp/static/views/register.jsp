@@ -13,7 +13,10 @@
 
     <title>阿婆私房菜后台管理 - 注册</title>
     <link href="../staticRes/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
-    <link href="../staticRes/font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
+    <!--图标库-->
+    <link href="../staticRes/fontawesome_5.15.4/css/fontawesome.css" rel="stylesheet">
+    <link href="../staticRes/fontawesome_5.15.4/css/brands.css" rel="stylesheet">
+    <link href="../staticRes/fontawesome_5.15.4/css/solid.css" rel="stylesheet">
     <link href="../staticRes/css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="../staticRes/css/animate.css" rel="stylesheet">
     <link href="../staticRes/css/style.css?v=2.2.0" rel="stylesheet">

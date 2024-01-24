@@ -26,4 +26,6 @@ public interface OrderService {
     public List<MonthCountView> getMonthView();
     public List<MonthCountView> getMonthTradingView();
     public List<AllTradingView> getAllTradingView();
+
+    public boolean freshOrder(Map<String,Object> map);
 }

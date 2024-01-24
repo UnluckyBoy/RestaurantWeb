@@ -123,4 +123,44 @@
             pType
         from CTEMP
     </select>
+
+    <!--UpDate逻辑-->
+    <update id="freshOrder" parameterType="java.util.HashMap">
+        update  order_info_data
+        <set >
+            <if test="mContent!=null">
+                mContent=#{mContent},
+            </if>
+            <if test="mOrder!=null">
+                mOrder=#{mOrder},
+            </if>
+            <if test="mShopper!=null">
+                mShopper=#{mShopper},
+            </if>
+            <if test="mTradingPrice!=0">
+                mTradingPrice=#{mTradingPrice},
+            </if>
+            <if test="mCreateTime!=null">
+                mCreateTime=#{mCreateTime},
+            </if>
+            <if test="mEditor!=null">
+                mEditor=#{mEditor},
+            </if>
+            <if test="mEditTime!=null">
+                mEditTime=#{mEditTime},
+            </if>
+            <if test="mTradingType!=null">
+                mTradingType=#{mTradingType}
+            </if>
+        </set>
+        <where>
+            <if test="mId!=0">
+                mId=#{mId}
+            </if>
+            and
+            <if test="mOrderNumber!=null">
+                mOrderNumber=#{mOrderNumber}
+            </if>
+        </where>
+    </update>
 </mapper>

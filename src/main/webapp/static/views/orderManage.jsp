@@ -16,7 +16,6 @@
     <title>销售订单数据</title>
 
     <link href="../staticRes/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
-    <link href="../staticRes/font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
     <!--图标库-->
     <link href="../staticRes/fontawesome_5.15.4/css/fontawesome.css" rel="stylesheet">
     <link href="../staticRes/fontawesome_5.15.4/css/brands.css" rel="stylesheet">
@@ -179,7 +178,7 @@
                         </span>
                     </li>
                     <li>
-                        <a href=""><i class="fa fa-sign-out"></i> 退出</a>
+                        <a href="/UserInfo/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
                     </li>
                 </ul>
             </nav>
@@ -205,7 +204,7 @@
                             </thead>
                             <tbody>
                             <c:forEach var="orderlists" items="${order_message.AllOrderList}">
-                                <tr>
+                                <tr class="order-table-row">
                                     <td class="text-center">${orderlists.mId}</td>
                                     <td>${orderlists.mOrderNumber}</td>
                                     <td>${orderlists.mContent}</td>
@@ -218,23 +217,63 @@
                                     <td class="text-center">${orderlists.mTradingType}</td>
                                 </tr>
                             </c:forEach>
-
-<%--                            <tr>--%>
-<%--                                <td class="text-center">1</td>--%>
-<%--                                <td>22cc4b1e20240114152033</td>--%>
-<%--                                <td>黄焖鸡一份，加辣</td>--%>
-<%--                                <td>用户123</td>--%>
-<%--                                <td>有一家店铺</td>--%>
-<%--                                <td class="text-center"><span class="label label-primary">&yen;35</span></td>--%>
-<%--                                <td class="text-center small">2024-01-14 15:20:33</td>--%>
-<%--                                <td></td>--%>
-<%--                                <td></td>--%>
-<%--                                <td class="text-center">1</td>--%>
-<%--                            </tr>--%>
                             </tbody>
                         </table>
                     </div>
-<%--                    <a>${order_message.AllOrderList}</a>--%>
+                </div>
+                <!-- 弹窗的HTML结构 -->
+                <div class="modal inmodal" id="editModal" tabindex="-1" role="dialog"  aria-hidden="true">
+                    <div class="modal-dialog modal-lg"><!--modal-lg设置大窗口-->
+                        <div class="modal-content animated fadeIn"><!--设置窗口动画模式-->
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <i class="fa fa-clock-o modal-icon"></i>
+                                <h4 class="modal-title">订单修改</h4>
+                                <small>重要数据！请慎重!!!</small>
+                            </div>
+                            <div class="modal-body">
+                                <div class="col-lg-12">
+                                    <table class="table table-hover margin bottom" id="editTable"><!--border="1",显示表格边框,且边框宽度为1像素-->
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>订单号</th>
+                                            <th class="text-center">订单详情</th>
+                                            <th class="text-center">客户</th>
+                                            <th class="text-center">商铺</th>
+                                            <th class="text-center">交易金额</th>
+                                            <th class="text-center">交易时间</th>
+                                            <th class="text-center">修改人</th>
+                                            <th class="text-center">修改时间</th>
+                                            <th class="text-center">交易状态</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td id="td_data1"></td>
+                                            <td id="td_data2"></td>
+                                            <td contenteditable="true" id="td_data3"></td>
+                                            <td contenteditable="true" id="td_data4"></td>
+                                            <td contenteditable="true" id="td_data5"></td>
+                                            <td contenteditable="true" id="td_data6"></td>
+                                            <td id="td_data7"></td>
+                                            <td id="td_data8"></td>
+                                            <td id="td_data9"></td>
+                                            <td contenteditable="true" id="td_data10"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary" onclick="saveEditedData()">保存</button>
+<%--                                <form role="form" action="/UserInfo/update_order" method="post">--%>
+<%--                                    <button type="button" class="btn btn-primary" onclick="saveEditedData()">保存</button>--%>
+<%--                                </form>--%>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -270,6 +309,125 @@
 <script src="../staticRes/js/plugins/sparkline/jquery.sparkline.min.js"></script>
 <!-- Sparkline demo data  -->
 <script src="../staticRes/js/demo/sparkline-demo.js"></script>
+
+<!--给数据表添加点击响应逻辑-->
+<script>
+    $(document).ready(function() {
+        // 给每一行添加点击事件
+        $(".order-table-row").on("click", function() {
+            // 获取当前行的数据，以示例为准，这里获取第一列的文本内容
+            var orderId = $(this).find("td:first").text();
+            console.log("点击的行: "+ orderId+ "\t"+$(this).find("td:eq(1)").text()
+                + "\t"+$(this).find("td:eq(2)").text()+ "\t"+$(this).find("td:eq(3)").text()
+                + "\t"+$(this).find("td:eq(4)").text()+ "\t"+$(this).find("td:eq(5)").text()
+                + "\t"+$(this).find("td:eq(6)").text()+ "\t"+$(this).find("td:eq(7)").text()
+                + "\t"+$(this).find("td:eq(8)").text()+ "\t"+$(this).find("td:eq(9)").text());
+            //var orderContent = $(this).find("td:eq(2)").text(); //以示例为准，获取第三列的内容
+            //console.log("内容: " + orderContent);
+
+
+            // // 在编辑弹窗中显示数据
+             //$("#modal-body-content").val(orderContent);
+            // var paragraph = document.getElementById("modal-body-content");
+            // paragraph.innerHTML =orderContent;
+            document.getElementById("td_data1").innerText = orderId;
+            document.getElementById("td_data2").innerText = $(this).find("td:eq(1)").text();
+            document.getElementById("td_data3").innerText = $(this).find("td:eq(2)").text();
+            document.getElementById("td_data4").innerText = $(this).find("td:eq(3)").text();
+            document.getElementById("td_data5").innerText = $(this).find("td:eq(4)").text();
+            document.getElementById("td_data6").innerText = $(this).find("td:eq(5)").text().slice(1);
+            document.getElementById("td_data7").innerText = $(this).find("td:eq(6)").text();
+            document.getElementById("td_data8").innerText = $(this).find("td:eq(7)").text();
+            document.getElementById("td_data9").innerText = $(this).find("td:eq(8)").text();
+            document.getElementById("td_data10").innerText = $(this).find("td:eq(9)").text();
+            // // 弹出编辑弹窗
+            // $("#editModal").css("display", "block");
+            $("#editModal").modal("show"); // 显示模态框(使用Bootstrap库显示)
+            //$("#editModal").modal("hide"); // 隐藏模态框
+        });
+    });
+    // 点击保存按钮时的操作
+    function saveEditedData() {
+        // 获取编辑后的数据
+        var table=$("#editTable");
+        var result_data1 = table.find("td:eq(0)").text();
+        var result_data2 = table.find("td:eq(1)").text();
+        var result_data3 = table.find("td:eq(2)").text();
+        var result_data4 = table.find("td:eq(3)").text();
+        var result_data5 = table.find("td:eq(4)").text();
+        var result_data6 = table.find("td:eq(5)").text();
+        var result_data7 = table.find("td:eq(6)").text();
+        var result_data8 = '${message.name}';//修改人
+        var result_data9 = getCurrentDateTime();//修改时间
+        var result_data10 = table.find("td:eq(9)").text();
+        // 在这里可以执行保存操作，例如更新数据或者发送到后端
+        var result="{mId="+ result_data1+",mOrderNumber="+ result_data2+",mContent="+ result_data3
+            +",mOrder=" + result_data4+",mShopper=" + result_data5+",mTradingPrice="+ result_data6
+            +",mCreateTime="+ result_data7+",mEditor="+ result_data8+",mEditTime=" + result_data9
+            +",mTradingType="+ result_data10+"}";
+        console.log("编辑后的数据: " +result);
+
+        // 封装要发送的数据
+        var order_data = {
+            mId: result_data1,
+            mOrderNumber: result_data2,
+            mContent: result_data3,
+            mOrder: result_data4,
+            mShopper: result_data5,
+            mTradingPrice: result_data6,
+            mCreateTime: result_data7,
+            mEditor: result_data8,
+            mEditTime: result_data9,
+            mTradingType: result_data10
+        };
+
+        // 发送数据到后端
+        $.ajax({
+            url: '/UserInfo/update_order',  // 替换为实际的 Spring Boot 后端端点
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(order_data),
+            success: function(response) {
+                console.log('数据成功发送到后端',response);
+                // 在这里处理后端的响应
+                if(response=="success"){
+                    location.reload();
+                }
+            },
+            error: function(error) {
+                console.error('发送数据到后端时出错', error);
+            }
+        });
+
+        // 隐藏编辑弹窗
+        //$("#editModal").css("display", "none");
+        $("#editModal").modal("hide"); // 隐藏模态框
+    }
+
+
+
+    /**
+     * 获取当前时间
+     * @returns {string}
+     */
+    function getCurrentDateTime() {
+        var currentDate = new Date();
+        // 获取年、月、日、小时、分钟、秒
+        var year = currentDate.getFullYear();
+        var month = addZero(currentDate.getMonth() + 1);  // 月份从0开始，需要加1
+        var day = addZero(currentDate.getDate());
+        var hours = addZero(currentDate.getHours());
+        var minutes = addZero(currentDate.getMinutes());
+        var seconds = addZero(currentDate.getSeconds());
+        // 格式化为：yyyy-MM-dd HH:mm:ss
+        var formattedDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+        return formattedDateTime;
+    }
+    // 补零函数，用于确保单个数字在前面加0
+    function addZero(number) {
+        return number < 10 ? '0' + number : number;
+    }
+</script>
 
 </body>
 

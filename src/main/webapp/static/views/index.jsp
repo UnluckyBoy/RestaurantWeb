@@ -186,9 +186,7 @@
                         </span>
                     </li>
                     <li>
-                        <a href="">
-                            <i class="fa fa-sign-out"></i> 退出
-                        </a>
+                        <a href="/UserInfo/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
                     </li>
                 </ul>
             </nav>
