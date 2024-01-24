@@ -55,7 +55,7 @@
                             <li><a href="">信箱</a>
                             </li>
                             <li class="divider"></li>
-                            <li><a href="">安全退出</a>
+                            <li><a href="/UserInfo/logout">安全退出</a>
                             </li>
                         </ul>
                     </div>
@@ -68,15 +68,15 @@
                     <a href="index.jsp"><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="">订单数据<span class="fa arrow"></span></a>
-                            <ul class="nav nav-third-level">
-                                <li>
-                                    <a href="/UserInfo/OrderManagerPage">查看所有</a>
-                                </li>
-                                <li>
-                                    <a href="">修改</a>
-                                </li>
-                            </ul>
+                        <li><a href="/UserInfo/OrderManagerPage">订单数据<span class="fa arrow"></span></a>
+<%--                            <ul class="nav nav-third-level">--%>
+<%--                                <li>--%>
+<%--                                    <a href="/UserInfo/OrderManagerPage">查看所有</a>--%>
+<%--                                </li>--%>
+<%--                                <li>--%>
+<%--                                    <a href="">修改</a>--%>
+<%--                                </li>--%>
+<%--                            </ul>--%>
                         </li>
                         <li><a href="">菜单管理<span class="fa arrow"></span></a>
                             <ul class="nav nav-third-level">
@@ -130,36 +130,33 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href=""><i class="fa fa-sitemap"></i> <span class="nav-label">菜单 </span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li>
-                            <a href="index.html#">三级菜单 <span class="fa arrow"></span></a>
-                            <ul class="nav nav-third-level">
-                                <li>
-                                    <a href="index.jsp#">三级菜单 01</a>
-                                </li>
-                                <li>
-                                    <a href="index.jsp#">三级菜单 01</a>
-                                </li>
-                                <li>
-                                    <a href="index.jsp#">三级菜单 01</a>
-                                </li>
-
-                            </ul>
-                        </li>
-                        <li><a href="index.jsp#">二级菜单</a>
-                        </li>
-                        <li>
-                            <a href="index.jsp#">二级菜单</a>
-                        </li>
-                        <li>
-                            <a href="index.jsp#">二级菜单</a>
-                        </li>
-                    </ul>
-                </li>
 <%--                <li>--%>
-<%--                    <a href=""><i class="fa fa-comments"></i> <span class="nav-label">即时通讯</span><span class="label label-danger pull-right">New</span></a>--%>
+<%--                    <a href=""><i class="fa fa-sitemap"></i> <span class="nav-label">菜单 </span><span class="fa arrow"></span></a>--%>
+<%--                    <ul class="nav nav-second-level">--%>
+<%--                        <li>--%>
+<%--                            <a href="index.html#">三级菜单 <span class="fa arrow"></span></a>--%>
+<%--                            <ul class="nav nav-third-level">--%>
+<%--                                <li>--%>
+<%--                                    <a href="index.jsp#">三级菜单 01</a>--%>
+<%--                                </li>--%>
+<%--                                <li>--%>
+<%--                                    <a href="index.jsp#">三级菜单 01</a>--%>
+<%--                                </li>--%>
+<%--                                <li>--%>
+<%--                                    <a href="index.jsp#">三级菜单 01</a>--%>
+<%--                                </li>--%>
+
+<%--                            </ul>--%>
+<%--                        </li>--%>
+<%--                        <li><a href="index.jsp#">二级菜单</a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a href="index.jsp#">二级菜单</a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a href="index.jsp#">二级菜单</a>--%>
+<%--                        </li>--%>
+<%--                    </ul>--%>
 <%--                </li>--%>
             </ul>
 
@@ -190,11 +187,11 @@
                         <table class="table table-hover margin bottom">
                             <thead>
                             <tr>
-                                <th>序号</th>
-                                <th>订单号</th>
+                                <th class="text-center">序号</th>
+                                <th class="text-center">订单号</th>
                                 <th class="text-center">订单详情</th>
-                                <th class="text-center">客户</th>
-                                <th class="text-center">商铺</th>
+                                <th>客户</th>
+                                <th>商铺</th>
                                 <th class="text-center">交易金额</th>
                                 <th class="text-center">交易时间</th>
                                 <th class="text-center">修改人</th>
@@ -204,9 +201,9 @@
                             </thead>
                             <tbody>
                             <c:forEach var="orderlists" items="${order_message.AllOrderList}">
-                                <tr class="order-table-row">
+                                <tr class="order-table-column">
                                     <td class="text-center">${orderlists.mId}</td>
-                                    <td>${orderlists.mOrderNumber}</td>
+                                    <td class="text-center small">${orderlists.mOrderNumber}</td>
                                     <td>${orderlists.mContent}</td>
                                     <td>${orderlists.mOrder}</td>
                                     <td>${orderlists.mShopper}</td>
@@ -228,43 +225,43 @@
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                                 <i class="fa fa-clock-o modal-icon"></i>
-                                <h4 class="modal-title">订单修改</h4>
-                                <small>重要数据！请慎重!!!</small>
+                                <h4 class="modal-title label label-primary center-block">订单修改</h4>
+                                <small class="label label-danger center-block">重要数据！请慎重!!!</small>
                             </div>
-                            <div class="modal-body">
-                                <div class="col-lg-12">
-                                    <table class="table table-hover margin bottom" id="editTable"><!--border="1",显示表格边框,且边框宽度为1像素-->
-                                        <thead>
-                                        <tr>
-                                            <th>序号</th>
-                                            <th>订单号</th>
-                                            <th class="text-center">订单详情</th>
-                                            <th class="text-center">客户</th>
-                                            <th class="text-center">商铺</th>
-                                            <th class="text-center">交易金额</th>
-                                            <th class="text-center">交易时间</th>
-                                            <th class="text-center">修改人</th>
-                                            <th class="text-center">修改时间</th>
-                                            <th class="text-center">交易状态</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td id="td_data1"></td>
-                                            <td id="td_data2"></td>
-                                            <td contenteditable="true" id="td_data3"></td>
-                                            <td contenteditable="true" id="td_data4"></td>
-                                            <td contenteditable="true" id="td_data5"></td>
-                                            <td contenteditable="true" id="td_data6"></td>
-                                            <td id="td_data7"></td>
-                                            <td id="td_data8"></td>
-                                            <td id="td_data9"></td>
-                                            <td contenteditable="true" id="td_data10"></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div class="col-lg-12">
+                                <table class="table table-hover margin bottom" id="editTable"><!--border="1",显示表格边框,且边框宽度为1像素-->
+                                    <thead>
+                                    <tr>
+                                        <th class="small">序号</th>
+                                        <th class="small">订单号</th>
+                                        <th class="text-center small">订单详情</th>
+                                        <th class="text-center small">客户</th>
+                                        <th class="text-center small">商铺</th>
+                                        <th class="text-center small">交易金额</th>
+                                        <th class="text-center small">交易时间</th>
+                                        <th class="text-center small">修改人</th>
+                                        <th class="text-center small">修改时间</th>
+                                        <th class="text-center small">交易状态</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td id="td_data1"></td>
+                                        <td id="td_data2"></td>
+                                        <td contenteditable="true" id="td_data3"></td>
+                                        <td contenteditable="true" id="td_data4"></td>
+                                        <td contenteditable="true" id="td_data5"></td>
+                                        <td contenteditable="true" id="td_data6"></td>
+                                        <td id="td_data7"></td>
+                                        <td id="td_data8"></td>
+                                        <td id="td_data9"></td>
+                                        <td contenteditable="true" id="td_data10"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
+<%--                            <div class="modal-body">--%>
+<%--                            </div>--%>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
                                 <button type="button" class="btn btn-primary" onclick="saveEditedData()">保存</button>
@@ -314,7 +311,7 @@
 <script>
     $(document).ready(function() {
         // 给每一行添加点击事件
-        $(".order-table-row").on("click", function() {
+        $(".order-table-column").on("click", function() {
             // 获取当前行的数据，以示例为准，这里获取第一列的文本内容
             var orderId = $(this).find("td:first").text();
             console.log("点击的行: "+ orderId+ "\t"+$(this).find("td:eq(1)").text()
