@@ -201,6 +201,15 @@
                 </div>
             </div>
         </div>
+
+        <div class="text-center"><!--按钮-->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal5">
+                上一页
+            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal6">
+                下一页
+            </button>
+        </div>
     </div>
 </div>
 

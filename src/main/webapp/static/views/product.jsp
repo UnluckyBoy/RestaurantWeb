@@ -118,15 +118,12 @@
                             <thead>
                             <tr>
                                 <th class="text-center">序号</th>
-                                <th class="text-center">订单号</th>
-                                <th class="text-center">订单详情</th>
-                                <th>客户</th>
-                                <th>商铺</th>
-                                <th class="text-center">交易金额</th>
-                                <th class="text-center">交易时间</th>
-                                <th class="text-center">修改人</th>
-                                <th class="text-center">修改时间</th>
-                                <th class="text-center">交易状态</th>
+                                <th class="text-center">商品样式</th>
+                                <th class="text-center">商品名称</th>
+                                <th class="text-center">商品详情</th>
+                                <th class="text-center">商品类型</th>
+                                <th>商家</th>
+                                <th>售价</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -140,8 +137,6 @@
                                     <td class="text-center"><span class="label label-primary">&yen;${orderlists.mTradingPrice}</span></td>
                                     <td class="text-center small">${orderlists.mCreateTime}</td>
                                     <td>${orderlists.mEditor}</td>
-                                    <td>${orderlists.mEditTime}</td>
-                                    <td class="text-center">${orderlists.mTradingType}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>
@@ -200,6 +195,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="text-center"><!--按钮-->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal5">
+                上一页
+            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal6">
+                下一页
+            </button>
         </div>
     </div>
 </div>

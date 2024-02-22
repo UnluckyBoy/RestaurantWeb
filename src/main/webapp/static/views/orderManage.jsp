@@ -258,19 +258,22 @@
                                     </tbody>
                                 </table>
                             </div>
-<%--                            <div class="modal-body">--%>
-<%--                            </div>--%>
-                            <div class="modal-footer">
+                            <div class="modal-footer"><!--text-center-modal-footer-->
                                 <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
                                 <button type="button" class="btn btn-primary" onclick="saveEditedData()">保存</button>
-<%--                                <form role="form" action="/UserInfo/update_order" method="post">--%>
-<%--                                    <button type="button" class="btn btn-primary" onclick="saveEditedData()">保存</button>--%>
-<%--                                </form>--%>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="text-center"><!--按钮-->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal5">
+                上一页
+            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal6">
+                下一页
+            </button>
         </div>
     </div>
 </div>
