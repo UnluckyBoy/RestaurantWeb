@@ -453,38 +453,40 @@ public class GetInfoContro {
      * @return
      */
     public List getMonAllTradingData(boolean allType){
-        List<MonthCountView> list = null;
+        List<MonthCountView> listView = null;
         if(allType){
-            list=orderService.getMonthTradingView();//月有效订单
+            listView=orderService.getMonthTradingView();//月有效订单
         }else{
-            list=orderService.getMonthView();//月全订单
+            listView=orderService.getMonthView();//月全订单
         }
         List resultList=new ArrayList();
-        int year = TimeUtil.setTime(list.get(0).getmTime()).getYear();
-        int month = TimeUtil.setTime(list.get(0).getmTime()).getMonthValue();
-        int day = TimeUtil.setTime(list.get(0).getmTime()).getDayOfMonth();
-        if(day>0){
-            for(int x=1;x<day;x++){
-                resultList.add("[gd("+year+","+month+","+x+"),"+0+"]");
+        if(listView.size()>0){
+            int year = TimeUtil.setTime(listView.get(0).getmTime()).getYear();
+            int month = TimeUtil.setTime(listView.get(0).getmTime()).getMonthValue();
+            int day = TimeUtil.setTime(listView.get(0).getmTime()).getDayOfMonth();
+            if(day>0){
+                for(int x=1;x<day;x++){
+                    resultList.add("[gd("+year+","+month+","+x+"),"+0+"]");
+                }
             }
-        }
-        //System.out.println("日期补全:\n"+temp.size()+"\t"+temp.toString());
-        for(int i=0;i<list.size();i++){
-            //resultList.add("[gd("+list.get(i).getmTime().replaceAll("-",",")+"),"+list.get(i).getmCount()+"]");
-            resultList.add("[gd("+TimeUtil.setTime(list.get(i).getmTime()).getYear()+","+
-                    TimeUtil.setTime(list.get(i).getmTime()).getMonthValue()+","+
-                    TimeUtil.setTime(list.get(i).getmTime()).getDayOfMonth()+"),"+list.get(i).getmCount()+"]");
-        }
-        //System.out.println("订单temp:\n"+temp.size()+"\t"+temp.toString());
-        int monEndDay=Month.of(month).length(TimeUtil.LeapYearChecker(list.get(0).getmTime()));
-        int end_day=TimeUtil.setTime(list.get(list.size()-1).getmTime()).getDayOfMonth();
-        //System.out.println("monEndDay:"+monEndDay+"\t"+"end_day:"+end_day);
-        if(end_day<monEndDay){
-            for(int z=end_day+1;z<monEndDay+1;z++){
-                resultList.add("[gd("+year+","+month+","+z+"),"+0+"]");
+            //System.out.println("日期补全:\n"+temp.size()+"\t"+temp.toString());
+            for(int i=0;i<listView.size();i++){
+                //resultList.add("[gd("+list.get(i).getmTime().replaceAll("-",",")+"),"+list.get(i).getmCount()+"]");
+                resultList.add("[gd("+TimeUtil.setTime(listView.get(i).getmTime()).getYear()+","+
+                        TimeUtil.setTime(listView.get(i).getmTime()).getMonthValue()+","+
+                        TimeUtil.setTime(listView.get(i).getmTime()).getDayOfMonth()+"),"+listView.get(i).getmCount()+"]");
             }
+            //System.out.println("订单temp:\n"+temp.size()+"\t"+temp.toString());
+            int monEndDay=Month.of(month).length(TimeUtil.LeapYearChecker(listView.get(0).getmTime()));
+            int end_day=TimeUtil.setTime(listView.get(listView.size()-1).getmTime()).getDayOfMonth();
+            //System.out.println("monEndDay:"+monEndDay+"\t"+"end_day:"+end_day);
+            if(end_day<monEndDay){
+                for(int z=end_day+1;z<monEndDay+1;z++){
+                    resultList.add("[gd("+year+","+month+","+z+"),"+0+"]");
+                }
+            }
+            System.out.println("订单temp:\n"+resultList.size()+"\t"+resultList.toString());
         }
-        System.out.println("订单temp:\n"+resultList.size()+"\t"+resultList.toString());
         return resultList;
     }
 
@@ -571,6 +573,27 @@ public class GetInfoContro {
         }
         return "orderManage";
     }
+    @RequestMapping("/ProductPage")
+    public String ProductPage(HttpServletRequest request,HttpSession session,Model model){
+        if (session != null && session.getAttribute("current_user") != null) {
+            // Session不为空且包含"userId"属性，表示用户已登录
+            model.addAttribute("message", session.getAttribute("current_user"));
+            model.addAttribute("order_message", session.getAttribute("session_message"));
+            System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("message"));
+        }
+        return "product";
+    }
+    @RequestMapping("/CommonMessagePage")
+    public String CommonMessagePage(HttpServletRequest request,HttpSession session,Model model){
+        if (session != null && session.getAttribute("current_user") != null) {
+            // Session不为空且包含"userId"属性，表示用户已登录
+            model.addAttribute("message", session.getAttribute("current_user"));
+            model.addAttribute("order_message", session.getAttribute("session_message"));
+            System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("message"));
+        }
+        return "commonMessage";
+    }
+
 
     @RequestMapping("/login")
     public String Login(@RequestParam("account") String account, @RequestParam("password") String password,

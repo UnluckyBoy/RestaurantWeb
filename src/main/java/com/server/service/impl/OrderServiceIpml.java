@@ -54,6 +54,12 @@ public class OrderServiceIpml implements OrderService {
 
     @Override
     public int getNearMonthTradingPrice() {
+//        Integer temp=orderMapper.getNearMonthTradingPrice();
+//        if(temp==null){
+//            return 0;
+//        }else{
+//            return temp;
+//        }
         return orderMapper.getNearMonthTradingPrice();
     }
 

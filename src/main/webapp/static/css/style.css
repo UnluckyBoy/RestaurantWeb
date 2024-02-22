@@ -1004,7 +1004,7 @@ button.dim:active:before {
 .label-primary,
 .badge-primary {
   background-color: #1ab394;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 .label-success,
 .badge-success {
@@ -1046,6 +1046,8 @@ button.dim:active:before {
   background-color: #2A2E36;
   color: #8B91A0;
 }
+
+
 /* TOOGLE SWICH */
 .onoffswitch {
   position: relative;

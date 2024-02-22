@@ -75,7 +75,7 @@
                     <a href="index.jsp"><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="/UserInfo/OrderManagerPage">订单数据<span class="fa arrow"></span></a>
+                        <li><a href="/UserInfo/OrderManagerPage">订单数据</a>
 <%--                            <ul class="nav nav-third-level">--%>
 <%--                                <li>--%>
 <%--                                    <a href="/UserInfo/OrderManagerPage">查看所有</a>--%>
@@ -85,86 +85,58 @@
 <%--                                </li>--%>
 <%--                            </ul>--%>
                         </li>
-                        <li><a href="">菜单管理<span class="fa arrow"></span></a>
-                            <ul class="nav nav-third-level">
-                                <li>
-                                    <a href="">查询</a>
-                                </li>
-                                <li>
-                                    <a href="">新增</a>
-                                </li>
-                                <li>
-                                    <a href="">修改</a>
-                                </li>
-                                <li>
-                                    <a href="">删除</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a href="">公共信息<span class="fa arrow"></span></a>
-                            <ul class="nav nav-third-level">
-                                <li>
-                                    <a href="">查询</a>
-                                </li>
-                                <li>
-                                    <a href="">新增</a>
-                                </li>
-                                <li>
-                                    <a href="">修改</a>
-                                </li>
-                                <li>
-                                    <a href="">删除</a>
-                                </li>
-                            </ul>
-                        </li>
+                        <li><a href="/UserInfo/ProductPage">菜单管理</a></li>
+                        <li><a href="/UserInfo/CommonMessagePage">公共信息</a></li>
+<%--                        <li><a href="">菜单管理<span class="fa arrow"></span></a>--%>
+<%--                            <ul class="nav nav-third-level">--%>
+<%--                                <li>--%>
+<%--                                    <a href="">查询</a>--%>
+<%--                                </li>--%>
+<%--                                <li>--%>
+<%--                                    <a href="">新增</a>--%>
+<%--                                </li>--%>
+<%--                                <li>--%>
+<%--                                    <a href="">修改</a>--%>
+<%--                                </li>--%>
+<%--                                <li>--%>
+<%--                                    <a href="">删除</a>--%>
+<%--                                </li>--%>
+<%--                            </ul>--%>
+<%--                        </li>--%>
+<%--                        <li><a href="">公共信息<span class="fa arrow"></span></a>--%>
+<%--                            <ul class="nav nav-third-level">--%>
+<%--                                <li>--%>
+<%--                                    <a href="">查询</a>--%>
+<%--                                </li>--%>
+<%--                                <li>--%>
+<%--                                    <a href="">新增</a>--%>
+<%--                                </li>--%>
+<%--                                <li>--%>
+<%--                                    <a href="">修改</a>--%>
+<%--                                </li>--%>
+<%--                                <li>--%>
+<%--                                    <a href="">删除</a>--%>
+<%--                                </li>--%>
+<%--                            </ul>--%>
+<%--                        </li>--%>
                     </ul>
                 </li>
                 <li>
                     <a href="index.jsp#"><i class="fas fa-address-card"></i> <span class="nav-label">个人信息</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="">联系人</a>
-                        </li>
                         <li><a href="">个人资料</a>
                         </li>
                         <li><a href="">帮助中心</a>
-                        </li>
-                        <li><a href="">时间轴</a>
-                        </li>
+<%--                        </li>--%>
+<%--                        <li><a href="">时间轴</a>--%>
+<%--                        </li>--%>
                         <li><a href="">登录</a>
                         </li>
-                        <li><a href="">注册</a>
+                        <li><a href="/UserInfo/logout">退出</a>
                         </li>
                     </ul>
                 </li>
-<%--                <li>--%>
-<%--                    <a href=""><i class="fa fa-sitemap"></i> <span class="nav-label">菜单 </span><span class="fa arrow"></span></a>--%>
-<%--                    <ul class="nav nav-second-level">--%>
-<%--                        <li>--%>
-<%--                            <a href="index.html#">三级菜单 <span class="fa arrow"></span></a>--%>
-<%--                            <ul class="nav nav-third-level">--%>
-<%--                                <li>--%>
-<%--                                    <a href="index.jsp#">三级菜单 01</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="index.jsp#">三级菜单 01</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="index.jsp#">三级菜单 01</a>--%>
-<%--                                </li>--%>
-
-<%--                            </ul>--%>
-<%--                        </li>--%>
-<%--                        <li><a href="index.jsp#">二级菜单</a>--%>
-<%--                        </li>--%>
-<%--                        <li>--%>
-<%--                            <a href="index.jsp#">二级菜单</a>--%>
-<%--                        </li>--%>
-<%--                        <li>--%>
-<%--                            <a href="index.jsp#">二级菜单</a>--%>
-<%--                        </li>--%>
-<%--                    </ul>--%>
-<%--                </li>--%>
             </ul>
 
         </div>
@@ -178,8 +150,9 @@
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
                         <span class="m-r-sm text-muted welcome-message">
-                            <a href="/UserInfo/IndexPage" title="返回首页">
-                                <i class="fa fa-home"></i></a> ${message.name} 欢迎使用
+                            <a href="/UserInfo/IndexPage" title="返回首页"><i class="fa fa-home"></i>
+                            </a>
+                            <strong class="font-bold label-warning-light">${message.name}</strong> | 欢迎使用
                         </span>
                     </li>
                     <li>

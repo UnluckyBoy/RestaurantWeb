@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: matrix
-  Date: 2024/1/17 0017
-  Time: 16:24
+  Date: 2024/2/22 0022
+  Time: 13:08
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
 
-    <title>销售订单数据</title>
+    <title>产品管理</title>
 
     <link href="../staticRes/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
     <!--图标库-->
@@ -70,49 +70,9 @@
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="/UserInfo/OrderManagerPage">订单数据</a>
-<%--                            <ul class="nav nav-third-level">--%>
-<%--                                <li>--%>
-<%--                                    <a href="/UserInfo/OrderManagerPage">查看所有</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">修改</a>--%>
-<%--                                </li>--%>
-<%--                            </ul>--%>
                         </li>
                         <li><a href="/UserInfo/ProductPage">菜单管理</a></li>
                         <li><a href="/UserInfo/CommonMessagePage">公共信息</a></li>
-<%--                        <li><a href="">菜单管理<span class="fa arrow"></span></a>--%>
-<%--                            <ul class="nav nav-third-level">--%>
-<%--                                <li>--%>
-<%--                                    <a href="">查询</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">新增</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">修改</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">删除</a>--%>
-<%--                                </li>--%>
-<%--                            </ul>--%>
-<%--                        </li>--%>
-<%--                        <li><a href="">公共信息<span class="fa arrow"></span></a>--%>
-<%--                            <ul class="nav nav-third-level">--%>
-<%--                                <li>--%>
-<%--                                    <a href="">查询</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">新增</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">修改</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">删除</a>--%>
-<%--                                </li>--%>
-<%--                            </ul>--%>
-<%--                        </li>--%>
                     </ul>
                 </li>
                 <li>
@@ -128,34 +88,6 @@
                         </li>
                     </ul>
                 </li>
-<%--                <li>--%>
-<%--                    <a href=""><i class="fa fa-sitemap"></i> <span class="nav-label">菜单 </span><span class="fa arrow"></span></a>--%>
-<%--                    <ul class="nav nav-second-level">--%>
-<%--                        <li>--%>
-<%--                            <a href="index.html#">三级菜单 <span class="fa arrow"></span></a>--%>
-<%--                            <ul class="nav nav-third-level">--%>
-<%--                                <li>--%>
-<%--                                    <a href="index.jsp#">三级菜单 01</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="index.jsp#">三级菜单 01</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="index.jsp#">三级菜单 01</a>--%>
-<%--                                </li>--%>
-
-<%--                            </ul>--%>
-<%--                        </li>--%>
-<%--                        <li><a href="index.jsp#">二级菜单</a>--%>
-<%--                        </li>--%>
-<%--                        <li>--%>
-<%--                            <a href="index.jsp#">二级菜单</a>--%>
-<%--                        </li>--%>
-<%--                        <li>--%>
-<%--                            <a href="index.jsp#">二级菜单</a>--%>
-<%--                        </li>--%>
-<%--                    </ul>--%>
-<%--                </li>--%>
             </ul>
 
         </div>
@@ -163,9 +95,9 @@
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-<%--                <div class="navbar-header">--%>
-<%--                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="/UserInfo/IndexPage"><i class="fas fa-desktop"></i> </a>--%>
-<%--                </div>--%>
+                <%--                <div class="navbar-header">--%>
+                <%--                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="/UserInfo/IndexPage"><i class="fas fa-desktop"></i> </a>--%>
+                <%--                </div>--%>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
                         <span class="m-r-sm text-muted welcome-message"><a href="/UserInfo/IndexPage" title="返回首页">
@@ -258,14 +190,11 @@
                                     </tbody>
                                 </table>
                             </div>
-<%--                            <div class="modal-body">--%>
-<%--                            </div>--%>
+                            <%--                            <div class="modal-body">--%>
+                            <%--                            </div>--%>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
                                 <button type="button" class="btn btn-primary" onclick="saveEditedData()">保存</button>
-<%--                                <form role="form" action="/UserInfo/update_order" method="post">--%>
-<%--                                    <button type="button" class="btn btn-primary" onclick="saveEditedData()">保存</button>--%>
-<%--                                </form>--%>
                             </div>
                         </div>
                     </div>
@@ -322,7 +251,7 @@
 
 
             // // 在编辑弹窗中显示数据
-             //$("#modal-body-content").val(orderContent);
+            //$("#modal-body-content").val(orderContent);
             // var paragraph = document.getElementById("modal-body-content");
             // paragraph.innerHTML =orderContent;
             document.getElementById("td_data1").innerText = orderId;

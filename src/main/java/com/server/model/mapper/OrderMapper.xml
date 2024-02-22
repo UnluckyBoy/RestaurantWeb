@@ -63,9 +63,12 @@
     </select>
     <!--最近一个月内的有效订单总额-->
     <select id="getNearMonthTradingPrice" resultType="int">
-        SELECT SUM(mTradingPrice) as TradingPriceSum
+--         SELECT SUM(mTradingPrice) as TradingPriceSum
+--         from order_info_data
+--         where mCreateTime >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) and mTradingType=1
+        SELECT COALESCE(SUM(mTradingPrice), 0) as TradingPriceSum
         from order_info_data
-        where mCreateTime >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) and mTradingType=1
+        where mCreateTime >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) and mTradingType = 1
     </select>
     <!--指定查找当前年所有订单数-->
     <select id="getCurrentYearAllOrderCount" resultType="com.server.model.pojo.OrderInfo">
