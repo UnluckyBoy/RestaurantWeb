@@ -3,6 +3,7 @@ package com.server.model.mapper;
 import com.server.model.pojo.AllTradingView;
 import com.server.model.pojo.MonthCountView;
 import com.server.model.pojo.OrderInfo;
+import com.server.model.pojo.Product;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -30,4 +31,5 @@ public interface OrderMapper {
     public List<AllTradingView> getAllTradingView();//查找当月有效订单数据的产品、类别、销售额按照高到低排序
 
     public boolean freshOrder(Map<String,Object> map);//更新订单信息
+    public List<Product> getAllProduct();//获取所有产品
 }

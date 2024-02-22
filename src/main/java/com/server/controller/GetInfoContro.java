@@ -1,11 +1,8 @@
 package com.server.controller;
 
-import com.server.model.pojo.AllTradingView;
-import com.server.model.pojo.MonthCountView;
-import com.server.model.pojo.OrderInfo;
+import com.server.model.pojo.*;
 import com.server.service.OrderService;
 import com.server.tools.*;
-import com.server.model.pojo.UserInfo;
 import com.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -421,6 +418,12 @@ public class GetInfoContro {
         return orderMap;
     }
 
+    public Map ProductMap(){
+        Map<String,Object> productMap=new HashMap<>();
+        productMap.put("Product",orderService.getAllProduct());
+        return productMap;
+    }
+
     /**
      * 刷新session
      * @param session
@@ -515,7 +518,7 @@ public class GetInfoContro {
 
 //        orderMap.put("AllTradingList",orderService.getAllTradingView());
 //        orderMap.put("AllOrderList",orderService.orderQueryAll());
-        List<AllTradingView> test1=orderService.getAllTradingView();
+        List<Product> test1=orderService.getAllProduct();
         List<OrderInfo> test2=orderService.orderQueryAll();
         System.out.println("test1:"+test1.size()+"\t"+test1.toString());
         System.out.println("test2:"+test2.size()+"\t"+test2.toString());
@@ -554,12 +557,10 @@ public class GetInfoContro {
 
     @RequestMapping("/loginPage")
     public String LoginPage(HttpServletRequest request,Model model){
-        //model.addAttribute("message", resultMap.toString());
         return "login";
     }
     @RequestMapping("/registerPage")
     public String registerPage(HttpServletRequest request,Model model){
-        //model.addAttribute("message", resultMap.toString());
         return "register";
     }
 
@@ -577,9 +578,10 @@ public class GetInfoContro {
     public String ProductPage(HttpServletRequest request,HttpSession session,Model model){
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
-            model.addAttribute("message", session.getAttribute("current_user"));
-            model.addAttribute("order_message", session.getAttribute("session_message"));
-            System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("message"));
+//            model.addAttribute("message", session.getAttribute("current_user"));
+//            model.addAttribute("order_message", session.getAttribute("session_message"));
+            model.addAttribute("product",ProductMap());
+            System.out.println("product:\t"+model.getAttribute("product"));
         }
         return "product";
     }
@@ -647,8 +649,6 @@ public class GetInfoContro {
                 if(login_status){
                     resultMap=CommonClass2Map(mUser);
                     System.out.println("Server_running_login_Map:\n"+resultMap.toString());
-
-                    //session.setAttribute("current_user", resultMap);
                     freshSession(session,"current_user",resultMap);
                     return "redirect:/UserInfo/IndexPage";//重定向到主页
                 }else{
@@ -711,7 +711,6 @@ public class GetInfoContro {
         }else{
             return ResponseEntity.ok("error");
         }
-        //freshSession(session);
     }
 
 }

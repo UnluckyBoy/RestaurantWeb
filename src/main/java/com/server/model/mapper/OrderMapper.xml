@@ -126,6 +126,18 @@
             pType
         from CTEMP
     </select>
+    <!--查询所有产品信息-->
+    <select id="getAllProduct" resultType="com.server.model.pojo.Product">
+        select pId,
+               pName,
+               pIcon,
+               pDescription,
+               pType,
+               pShopper,
+               pPrice
+        from product_info_data
+    </select>
+
 
     <!--UpDate逻辑-->
     <update id="freshOrder" parameterType="java.util.HashMap">

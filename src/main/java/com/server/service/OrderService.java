@@ -3,6 +3,7 @@ package com.server.service;
 import com.server.model.pojo.AllTradingView;
 import com.server.model.pojo.MonthCountView;
 import com.server.model.pojo.OrderInfo;
+import com.server.model.pojo.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,4 +29,5 @@ public interface OrderService {
     public List<AllTradingView> getAllTradingView();
 
     public boolean freshOrder(Map<String,Object> map);
+    public List<Product> getAllProduct();
 }

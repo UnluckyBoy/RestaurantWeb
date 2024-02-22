@@ -4,6 +4,7 @@ import com.server.model.mapper.OrderMapper;
 import com.server.model.pojo.AllTradingView;
 import com.server.model.pojo.MonthCountView;
 import com.server.model.pojo.OrderInfo;
+import com.server.model.pojo.Product;
 import com.server.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,5 +87,10 @@ public class OrderServiceIpml implements OrderService {
     @Override
     public boolean freshOrder(Map<String, Object> map) {
         return orderMapper.freshOrder(map);
+    }
+
+    @Override
+    public List<Product> getAllProduct() {
+        return orderMapper.getAllProduct();
     }
 }
