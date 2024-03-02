@@ -122,21 +122,20 @@
                                 <th class="text-center">商品名称</th>
                                 <th class="text-center">商品详情</th>
                                 <th class="text-center">商品类型</th>
-                                <th>商家</th>
-                                <th>售价</th>
+                                <th class="text-center">商家</th>
+                                <th class="text-center">售价</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach var="orderlists" items="${order_message.AllOrderList}">
+                            <c:forEach var="productlists" items="${product.ProductList}">
                                 <tr class="order-table-column">
-                                    <td class="text-center">${orderlists.mId}</td>
-                                    <td class="text-center small">${orderlists.mOrderNumber}</td>
-                                    <td>${orderlists.mContent}</td>
-                                    <td>${orderlists.mOrder}</td>
-                                    <td>${orderlists.mShopper}</td>
-                                    <td class="text-center"><span class="label label-primary">&yen;${orderlists.mTradingPrice}</span></td>
-                                    <td class="text-center small">${orderlists.mCreateTime}</td>
-                                    <td>${orderlists.mEditor}</td>
+                                    <td class="text-center">${productlists.pId}</td>
+                                    <td class="text-center small">${productlists.pIcon}</td>
+                                    <td class="text-center">${productlists.pName}</td>
+                                    <td class="text-center">${productlists.pDescription}</td>
+                                    <td class="text-center">${productlists.pType}</td>
+                                    <td class="text-center">${productlists.pShopper}</td>
+                                    <td class="text-center"> <span class="label label-primary">&yen;${productlists.pPrice}</span></td>
                                 </tr>
                             </c:forEach>
                             </tbody>

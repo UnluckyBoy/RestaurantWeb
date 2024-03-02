@@ -420,7 +420,7 @@ public class GetInfoContro {
 
     public Map ProductMap(){
         Map<String,Object> productMap=new HashMap<>();
-        productMap.put("Product",orderService.getAllProduct());
+        productMap.put("ProductList",orderService.getAllProduct());
         return productMap;
     }
 
@@ -578,7 +578,7 @@ public class GetInfoContro {
     public String ProductPage(HttpServletRequest request,HttpSession session,Model model){
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
-//            model.addAttribute("message", session.getAttribute("current_user"));
+            model.addAttribute("message", session.getAttribute("current_user"));
 //            model.addAttribute("order_message", session.getAttribute("session_message"));
             model.addAttribute("product",ProductMap());
             System.out.println("product:\t"+model.getAttribute("product"));
