@@ -4,17 +4,28 @@ import com.server.model.pojo.*;
 import com.server.service.OrderService;
 import com.server.tools.*;
 import com.server.service.UserService;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.time.Month;
 import java.util.*;
@@ -30,7 +41,7 @@ import java.util.*;
  */
 @Controller
 //@ResponseBody
-@RequestMapping("/UserInfo")
+@RequestMapping("/Restaurant")
 public class GetInfoContro {
     private static String system_Path=System.getProperty("user.dir")+"/BackResource/";
     private static String user_info_Path="/HeadIcon";
@@ -50,6 +61,8 @@ public class GetInfoContro {
     //private List<UserInfo> mListUser;
     private static String PASSWORD_EncryKEY = "EncryptionKey_By-WuMing";//自定义密钥:EncryptionKey_By-WuMing
     private static String mHand="/default.png";//默认头像地址
+    private static String root_dir=System.getProperty("user.dir")+"/BackResource/";
+    private static String product_dir="ProductIcon/";
 
 //    /**
 //     * 登录接口
@@ -551,7 +564,7 @@ public class GetInfoContro {
         } else {
             // Session为空或不包含"userId"属性，表示用户未登录
             System.out.println("用户未登录");
-            return "redirect:/UserInfo/loginPage";
+            return "redirect:/Restaurant/loginPage";
         }
     }
 
@@ -650,7 +663,7 @@ public class GetInfoContro {
                     resultMap=CommonClass2Map(mUser);
                     System.out.println("Server_running_login_Map:\n"+resultMap.toString());
                     freshSession(session,"current_user",resultMap);
-                    return "redirect:/UserInfo/IndexPage";//重定向到主页
+                    return "redirect:/Restaurant/IndexPage";//重定向到主页
                 }else{
                     resultMap.put("result","error");
                     return "login";
@@ -681,7 +694,7 @@ public class GetInfoContro {
                     boolean logout= userService.fresh_status_logout(requestMap);
                     if(logout){
                         session.invalidate(); //使当前session失效
-                        return "redirect:/UserInfo/loginPage";
+                        return "redirect:/Restaurant/loginPage";
                     }else{
                         System.out.println("登出异常:"+logout);
                         return "";
@@ -713,4 +726,28 @@ public class GetInfoContro {
         }
     }
 
+    @RequestMapping("/upload_product_head")
+    public ResponseEntity<String> handleFileUpload(@RequestParam("image") MultipartFile file,
+                                                   @RequestParam("pName") String pName,
+                                                   @RequestParam("pShopper") String pShopper) {
+        System.out.println("上传图片:"+pName+"___"+pShopper);
+        try {
+            // 处理文件上传
+            if (file.isEmpty()) {
+                return new ResponseEntity<>("请选择图片.", HttpStatus.BAD_REQUEST);
+            }
+            Map<String, Object> up_headMap=new HashMap<>();
+            if(ImageFileIOUtil.writeImageResized(root_dir,product_dir,file)=="success"){
+                up_headMap.put("pIcon","/"+product_dir+"resized_"+file.getOriginalFilename());
+                up_headMap.put("pName",pName);
+                up_headMap.put("pShopper",pShopper);
+                orderService.up_product_Icon(up_headMap);
+            }
+            return new ResponseEntity<>(ImageFileIOUtil.writeImageResized(root_dir,product_dir,file), HttpStatus.OK);
+        } catch (IOException e) {
+            // 返回错误信息
+            return new ResponseEntity<>("failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        //return new ResponseEntity<>("success", HttpStatus.OK);
+    }
 }

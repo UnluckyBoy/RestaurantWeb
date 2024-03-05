@@ -93,4 +93,9 @@ public class OrderServiceIpml implements OrderService {
     public List<Product> getAllProduct() {
         return orderMapper.getAllProduct();
     }
+
+    @Override
+    public void up_product_Icon(Map<String, Object> map) {
+        orderMapper.up_product_Icon(map);
+    }
 }

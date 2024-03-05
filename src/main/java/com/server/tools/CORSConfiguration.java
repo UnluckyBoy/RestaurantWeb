@@ -56,7 +56,7 @@ public class CORSConfiguration extends WebMvcConfigurationSupport {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String dirPath=System.getProperty("user.dir")+"/BackResource/";
         String static_dirPath=System.getProperty("user.dir")+"/staticRes/";
-        System.out.println("头像路径:"+dirPath);
+        //System.out.println("头像路径:"+dirPath);
         //和页面有关的静态目录都放在项目的static目录下(异常,放在"/BackResource/webStaticRes/"下)
         //registry.addResourceHandler("/**").addResourceLocations("classpath:/WEB-INF/");
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");

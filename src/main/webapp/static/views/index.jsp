@@ -62,7 +62,7 @@
                             <li><a href="">信箱</a>
                             </li>
                             <li class="divider"></li>
-                            <li><a href="/UserInfo/logout">安全退出</a>
+                            <li><a href="/Restaurant/logout">安全退出</a>
                             </li>
                         </ul>
                     </div>
@@ -75,18 +75,18 @@
                     <a href="index.jsp"><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="/UserInfo/OrderManagerPage">订单数据</a>
+                        <li><a href="/Restaurant/OrderManagerPage">订单数据</a>
 <%--                            <ul class="nav nav-third-level">--%>
 <%--                                <li>--%>
-<%--                                    <a href="/UserInfo/OrderManagerPage">查看所有</a>--%>
+<%--                                    <a href="/Restaurant/OrderManagerPage">查看所有</a>--%>
 <%--                                </li>--%>
 <%--                                <li>--%>
 <%--                                    <a href="">修改</a>--%>
 <%--                                </li>--%>
 <%--                            </ul>--%>
                         </li>
-                        <li><a href="/UserInfo/ProductPage">菜单管理</a></li>
-                        <li><a href="/UserInfo/CommonMessagePage">公共信息</a></li>
+                        <li><a href="/Restaurant/ProductPage">菜单管理</a></li>
+                        <li><a href="/Restaurant/CommonMessagePage">公共信息</a></li>
 <%--                        <li><a href="">菜单管理<span class="fa arrow"></span></a>--%>
 <%--                            <ul class="nav nav-third-level">--%>
 <%--                                <li>--%>
@@ -133,7 +133,7 @@
 <%--                        </li>--%>
                         <li><a href="">登录</a>
                         </li>
-                        <li><a href="/UserInfo/logout">退出</a>
+                        <li><a href="/Restaurant/logout">退出</a>
                         </li>
                     </ul>
                 </li>
@@ -145,18 +145,18 @@
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
 <%--                <div class="navbar-header">--%>
-<%--                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="/UserInfo/IndexPage"><i class="fas fa-desktop"></i> </a>--%>
+<%--                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="/Restaurant/IndexPage"><i class="fas fa-desktop"></i> </a>--%>
 <%--                </div>--%>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
                         <span class="m-r-sm text-muted welcome-message">
-                            <a href="/UserInfo/IndexPage" title="返回首页"><i class="fa fa-home"></i>
+                            <a href="/Restaurant/IndexPage" title="返回首页"><i class="fa fa-home"></i>
                             </a>
                             <strong class="font-bold label-warning-light">${message.name}</strong> | 欢迎使用
                         </span>
                     </li>
                     <li>
-                        <a href="/UserInfo/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
+                        <a href="/Restaurant/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
                     </li>
                 </ul>
             </nav>

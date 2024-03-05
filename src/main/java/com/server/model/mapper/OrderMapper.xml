@@ -140,6 +140,7 @@
 
 
     <!--UpDate逻辑-->
+    <!--更新订单-->
     <update id="freshOrder" parameterType="java.util.HashMap">
         update  order_info_data
         <set >
@@ -175,6 +176,24 @@
             and
             <if test="mOrderNumber!=null">
                 mOrderNumber=#{mOrderNumber}
+            </if>
+        </where>
+    </update>
+    <!--更新产品图片-->
+    <update id="up_product_Icon" parameterType="java.util.HashMap">
+        update product_info_data
+        <set>
+            <if test="pIcon!=null">
+                pIcon=#{pIcon}
+            </if>
+        </set>
+        <where>
+            <if test="pName!=null">
+                pName=#{pName}
+            </if>
+            and
+            <if test="pShopper!=null">
+                pShopper=#{pShopper}
             </if>
         </where>
     </update>

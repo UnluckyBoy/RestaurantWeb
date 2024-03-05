@@ -56,23 +56,19 @@
                             <li><a href="">信箱</a>
                             </li>
                             <li class="divider"></li>
-                            <li><a href="/UserInfo/logout">安全退出</a>
+                            <li><a href="/Restaurant/logout">安全退出</a>
                             </li>
                         </ul>
                     </div>
-                    <div class="logo-element">
-                        H+
-                    </div>
-
                 </li>
                 <li class="active">
                     <a href="index.jsp"><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="/UserInfo/OrderManagerPage">订单数据</a>
+                        <li><a href="/Restaurant/OrderManagerPage">订单数据</a>
                         </li>
-                        <li><a href="/UserInfo/ProductPage">菜单管理</a></li>
-                        <li><a href="/UserInfo/CommonMessagePage">公共信息</a></li>
+                        <li><a href="/Restaurant/ProductPage">菜单管理</a></li>
+                        <li><a href="/Restaurant/CommonMessagePage">公共信息</a></li>
                     </ul>
                 </li>
                 <li>
@@ -84,7 +80,7 @@
                         <li><a href="">帮助中心</a>
                         <li><a href="">登录</a>
                         </li>
-                        <li><a href="/UserInfo/logout">退出</a>
+                        <li><a href="/Restaurant/logout">退出</a>
                         </li>
                     </ul>
                 </li>
@@ -96,16 +92,16 @@
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <%--                <div class="navbar-header">--%>
-                <%--                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="/UserInfo/IndexPage"><i class="fas fa-desktop"></i> </a>--%>
+                <%--                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="/Restaurant/IndexPage"><i class="fas fa-desktop"></i> </a>--%>
                 <%--                </div>--%>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
-                        <span class="m-r-sm text-muted welcome-message"><a href="/UserInfo/IndexPage" title="返回首页">
+                        <span class="m-r-sm text-muted welcome-message"><a href="/Restaurant/IndexPage" title="返回首页">
                             <i class="fa fa-home"></i></a> <strong class="font-bold label-warning-light" >${message.name}</strong> | 欢迎使用
                         </span>
                     </li>
                     <li>
-                        <a href="/UserInfo/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
+                        <a href="/Restaurant/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
                     </li>
                 </ul>
             </nav>
@@ -124,31 +120,82 @@
                                 <th class="text-center">商品类型</th>
                                 <th class="text-center">商家</th>
                                 <th class="text-center">售价</th>
+                                <th class="text-center">备注</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach var="productlists" items="${product.ProductList}">
-                                <tr class="order-table-column">
-                                    <td class="text-center">${productlists.pId}</td>
-                                    <td class="text-center small">${productlists.pIcon}</td>
-                                    <td class="text-center">${productlists.pName}</td>
-                                    <td class="text-center">${productlists.pDescription}</td>
-                                    <td class="text-center">${productlists.pType}</td>
-                                    <td class="text-center">${productlists.pShopper}</td>
-                                    <td class="text-center"> <span class="label label-primary">&yen;${productlists.pPrice}</span></td>
+                            <c:forEach var="productLists" items="${product.ProductList}">
+                                <tr class="product-table-column">
+                                    <td class="text-center">${productLists.pId}</td>
+<%--                                    <td class="text-center small">${productlists.pIcon}</td>--%>
+                                    <td class="text-center">
+                                        <img id="product_head" src="http://localhost:8080${productLists.pIcon}" alt="Image" width="64" height="64">
+                                    </td>
+                                    <td class="text-center" id="product_name">${productLists.pName}</td>
+                                    <td class="text-center">${productLists.pDescription}</td>
+                                    <td class="text-center">${productLists.pType}</td>
+                                    <td class="text-center" id="product_shopper">${productLists.pShopper}</td>
+                                    <td class="text-center"><span class="label label-primary">&yen;${productLists.pPrice}</span></td>
+                                    <td class="text-center small">
+                                        <button id="btn_add" type="button" class="btn btn-success" onclick="update_Product()">修改</button>
+                                        <button id="btn_delete" type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirm_Modal">删除</button>
+                                    </td>
                                 </tr>
                             </c:forEach>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <!-- 弹窗的HTML结构 -->
+
+                <!--确定删除窗口-小模态窗口-->
+                <div class="modal inmodal fade" id="confirm_Modal" tabindex="-1" role="dialog"  aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+<%--                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>--%>
+                                <label>温馨提示</label>
+                            </div>
+                            <div class="modal-body">
+                                <strong class="label label-danger center-block">重要数据！请慎重!!!是否删除？</strong>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-danger">确定</button>
+                                    <button type="button" class="btn btn-white" data-dismiss="modal">取消</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--图片修改弹窗-->
+                <die class="modal inmodal" id="imageEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content animated fadeIn">
+                            <div class="modal-header">
+                                <label class="modal-title label label-primary center-block">图片更新</label>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        <input type="file" id="product_head_file" name="" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-primary" id="updateHead">保存</button>
+                                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </die>
+                <!--全部修改-弹窗的HTML结构 -->
                 <div class="modal inmodal" id="editModal" tabindex="-1" role="dialog"  aria-hidden="true">
                     <div class="modal-dialog modal-lg"><!--modal-lg设置大窗口-->
                         <div class="modal-content animated fadeIn"><!--设置窗口动画模式-->
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <i class="fa fa-clock-o modal-icon"></i>
                                 <h4 class="modal-title label label-primary center-block">订单修改</h4>
                                 <small class="label label-danger center-block">重要数据！请慎重!!!</small>
                             </div>
@@ -157,38 +204,32 @@
                                     <thead>
                                     <tr>
                                         <th class="small">序号</th>
-                                        <th class="small">订单号</th>
-                                        <th class="text-center small">订单详情</th>
-                                        <th class="text-center small">客户</th>
-                                        <th class="text-center small">商铺</th>
-                                        <th class="text-center small">交易金额</th>
-                                        <th class="text-center small">交易时间</th>
-                                        <th class="text-center small">修改人</th>
-                                        <th class="text-center small">修改时间</th>
-                                        <th class="text-center small">交易状态</th>
+                                        <th class="text-center small">商品样式</th>
+                                        <th class="text-center small">商品名称</th>
+                                        <th class="text-center small">商品详情</th>
+                                        <th class="text-center small">商品类型</th>
+                                        <th class="text-center small">商家</th>
+                                        <th class="text-center small">售价</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td id="td_data1"></td>
-                                        <td id="td_data2"></td>
-                                        <td contenteditable="true" id="td_data3"></td>
-                                        <td contenteditable="true" id="td_data4"></td>
-                                        <td contenteditable="true" id="td_data5"></td>
-                                        <td contenteditable="true" id="td_data6"></td>
-                                        <td id="td_data7"></td>
-                                        <td id="td_data8"></td>
-                                        <td id="td_data9"></td>
-                                        <td contenteditable="true" id="td_data10"></td>
+                                        <td class="text-center small" id="td_data1"></td>
+                                        <td class="text-center small" id="td_data2"></td>
+                                        <td class="text-center small" contenteditable="true" id="td_data3"></td>
+                                        <td class="text-center small" contenteditable="true" id="td_data4"></td>
+                                        <td class="text-center small" contenteditable="true" id="td_data5"></td>
+                                        <td class="text-center small" contenteditable="true" id="td_data6"></td>
+                                        <td class="text-center small" contenteditable="true" id="td_data7"></td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <%--                            <div class="modal-body">--%>
-                            <%--                            </div>--%>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                                <button type="button" class="btn btn-primary" onclick="saveEditedData()">保存</button>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-primary" onclick="saveEditedData()">保存</button>
+                                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -197,12 +238,9 @@
         </div>
 
         <div class="text-center"><!--按钮-->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal5">
-                上一页
-            </button>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal6">
-                下一页
-            </button>
+            <button type="button" class="btn btn-primary">上一页</button>
+            <button type="button" class="btn btn-primary">下一页</button>
+            <button type="button" class="btn btn-success" onclick="add_Product()">添 加</button>
         </div>
     </div>
 </div>
@@ -241,37 +279,68 @@
 <script>
     $(document).ready(function() {
         // 给每一行添加点击事件
-        $(".order-table-column").on("click", function() {
-            // 获取当前行的数据，以示例为准，这里获取第一列的文本内容
-            var orderId = $(this).find("td:first").text();
-            console.log("点击的行: "+ orderId+ "\t"+$(this).find("td:eq(1)").text()
-                + "\t"+$(this).find("td:eq(2)").text()+ "\t"+$(this).find("td:eq(3)").text()
-                + "\t"+$(this).find("td:eq(4)").text()+ "\t"+$(this).find("td:eq(5)").text()
-                + "\t"+$(this).find("td:eq(6)").text()+ "\t"+$(this).find("td:eq(7)").text()
-                + "\t"+$(this).find("td:eq(8)").text()+ "\t"+$(this).find("td:eq(9)").text());
-            //var orderContent = $(this).find("td:eq(2)").text(); //以示例为准，获取第三列的内容
-            //console.log("内容: " + orderContent);
+        // $(".product-table-column").on("click", function() {
+        //     // 获取当前行的数据，以示例为准，这里获取第一列的文本内容
+        //     var orderId = $(this).find("td:first").text();
+        //     var orderContent = $(this).find("td:eq(6)").text(); //以示例为准，获取第三列的内容
+        //     console.log("内容: " + orderContent+"  长度:"+orderContent.length);
+        //     // 在编辑弹窗中显示数据
+        //     document.getElementById("td_data1").innerText = orderId;
+        //     document.getElementById("td_data2").innerText = $(this).find("td:eq(1)").attr("src");
+        //     document.getElementById("td_data3").innerText = $(this).find("td:eq(2)").text();
+        //     document.getElementById("td_data4").innerText = $(this).find("td:eq(3)").text();
+        //     document.getElementById("td_data5").innerText = $(this).find("td:eq(4)").text();
+        //     document.getElementById("td_data6").innerText = $(this).find("td:eq(5)").text();
+        //     document.getElementById("td_data7").innerText = $(this).find("td:eq(6)").text().slice(1);
+        //     // // 弹出编辑弹窗
+        //     // $("#editModal").css("display", "block");
+        //     $("#editModal").modal("show"); // 显示模态框(使用Bootstrap库显示)
+        //     //$("#editModal").modal("hide"); // 隐藏模态框
+        // });
 
+        /**
+         * 第一行:first-child
+         * 第二行:nth-child(2)
+         */
+        $('table tr td:nth-child(2)').click(function() {
+            // 获取当前点击的<td>元素的文本或其他属性
+            var cellText = $(this).parent().find("td:eq(0)").text();
+            var pName=$(this).parent().find("td:eq(2)").text();
+            var pShopper=$(this).parent().find("td:eq(5)").text();
+            console.log("点击了图片"+cellText);
+            $("#imageEditModal").modal("show");
 
-            // // 在编辑弹窗中显示数据
-            //$("#modal-body-content").val(orderContent);
-            // var paragraph = document.getElementById("modal-body-content");
-            // paragraph.innerHTML =orderContent;
-            document.getElementById("td_data1").innerText = orderId;
-            document.getElementById("td_data2").innerText = $(this).find("td:eq(1)").text();
-            document.getElementById("td_data3").innerText = $(this).find("td:eq(2)").text();
-            document.getElementById("td_data4").innerText = $(this).find("td:eq(3)").text();
-            document.getElementById("td_data5").innerText = $(this).find("td:eq(4)").text();
-            document.getElementById("td_data6").innerText = $(this).find("td:eq(5)").text().slice(1);
-            document.getElementById("td_data7").innerText = $(this).find("td:eq(6)").text();
-            document.getElementById("td_data8").innerText = $(this).find("td:eq(7)").text();
-            document.getElementById("td_data9").innerText = $(this).find("td:eq(8)").text();
-            document.getElementById("td_data10").innerText = $(this).find("td:eq(9)").text();
-            // // 弹出编辑弹窗
-            // $("#editModal").css("display", "block");
-            $("#editModal").modal("show"); // 显示模态框(使用Bootstrap库显示)
-            //$("#editModal").modal("hide"); // 隐藏模态框
+            document.getElementById('updateHead').addEventListener('click', function() {
+                var fileInput = $("#product_head_file")[0];
+                var file = fileInput.files[0];
+                var productName =pName; //产品名称
+                var productShopper = pShopper; //商家
+
+                var formData = new FormData();
+                if (file) {
+                    formData.append("image", file);
+                    formData.append("pName", productName);
+                    formData.append("pShopper", productShopper);
+                    $.ajax({
+                        url: "/Restaurant/upload_product_head", //SpringBoot应用地址
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(data) {
+                            alert("上传结果:" + data);
+                        },
+                        error: function(jqXHR, textStatus, errorMessage) {
+                            alert("上传结果:" + errorMessage);
+                        }
+                    });
+                    $("#imageEditModal").modal("hide"); // 隐藏模态框
+                } else {
+                    alert("请选择图片!");
+                }
+            });
         });
+
     });
     // 点击保存按钮时的操作
     function saveEditedData() {
@@ -284,14 +353,10 @@
         var result_data5 = table.find("td:eq(4)").text();
         var result_data6 = table.find("td:eq(5)").text();
         var result_data7 = table.find("td:eq(6)").text();
-        var result_data8 = '${message.name}';//修改人
-        var result_data9 = getCurrentDateTime();//修改时间
-        var result_data10 = table.find("td:eq(9)").text();
         // 在这里可以执行保存操作，例如更新数据或者发送到后端
-        var result="{mId="+ result_data1+",mOrderNumber="+ result_data2+",mContent="+ result_data3
-            +",mOrder=" + result_data4+",mShopper=" + result_data5+",mTradingPrice="+ result_data6
-            +",mCreateTime="+ result_data7+",mEditor="+ result_data8+",mEditTime=" + result_data9
-            +",mTradingType="+ result_data10+"}";
+        var result="{pId="+ result_data1+",pIcon="+ result_data2+",pName="+ result_data3
+            +",pDescription=" + result_data4+",pType=" + result_data5+",pShopper="+ result_data6
+            +",pPrice="+ result_data7+"}";
         console.log("编辑后的数据: " +result);
 
         // 封装要发送的数据
@@ -302,36 +367,83 @@
             mOrder: result_data4,
             mShopper: result_data5,
             mTradingPrice: result_data6,
-            mCreateTime: result_data7,
-            mEditor: result_data8,
-            mEditTime: result_data9,
-            mTradingType: result_data10
+            mCreateTime: result_data7
         };
 
         // 发送数据到后端
-        $.ajax({
-            url: '/UserInfo/update_order',  // 替换为实际的 Spring Boot 后端端点
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(order_data),
-            success: function(response) {
-                console.log('数据成功发送到后端',response);
-                // 在这里处理后端的响应
-                if(response=="success"){
-                    location.reload();
-                }
-            },
-            error: function(error) {
-                console.error('发送数据到后端时出错', error);
-            }
-        });
+        // $.ajax({
+        //     url: '/Restaurant/update_order',  // 替换为实际的 Spring Boot 后端端点
+        //     type: 'POST',
+        //     contentType: 'application/json',
+        //     data: JSON.stringify(order_data),
+        //     success: function(response) {
+        //         console.log('数据成功发送到后端',response);
+        //         // 在这里处理后端的响应
+        //         if(response=="success"){
+        //             location.reload();
+        //         }
+        //     },
+        //     error: function(error) {
+        //         console.error('发送数据到后端时出错', error);
+        //     }
+        // });
 
         // 隐藏编辑弹窗
         //$("#editModal").css("display", "none");
         $("#editModal").modal("hide"); // 隐藏模态框
     }
 
+    /**
+     * 上传图片到后端
+     */
+    // function upProductHead(){
+    //     var fileInput = $("#product_head_file")[0];
+    //     var file = fileInput.files[0];
+    //     var productName ="测试"; //产品名称
+    //     var shopper = "测试"; //商家
+    //
+    //     var formData = new FormData();
+    //     if (file) {
+    //         formData.append("image", file);
+    //         formData.append("pName", productName);
+    //         formData.append("pShopper", shopper);
+    //         $.ajax({
+    //             url: "/Restaurant/upload_product_head", //SpringBoot应用地址
+    //             type: "POST",
+    //             data: formData,
+    //             contentType: false,
+    //             processData: false,
+    //             success: function(data) {
+    //                 alert("上传结果:" + data);
+    //             },
+    //             error: function(jqXHR, textStatus, errorMessage) {
+    //                 alert("上传结果:" + errorMessage);
+    //             }
+    //         });
+    //         $("#imageEditModal").modal("hide"); // 隐藏模态框
+    //     } else {
+    //         alert("请选择图片!");
+    //     }
+    // }
 
+    /**
+     * 添加产品
+     */
+    function add_Product(){
+        console.log("添加产品");
+    }
+    /**
+     * 修改产品
+     */
+    function update_Product(){
+        console.log("修改产品");
+    }
+    /**
+     * 删除产品
+     */
+    function delete_Product(){
+        alert('是否确定删除?');
+    }
 
     /**
      * 获取当前时间

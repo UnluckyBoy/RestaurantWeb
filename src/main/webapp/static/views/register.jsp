@@ -52,7 +52,7 @@
             </div>
             <button type="submit" class="btn btn-primary block full-width m-b">注 册</button>
 
-            <p class="text-muted text-center"><small>已经有账户了？</small><a href="/UserInfo/loginPage">点此登录</a>
+            <p class="text-muted text-center"><small>已经有账户了？</small><a href="/Restaurant/loginPage">点此登录</a>
             </p>
 
         </form>

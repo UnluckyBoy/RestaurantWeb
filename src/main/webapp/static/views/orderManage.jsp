@@ -56,7 +56,7 @@
                             <li><a href="">信箱</a>
                             </li>
                             <li class="divider"></li>
-                            <li><a href="/UserInfo/logout">安全退出</a>
+                            <li><a href="/Restaurant/logout">安全退出</a>
                             </li>
                         </ul>
                     </div>
@@ -69,18 +69,18 @@
                     <a href="index.jsp"><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="/UserInfo/OrderManagerPage">订单数据</a>
+                        <li><a href="/Restaurant/OrderManagerPage">订单数据</a>
 <%--                            <ul class="nav nav-third-level">--%>
 <%--                                <li>--%>
-<%--                                    <a href="/UserInfo/OrderManagerPage">查看所有</a>--%>
+<%--                                    <a href="/Restaurant/OrderManagerPage">查看所有</a>--%>
 <%--                                </li>--%>
 <%--                                <li>--%>
 <%--                                    <a href="">修改</a>--%>
 <%--                                </li>--%>
 <%--                            </ul>--%>
                         </li>
-                        <li><a href="/UserInfo/ProductPage">菜单管理</a></li>
-                        <li><a href="/UserInfo/CommonMessagePage">公共信息</a></li>
+                        <li><a href="/Restaurant/ProductPage">菜单管理</a></li>
+                        <li><a href="/Restaurant/CommonMessagePage">公共信息</a></li>
 <%--                        <li><a href="">菜单管理<span class="fa arrow"></span></a>--%>
 <%--                            <ul class="nav nav-third-level">--%>
 <%--                                <li>--%>
@@ -124,7 +124,7 @@
                         <li><a href="">帮助中心</a>
                         <li><a href="">登录</a>
                         </li>
-                        <li><a href="/UserInfo/logout">退出</a>
+                        <li><a href="/Restaurant/logout">退出</a>
                         </li>
                     </ul>
                 </li>
@@ -164,16 +164,16 @@
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
 <%--                <div class="navbar-header">--%>
-<%--                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="/UserInfo/IndexPage"><i class="fas fa-desktop"></i> </a>--%>
+<%--                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="/Restaurant/IndexPage"><i class="fas fa-desktop"></i> </a>--%>
 <%--                </div>--%>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
-                        <span class="m-r-sm text-muted welcome-message"><a href="/UserInfo/IndexPage" title="返回首页">
+                        <span class="m-r-sm text-muted welcome-message"><a href="/Restaurant/IndexPage" title="返回首页">
                             <i class="fa fa-home"></i></a> <strong class="font-bold label-warning-light" >${message.name}</strong> | 欢迎使用
                         </span>
                     </li>
                     <li>
-                        <a href="/UserInfo/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
+                        <a href="/Restaurant/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
                     </li>
                 </ul>
             </nav>
@@ -200,16 +200,16 @@
                             <tbody>
                             <c:forEach var="orderlists" items="${order_message.AllOrderList}">
                                 <tr class="order-table-column">
-                                    <td class="text-center">${orderlists.mId}</td>
+                                    <td class="text-center small">${orderlists.mId}</td>
                                     <td class="text-center small">${orderlists.mOrderNumber}</td>
-                                    <td>${orderlists.mContent}</td>
-                                    <td>${orderlists.mOrder}</td>
-                                    <td>${orderlists.mShopper}</td>
-                                    <td class="text-center"><span class="label label-primary">&yen;${orderlists.mTradingPrice}</span></td>
+                                    <td class="text-center small">${orderlists.mContent}</td>
+                                    <td class="text-center small">${orderlists.mOrder}</td>
+                                    <td class="text-center small">${orderlists.mShopper}</td>
+                                    <td class="text-center small"><span class="label label-primary">&yen;${orderlists.mTradingPrice}</span></td>
                                     <td class="text-center small">${orderlists.mCreateTime}</td>
-                                    <td>${orderlists.mEditor}</td>
-                                    <td>${orderlists.mEditTime}</td>
-                                    <td class="text-center">${orderlists.mTradingType}</td>
+                                    <td class="text-center small">${orderlists.mEditor}</td>
+                                    <td class="text-center small">${orderlists.mEditTime}</td>
+                                    <td class="text-center small">${orderlists.mTradingType}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>
@@ -221,17 +221,17 @@
                     <div class="modal-dialog modal-lg"><!--modal-lg设置大窗口-->
                         <div class="modal-content animated fadeIn"><!--设置窗口动画模式-->
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <i class="fa fa-clock-o modal-icon"></i>
+<%--                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>--%>
+<%--                                <i class="fa fa-clock-o modal-icon"></i>--%>
                                 <h4 class="modal-title label label-primary center-block">订单修改</h4>
                                 <small class="label label-danger center-block">重要数据！请慎重!!!</small>
                             </div>
-                            <div class="col-lg-12">
+                            <div class="modal-body"><!--col-lg-12-->
                                 <table class="table table-hover margin bottom" id="editTable"><!--border="1",显示表格边框,且边框宽度为1像素-->
                                     <thead>
                                     <tr>
-                                        <th class="small">序号</th>
-                                        <th class="small">订单号</th>
+                                        <th class="text-center small">序号</th>
+                                        <th class="text-center small">订单号</th>
                                         <th class="text-center small">订单详情</th>
                                         <th class="text-center small">客户</th>
                                         <th class="text-center small">商铺</th>
@@ -244,23 +244,25 @@
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td id="td_data1"></td>
-                                        <td id="td_data2"></td>
-                                        <td contenteditable="true" id="td_data3"></td>
-                                        <td contenteditable="true" id="td_data4"></td>
-                                        <td contenteditable="true" id="td_data5"></td>
-                                        <td contenteditable="true" id="td_data6"></td>
-                                        <td id="td_data7"></td>
-                                        <td id="td_data8"></td>
-                                        <td id="td_data9"></td>
-                                        <td contenteditable="true" id="td_data10"></td>
+                                        <td class="text-center small" id="td_data1"></td>
+                                        <td class="text-center small" id="td_data2"></td>
+                                        <td class="text-center small" contenteditable="true" id="td_data3"></td>
+                                        <td class="text-center small" contenteditable="true" id="td_data4"></td>
+                                        <td class="text-center small" contenteditable="true" id="td_data5"></td>
+                                        <td class="text-center small" contenteditable="true" id="td_data6"></td>
+                                        <td class="text-center small" id="td_data7"></td>
+                                        <td class="text-center small" id="td_data8"></td>
+                                        <td class="text-center small" id="td_data9"></td>
+                                        <td class="text-center small" contenteditable="true" id="td_data10"></td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="modal-footer"><!--text-center-modal-footer-->
-                                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                                <button type="button" class="btn btn-primary" onclick="saveEditedData()">保存</button>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-primary" onclick="saveEditedData()">保存</button>
+                                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -381,7 +383,7 @@
 
         // 发送数据到后端
         $.ajax({
-            url: '/UserInfo/update_order',  // 替换为实际的 Spring Boot 后端端点
+            url: '/Restaurant/update_order',  // 替换为实际的 Spring Boot 后端端点
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(order_data),

@@ -28,7 +28,7 @@
             <h1 class="logo-name"></h1>
         </div>
         <h3>欢迎使用</h3>
-        <form class="m-t" role="form" action="/UserInfo/login" method="post">
+        <form class="m-t" role="form" action="/Restaurant/login" method="post">
             <div class="form-group">
                 <label for="account"></label>
                 <input id="account" name="account" type="text" class="form-control" placeholder="账户" required="">
@@ -39,7 +39,7 @@
             </div>
             <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
             <p class="text-muted text-center">
-                <a href=""><small>忘记密码了？</small></a> | <a href="/UserInfo/registerPage">注册一个新账号</a>
+                <a href=""><small>忘记密码了？</small></a> | <a href="/Restaurant/registerPage">注册一个新账号</a>
             </p>
         </form>
     </div>
