@@ -32,5 +32,5 @@ public interface OrderMapper {
 
     public boolean freshOrder(Map<String,Object> map);//更新订单信息
     public List<Product> getAllProduct();//获取所有产品
-    public void up_product_Icon(Map<String,Object> map);//更新产品头像
+    public boolean up_product_Icon(Map<String,Object> map);//更新产品头像
 }

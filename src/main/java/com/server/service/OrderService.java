@@ -30,5 +30,5 @@ public interface OrderService {
 
     public boolean freshOrder(Map<String,Object> map);
     public List<Product> getAllProduct();
-    public void up_product_Icon(Map<String,Object> map);
+    public boolean up_product_Icon(Map<String,Object> map);
 }

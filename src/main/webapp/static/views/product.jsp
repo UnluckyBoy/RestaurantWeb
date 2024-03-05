@@ -315,7 +315,6 @@
                 var file = fileInput.files[0];
                 var productName =pName; //产品名称
                 var productShopper = pShopper; //商家
-
                 var formData = new FormData();
                 if (file) {
                     formData.append("image", file);
@@ -329,6 +328,7 @@
                         processData: false,
                         success: function(data) {
                             alert("上传结果:" + data);
+                            location.reload();
                         },
                         error: function(jqXHR, textStatus, errorMessage) {
                             alert("上传结果:" + errorMessage);

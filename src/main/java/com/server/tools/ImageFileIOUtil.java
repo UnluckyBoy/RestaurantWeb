@@ -97,27 +97,28 @@ public class ImageFileIOUtil {
         }
     }
 
-    public static String writeImageResized(String root_dir,String product_dir,MultipartFile file) throws IOException{
-        try {
-            // 处理文件上传
-            // 获取文件原始名称
-            String originalFileName = file.getOriginalFilename();
+    public static String writeImageResized(String image_name,String root_dir,String product_dir,MultipartFile file){
+        // 处理文件上传
+        // 获取文件原始名称
+        //String originalFileName = file.getOriginalFilename();
+        //String imageName=upload_name+"."+originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
+        System.out.println("图片文件:"+image_name);
 //            // 创建文件路径
 //            Path filePath = Paths.get(root_dir+product_dir + originalFileName);
 //            // 保存文件到服务器
 //            Files.write(filePath, file.getBytes());
-            String filePath = root_dir+product_dir+ originalFileName;
+        try{
+            String filePath = root_dir+product_dir+ image_name;
             // 将上传的图片保存到磁盘
             file.transferTo(new File(filePath));
             // 使用Thumbnailator压缩图片
-            File resizedFile = new File(root_dir + product_dir + "resized_" + originalFileName);
+            File resizedFile = new File(root_dir + product_dir+image_name);
             Thumbnails.of(new File(filePath))
                     .size(64, 64) // 设置目标尺寸为64x64像素
                     .toFile(resizedFile);
             // 返回成功信息
             return "success";
-        } catch (IOException e) {
-            // 返回错误信息
+        }catch (IOException e){
             return e.getMessage();
         }
     }

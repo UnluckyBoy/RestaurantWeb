@@ -95,7 +95,7 @@ public class OrderServiceIpml implements OrderService {
     }
 
     @Override
-    public void up_product_Icon(Map<String, Object> map) {
-        orderMapper.up_product_Icon(map);
+    public boolean up_product_Icon(Map<String, Object> map) {
+        return orderMapper.up_product_Icon(map);
     }
 }

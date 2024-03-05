@@ -729,25 +729,33 @@ public class GetInfoContro {
     @RequestMapping("/upload_product_head")
     public ResponseEntity<String> handleFileUpload(@RequestParam("image") MultipartFile file,
                                                    @RequestParam("pName") String pName,
-                                                   @RequestParam("pShopper") String pShopper) {
+                                                   @RequestParam("pShopper") String pShopper,HttpSession session) throws IOException{
         System.out.println("上传图片:"+pName+"___"+pShopper);
-        try {
-            // 处理文件上传
-            if (file.isEmpty()) {
-                return new ResponseEntity<>("请选择图片.", HttpStatus.BAD_REQUEST);
-            }
-            Map<String, Object> up_headMap=new HashMap<>();
-            if(ImageFileIOUtil.writeImageResized(root_dir,product_dir,file)=="success"){
-                up_headMap.put("pIcon","/"+product_dir+"resized_"+file.getOriginalFilename());
-                up_headMap.put("pName",pName);
-                up_headMap.put("pShopper",pShopper);
-                orderService.up_product_Icon(up_headMap);
-            }
-            return new ResponseEntity<>(ImageFileIOUtil.writeImageResized(root_dir,product_dir,file), HttpStatus.OK);
-        } catch (IOException e) {
-            // 返回错误信息
-            return new ResponseEntity<>("failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        if (file.isEmpty()) {
+            return new ResponseEntity<>("请选择图片.", HttpStatus.BAD_REQUEST);
         }
-        //return new ResponseEntity<>("success", HttpStatus.OK);
+        // 获取文件原始名称
+        String originalFileName = file.getOriginalFilename();
+        String image_suffix=originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();//后缀
+        String imageName=pName+"_"+pShopper+"."+image_suffix;
+        Map<String, Object> up_headMap=new HashMap<>();
+        String result=ImageFileIOUtil.writeImageResized(imageName,root_dir,product_dir,file);
+        up_headMap.put("pIcon","/"+product_dir+imageName);
+        up_headMap.put("pName",pName);
+        up_headMap.put("pShopper",pShopper);
+//        if(result=="success"){
+//            up_headMap.put("pIcon","/"+product_dir+imageName);
+//            up_headMap.put("pName",pName);
+//            up_headMap.put("pShopper",pShopper);
+//            if(orderService.up_product_Icon(up_headMap)){
+//                freshSession(session,"session_message",ProductMap());//更新产品Map
+//                return ResponseEntity.ok("success");
+//            }
+//        }
+        if(result=="success"&&orderService.up_product_Icon(up_headMap)){
+            return ResponseEntity.ok("success");
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:" + result);
+        }
     }
 }
