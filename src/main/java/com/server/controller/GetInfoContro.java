@@ -1,5 +1,6 @@
 package com.server.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.server.model.pojo.*;
 import com.server.service.OrderService;
 import com.server.tools.*;
@@ -401,8 +402,8 @@ public class GetInfoContro {
      * 订单数据逻辑
      * @return
      */
-    public Map OrderDataMap(){
-        Map<String,Object> orderMap=new HashMap<>();
+    public Map indexDataMap(){
+        Map<String,Object> indexMap=new HashMap<>();
         int allOrderCount=orderService.getAllCount();//全部订单
         int tradingOrderCount=orderService.getTradingCount();//交易订单总数
         int notTradingOrderCount=orderService.getNotTradingCount();//未交易订单总数
@@ -413,28 +414,44 @@ public class GetInfoContro {
         String nearMonthValid=ComputePercent((nearMonthCount/(float)tradingOrderCount)*100);//近一月有效订单百分比
         String nearPriceValid=ComputePercent((nearMonthTradingPrice/(float)sumTradingPrice)*100);//近一月有效金额百分比
 
-        orderMap.put("AllOrderCount",allOrderCount);
-        orderMap.put("TradingOrderCount",tradingOrderCount);
-        orderMap.put("NotTradingOrderCount",notTradingOrderCount);
-        orderMap.put("TradingPrice",sumTradingPrice);
-        orderMap.put("Valid",valid);
-        orderMap.put("UserCount",userService.getUserCount());
-        orderMap.put("OnlineCount",userService.getUserOnlineCount());
-        orderMap.put("NearMonthCount",nearMonthCount);
-        orderMap.put("NearMonthTradingPrice",nearMonthTradingPrice);
-        orderMap.put("NearMonthValid",nearMonthValid);
-        orderMap.put("NearPriceValid",nearPriceValid);
-        orderMap.put("NearMonAllTrading",getMonAllTradingData(false));//月全订单
-        orderMap.put("NearMonValidTrading",getMonAllTradingData(true));//月有效订单
-        orderMap.put("AllTradingList",orderService.getAllTradingView());
-        orderMap.put("AllOrderList",orderService.orderQueryAll());
-        return orderMap;
+        indexMap.put("AllOrderCount",allOrderCount);
+        indexMap.put("TradingOrderCount",tradingOrderCount);
+        indexMap.put("NotTradingOrderCount",notTradingOrderCount);
+        indexMap.put("TradingPrice",sumTradingPrice);
+        indexMap.put("Valid",valid);
+        indexMap.put("UserCount",userService.getUserCount());
+        indexMap.put("OnlineCount",userService.getUserOnlineCount());
+        indexMap.put("NearMonthCount",nearMonthCount);
+        indexMap.put("NearMonthTradingPrice",nearMonthTradingPrice);
+        indexMap.put("NearMonthValid",nearMonthValid);
+        indexMap.put("NearPriceValid",nearPriceValid);
+        indexMap.put("NearMonAllTrading",getMonAllTradingData(false));//月全订单
+        indexMap.put("NearMonValidTrading",getMonAllTradingData(true));//月有效订单
+        indexMap.put("AllTradingList",orderService.getAllTradingView());
+        //orderMap.put("AllOrderList",orderService.orderQueryAll());
+        return indexMap;
     }
 
+    /**
+     * 产品数据逻辑
+     * @return
+     */
     public Map ProductMap(){
         Map<String,Object> productMap=new HashMap<>();
         productMap.put("ProductList",orderService.getAllProduct());
         return productMap;
+    }
+
+    /**
+     * 消息数据逻辑
+     * @return
+     */
+    public Map MessageMap(){
+        Map<String,Object> messageMap=new HashMap<>();
+        List<MessageView> messageList=orderService.getCurrentMessage();
+        //System.out.println("消息数据:"+messageList.toString());
+        messageMap.put("AnnouncementList",messageList);
+        return messageMap;
     }
 
     /**
@@ -555,15 +572,13 @@ public class GetInfoContro {
             // Session不为空且包含"userId"属性，表示用户已登录
             //System.out.println("用户已登录:\t"+session.getAttribute("current_user"));
             model.addAttribute("message", session.getAttribute("current_user"));
-            model.addAttribute("order_message",OrderDataMap());
-            model.addAttribute("Product_message",ProductMap());
+            model.addAttribute("index_message",indexDataMap());
+            //model.addAttribute("Product_message",ProductMap());
             System.out.println("主页用户消息message:\t"+model.getAttribute("message"));
-            System.out.println("主页订单消息order_message:\t"+model.getAttribute("order_message"));
-            System.out.println("主页产品消息Product_message:\t"+model.getAttribute("Product_message"));
-            session.setAttribute("order_message",model.getAttribute("order_message"));
-            session.setAttribute("Product_message",model.getAttribute("Product_message"));
-            //freshSession(session,"session_message", (Map<String, Object>) model.getAttribute("order_message"));
-            //freshSession(session,"session_message", (Map<String, Object>) model.getAttribute("Product_message"));
+            //System.out.println("主页订单消息order_message:\t"+model.getAttribute("order_message"));
+            //System.out.println("主页产品消息Product_message:\t"+model.getAttribute("Product_message"));
+            session.setAttribute("index_message",model.getAttribute("index_message"));
+            //session.setAttribute("Product_message",model.getAttribute("Product_message"));
             return "index";
         } else {
             // Session为空或不包含"userId"属性，表示用户未登录
@@ -582,23 +597,38 @@ public class GetInfoContro {
     }
 
     @RequestMapping("/OrderManagerPage")
-    public String OrderManagerPage(HttpServletRequest request,HttpSession session,Model model){
+    public String OrderManagerPage(HttpServletRequest request,Model model,HttpSession session,
+                                   @RequestParam(defaultValue = "1") int pageNum,
+                                   @RequestParam(defaultValue = "6") int pageSize){
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
             model.addAttribute("message", session.getAttribute("current_user"));
-            model.addAttribute("order_message", session.getAttribute("order_message"));
-            System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("order_message"));
+            model.addAttribute("index_message", session.getAttribute("index_message"));
+            PageInfo<OrderInfo> pageInfo = orderService.getPageAllOrder(pageNum, pageSize);
+            model.addAttribute("order_message", pageInfo);
+            System.out.println("订单分页内容:"+model.getAttribute("order_message")+"页数:"+pageNum+"___页内容:"+pageSize);
+            session.setAttribute("order_message",model.getAttribute("order_message"));
+            //model.addAttribute("Product_message", session.getAttribute("Product_message"));
+            //System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("order_message"));
         }
         return "orderManage";
     }
     @RequestMapping("/ProductPage")
-    public String ProductPage(HttpServletRequest request,HttpSession session,Model model){
+    public String ProductPage(HttpServletRequest request,Model model,HttpSession session,
+                              @RequestParam(defaultValue = "1") int pageNum,
+                              @RequestParam(defaultValue = "6") int pageSize){
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
             model.addAttribute("message", session.getAttribute("current_user"));
+            model.addAttribute("index_message", session.getAttribute("index_message"));
             model.addAttribute("order_message", session.getAttribute("order_message"));
-            model.addAttribute("Product_message",session.getAttribute("Product_message"));
-            System.out.println("ProductPage消息Product_message:\t"+model.getAttribute("Product_message"));
+
+            PageInfo<Product> pageInfo = orderService.getPageProduct(pageNum, pageSize);
+            model.addAttribute("product_message", pageInfo);
+            System.out.println("产品分页内容:"+model.getAttribute("product_message")+"页数:"+pageNum+"___页内容:"+pageSize);
+            session.setAttribute("product_message",model.getAttribute("product_message"));
+            //model.addAttribute("Product_message",session.getAttribute("Product_message"));
+            //System.out.println("ProductPage消息Product_message:\t"+model.getAttribute("Product_message"));
         }
         return "product";
     }
@@ -608,7 +638,11 @@ public class GetInfoContro {
             // Session不为空且包含"userId"属性，表示用户已登录
             model.addAttribute("message", session.getAttribute("current_user"));
             model.addAttribute("order_message", session.getAttribute("order_message"));
-            System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("order_message"));
+            model.addAttribute("Product_message",session.getAttribute("Product_message"));
+            model.addAttribute("Announcement_message",MessageMap());
+            session.setAttribute("Announcement_message",model.getAttribute("Announcement_message"));
+            System.out.println("CommonMessagePage消息数据Announcement_message:"+session.getAttribute("Announcement_message"));
+            //System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("order_message"));
         }
         return "commonMessage";
     }
@@ -623,7 +657,6 @@ public class GetInfoContro {
         //对密码解密
         String mEncryPwd = Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password);
         requestMap.put("password",mEncryPwd);
-
         requestMap.put("status",1);
         /**显示ip**/
         String currentIp= IPUtil.getIpAddress(request);
@@ -665,7 +698,6 @@ public class GetInfoContro {
                 boolean login_status= userService.fresh_status_login(requestMap);
                 if(login_status){
                     resultMap=CommonClass2Map(mUser);
-                    //System.out.println("Server_running_login_Map:\n"+resultMap.toString());
                     freshSession(session,"current_user",resultMap);
                     return "redirect:/Restaurant/IndexPage";//重定向到主页
                 }else{
@@ -723,8 +755,8 @@ public class GetInfoContro {
         System.out.println("订单修改数据:"+order_data.toString());
         boolean fresh_result=orderService.freshOrder(order_data);
         if(fresh_result){
-            freshSession(session,"order_message",OrderDataMap());
-            freshSession(session,"Product_message",ProductMap());//更新产品Map
+            //freshSession(session,"order_message",indexDataMap());
+            //freshSession(session,"product_message",ProductMap());//更新产品Map
             return ResponseEntity.ok("success");
         }else{
             return ResponseEntity.ok("error");
@@ -748,21 +780,24 @@ public class GetInfoContro {
         up_headMap.put("pIcon","/"+product_dir+imageName);
         up_headMap.put("pName",pName);
         up_headMap.put("pShopper",pShopper);
-//        if(result=="success"){
-//            up_headMap.put("pIcon","/"+product_dir+imageName);
-//            up_headMap.put("pName",pName);
-//            up_headMap.put("pShopper",pShopper);
-//            if(orderService.up_product_Icon(up_headMap)){
-//                freshSession(session,"session_message",ProductMap());//更新产品Map
-//                return ResponseEntity.ok("success");
-//            }
-//        }
         if(result=="success"&&orderService.up_product_Icon(up_headMap)){
-            freshSession(session,"order_message",OrderDataMap());//更新订单Map
-            freshSession(session,"Product_message",ProductMap());//更新产品Map
+            //freshSession(session,"order_message",indexDataMap());//更新订单Map
+            //freshSession(session,"product_message",ProductMap());//更新产品Map
             return ResponseEntity.ok("success");
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:" + result);
         }
+    }
+
+    @RequestMapping("/test_page")
+    public String listProducts(Model model,HttpSession session, @RequestParam(defaultValue = "1") int pageNum,
+                            @RequestParam(defaultValue = "6") int pageSize) {
+        PageInfo<Product> productInfo = orderService.getPageProduct(pageNum, pageSize);
+        PageInfo<OrderInfo> orderInfo = orderService.getPageAllOrder(pageNum, pageSize);
+        model.addAttribute("product_message", productInfo);
+        model.addAttribute("order_message", orderInfo);
+        System.out.println("分页测试product_message:"+model.getAttribute("product_message")+"页数:"+pageNum+"___页内容:"+pageSize);
+        System.out.println("分页测试order_message:"+model.getAttribute("order_message")+"页数:"+pageNum+"___页内容:"+pageSize);
+        return "";
     }
 }

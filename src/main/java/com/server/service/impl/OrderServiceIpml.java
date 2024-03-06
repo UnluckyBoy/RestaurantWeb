@@ -1,10 +1,8 @@
 package com.server.service.impl;
 
+import com.github.pagehelper.PageInfo;
 import com.server.model.mapper.OrderMapper;
-import com.server.model.pojo.AllTradingView;
-import com.server.model.pojo.MonthCountView;
-import com.server.model.pojo.OrderInfo;
-import com.server.model.pojo.Product;
+import com.server.model.pojo.*;
 import com.server.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,12 +53,6 @@ public class OrderServiceIpml implements OrderService {
 
     @Override
     public int getNearMonthTradingPrice() {
-//        Integer temp=orderMapper.getNearMonthTradingPrice();
-//        if(temp==null){
-//            return 0;
-//        }else{
-//            return temp;
-//        }
         return orderMapper.getNearMonthTradingPrice();
     }
 
@@ -97,5 +89,23 @@ public class OrderServiceIpml implements OrderService {
     @Override
     public boolean up_product_Icon(Map<String, Object> map) {
         return orderMapper.up_product_Icon(map);
+    }
+
+    @Override
+    public List<MessageView> getCurrentMessage() {
+        return orderMapper.getCurrentMessage();
+    }
+
+    @Override
+    public PageInfo<Product> getPageProduct(int pageNum, int pageSize) {
+        //return orderMapper.getPageProduct(pageNum,pageSize);
+        List<Product> productList = orderMapper.getPageProduct(pageNum, pageSize);//多个数据分页
+        return new PageInfo<>(productList);
+    }
+
+    @Override
+    public PageInfo<OrderInfo> getPageAllOrder(int pageNum, int pageSize) {
+        List<OrderInfo> orderList = orderMapper.getPageAllOrder(pageNum, pageSize);//多个数据分页
+        return new PageInfo<>(orderList);
     }
 }

@@ -168,7 +168,7 @@
                             <h5>总收入</h5>
                         </div>
                         <div class="ibox-content">
-                            <h1 class="no-margins">&yen; ${order_message.TradingPrice}</h1>
+                            <h1 class="no-margins">&yen; ${index_message.TradingPrice}</h1>
                         </div>
                     </div>
                 </div>
@@ -179,7 +179,7 @@
                             <h5>用户数</h5>
                         </div>
                         <div class="ibox-content">
-                            <h1 class="no-margins">${order_message.UserCount}</h1>
+                            <h1 class="no-margins">${index_message.UserCount}</h1>
                         </div>
                     </div>
                 </div>
@@ -190,7 +190,7 @@
                             <h5>在线用户</h5>
                         </div>
                         <div class="ibox-content">
-                            <h1 class="no-margins">${order_message.OnlineCount}</h1>
+                            <h1 class="no-margins">${index_message.OnlineCount}</h1>
                         </div>
                     </div>
                 </div>
@@ -201,8 +201,8 @@
                             <h5>总订单</h5>
                         </div>
                         <div class="ibox-content">
-                            <h1 class="no-margins">${order_message.AllOrderCount}</h1>
-                            <div class="stat-percent font-bold text-info">${order_message.Valid}<i class="fa fa-level-up"></i>
+                            <h1 class="no-margins">${index_message.AllOrderCount}</h1>
+                            <div class="stat-percent font-bold text-info">${index_message.Valid}<i class="fa fa-level-up"></i>
                             </div>
                             <small>有效订单</small>
                         </div>
@@ -233,7 +233,7 @@
                                 <div class="col-lg-3">
                                     <ul class="stat-list">
                                         <li>
-                                            <h2 class="no-margins">${order_message.AllOrderCount}</h2>
+                                            <h2 class="no-margins">${index_message.AllOrderCount}</h2>
                                             <small>订单总数</small>
 <%--                                            <div class="stat-percent">48% <i class="fa fa-level-up text-navy"></i>--%>
 <%--                                            </div>--%>
@@ -242,21 +242,21 @@
                                             </div>
                                         </li>
                                         <li>
-                                            <h2 class="no-margins ">${order_message.NearMonthCount}</h2>
+                                            <h2 class="no-margins ">${index_message.NearMonthCount}</h2>
                                             <small>最近一个月订单</small>
-                                            <div class="stat-percent">${order_message.NearMonthValid}<i class="fa fa-level-down text-navy"></i>
+                                            <div class="stat-percent">${index_message.NearMonthValid}<i class="fa fa-level-down text-navy"></i>
                                             </div>
                                             <div class="progress progress-mini">
-                                                <div style="width: ${order_message.NearMonthValid};" class="progress-bar"></div>
+                                                <div style="width: ${index_message.NearMonthValid};" class="progress-bar"></div>
                                             </div>
                                         </li>
                                         <li>
-                                            <h2 class="no-margins ">&yen; ${order_message.NearMonthTradingPrice}</h2>
+                                            <h2 class="no-margins ">&yen; ${index_message.NearMonthTradingPrice}</h2>
                                             <small>最近一个月销售额</small>
-                                            <div class="stat-percent">${order_message.NearPriceValid}<i class="fa fa-bolt text-navy"></i>
+                                            <div class="stat-percent">${index_message.NearPriceValid}<i class="fa fa-bolt text-navy"></i>
                                             </div>
                                             <div class="progress progress-mini">
-                                                <div style="width: ${order_message.NearPriceValid};" class="progress-bar"></div>
+                                                <div style="width: ${index_message.NearPriceValid};" class="progress-bar"></div>
                                             </div>
                                         </li>
                                     </ul>
@@ -294,7 +294,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <c:forEach var="orderlist" items="${order_message.AllTradingList}">
+                                            <c:forEach var="orderlist" items="${index_message.AllTradingList}">
                                                 <tr>
                                                     <td>${orderlist.id}</td>
                                                     <td>${orderlist.pName}</td>
@@ -391,8 +391,8 @@
         //     [gd(2012, 1, 25), 786], [gd(2012, 1, 26), 666], [gd(2012, 1, 27), 888], [gd(2012, 1, 28), 900],
         //     [gd(2012, 1, 29), 178], [gd(2012, 1, 30), 555], [gd(2012, 1, 31), 993]
         // ];
-        var data2=${order_message.NearMonValidTrading};//有效订单
-        var data3=${order_message.NearMonAllTrading};//全部订单
+        var data2=${index_message.NearMonValidTrading};//有效订单
+        var data3=${index_message.NearMonAllTrading};//全部订单
 
         var dataset = [
             {

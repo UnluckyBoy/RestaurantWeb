@@ -1,10 +1,10 @@
 package com.server.model.mapper;
 
-import com.server.model.pojo.AllTradingView;
-import com.server.model.pojo.MonthCountView;
-import com.server.model.pojo.OrderInfo;
-import com.server.model.pojo.Product;
+import com.github.pagehelper.PageInfo;
+import com.server.model.pojo.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,4 +33,30 @@ public interface OrderMapper {
     public boolean freshOrder(Map<String,Object> map);//更新订单信息
     public List<Product> getAllProduct();//获取所有产品
     public boolean up_product_Icon(Map<String,Object> map);//更新产品头像
+    public List<MessageView> getCurrentMessage();//获取前5消息显示
+
+    @Select("select " +
+            "pId, " +
+            "pName, " +
+            "pIcon, " +
+            "pDescription, " +
+            "pType, " +
+            "pShopper, " +
+            "pPrice " +
+            "from product_info_data")
+    List<Product> getPageProduct(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize);//产品多数据分页
+
+    @Select("select " +
+            "mId, " +
+            "mOrderNumber, " +
+            "mContent, " +
+            "mOrder, " +
+            "mShopper, " +
+            "mTradingPrice, " +
+            "DATE_FORMAT(mCreateTime, '%Y-%m-%d %H:%i:%s') AS mCreateTime, " +
+            "mEditor, " +
+            "DATE_FORMAT(mEditTime, '%Y-%m-%d %H:%i:%s') AS mEditTime, " +
+            "mTradingType " +
+            "from order_info_data")
+    List<OrderInfo> getPageAllOrder(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize);//全部订单分页获取
 }

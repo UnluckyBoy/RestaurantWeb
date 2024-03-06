@@ -1,4 +1,4 @@
-<%--
+<%@ page import="com.server.model.pojo.Product" %><%--
   Created by IntelliJ IDEA.
   User: matrix
   Date: 2024/2/22 0022
@@ -120,10 +120,9 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach var="productLists" items="${Product_message.ProductList}">
+                            <c:forEach var="productLists" items="${product_message.list}">
                                 <tr class="product-table-column">
                                     <td class="text-center">${productLists.pId}</td>
-<%--                                    <td class="text-center small">${productlists.pIcon}</td>--%>
                                     <td class="text-center">
                                         <img id="product_head" src="http://localhost:8080${productLists.pIcon}" alt="Image" width="64" height="64">
                                     </td>
@@ -142,7 +141,6 @@
                         </table>
                     </div>
                 </div>
-
                 <!--确定删除窗口-小模态窗口-->
                 <div class="modal inmodal fade" id="confirm_Modal" tabindex="-1" role="dialog"  aria-hidden="true">
                     <div class="modal-dialog modal-sm">
@@ -163,7 +161,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!--图片修改弹窗-->
                 <die class="modal inmodal" id="imageEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
                     <div class="modal-dialog modal-lg">
@@ -232,11 +229,11 @@
                 </div>
             </div>
         </div>
-
         <div class="text-center"><!--按钮-->
-            <button type="button" class="btn btn-primary">上一页</button>
-            <button type="button" class="btn btn-primary">下一页</button>
+            <p><strong>${product_message.pageNum}/${product_message.pages}</strong></p>
             <button type="button" class="btn btn-success" onclick="add_Product()">添 加</button>
+            <button type="button" class="btn btn-primary" onclick="previousPage()">上一页</button>
+            <button type="button" class="btn btn-primary" onclick="nextPage()">下一页</button>
         </div>
     </div>
 </div>
@@ -246,6 +243,12 @@
 <script src="../staticRes/js/bootstrap.min.js?v=3.4.0"></script>
 <script src="../staticRes/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script src="../staticRes/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<script src="../staticRes/js/plugins/jeditable/jquery.jeditable.js"></script>
+<!-- Data Tables -->
+<script src="../staticRes/js/plugins/dataTables/jquery.dataTables.js"></script>
+<script src="../staticRes/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+
 <!-- Flot -->
 <script src="../staticRes/js/plugins/flot/jquery.flot.js"></script>
 <script src="../staticRes/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
@@ -306,6 +309,9 @@
             console.log("点击了图片"+cellText);
             $("#imageEditModal").modal("show");
 
+            /**
+             * 头像按钮修改
+             */
             document.getElementById('updateHead').addEventListener('click', function() {
                 var fileInput = $("#product_head_file")[0];
                 var file = fileInput.files[0];
@@ -336,7 +342,6 @@
                 }
             });
         });
-
     });
     // 点击保存按钮时的操作
     function saveEditedData() {
@@ -439,6 +444,31 @@
      */
     function delete_Product(){
         alert('是否确定删除?');
+    }
+
+    // 上一页按钮点击事件处理函数
+    function previousPage() {
+        if (${product_message.hasPreviousPage}) {//hasPreviousPage
+            var newPageNum = ${product_message.prePage}; // 或 pageInfo.pageNum - 1;
+            // 发送请求到服务器获取新页面的数据，并更新页面内容
+            // 例如：updatePageContent(newPageNum);
+            console.log('切换到上一页，页码：' + newPageNum);
+        } else {
+            console.log('已经是第一页了');
+            alert("已经是第一页!");
+        }
+    }
+    // 下一页按钮点击事件处理函数
+    function nextPage() {
+        if (${product_message.hasNextPage}) {
+            var newPageNum = ${product_message.nextPage}; // 或 pageInfo.pageNum + 1;
+            // 发送请求到服务器获取新页面的数据，并更新页面内容
+            // 例如：updatePageContent(newPageNum);
+            console.log('切换到下一页，页码：' + newPageNum);
+        } else {
+            console.log('已经是最后一页了');
+            alert("已经是最后一页!");
+        }
     }
 
     /**

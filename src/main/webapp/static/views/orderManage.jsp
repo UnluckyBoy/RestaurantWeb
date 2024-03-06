@@ -69,50 +69,9 @@
                     <a href="index.jsp"><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="/Restaurant/OrderManagerPage">订单数据</a>
-<%--                            <ul class="nav nav-third-level">--%>
-<%--                                <li>--%>
-<%--                                    <a href="/Restaurant/OrderManagerPage">查看所有</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">修改</a>--%>
-<%--                                </li>--%>
-<%--                            </ul>--%>
-                        </li>
+                        <li><a href="/Restaurant/OrderManagerPage">订单数据</a></li>
                         <li><a href="/Restaurant/ProductPage">菜单管理</a></li>
                         <li><a href="/Restaurant/CommonMessagePage">公共信息</a></li>
-<%--                        <li><a href="">菜单管理<span class="fa arrow"></span></a>--%>
-<%--                            <ul class="nav nav-third-level">--%>
-<%--                                <li>--%>
-<%--                                    <a href="">查询</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">新增</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">修改</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">删除</a>--%>
-<%--                                </li>--%>
-<%--                            </ul>--%>
-<%--                        </li>--%>
-<%--                        <li><a href="">公共信息<span class="fa arrow"></span></a>--%>
-<%--                            <ul class="nav nav-third-level">--%>
-<%--                                <li>--%>
-<%--                                    <a href="">查询</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">新增</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">修改</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">删除</a>--%>
-<%--                                </li>--%>
-<%--                            </ul>--%>
-<%--                        </li>--%>
                     </ul>
                 </li>
                 <li>
@@ -124,34 +83,6 @@
                         <li><a href="/Restaurant/logout">退出</a></li>
                     </ul>
                 </li>
-<%--                <li>--%>
-<%--                    <a href=""><i class="fa fa-sitemap"></i> <span class="nav-label">菜单 </span><span class="fa arrow"></span></a>--%>
-<%--                    <ul class="nav nav-second-level">--%>
-<%--                        <li>--%>
-<%--                            <a href="index.html#">三级菜单 <span class="fa arrow"></span></a>--%>
-<%--                            <ul class="nav nav-third-level">--%>
-<%--                                <li>--%>
-<%--                                    <a href="index.jsp#">三级菜单 01</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="index.jsp#">三级菜单 01</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="index.jsp#">三级菜单 01</a>--%>
-<%--                                </li>--%>
-
-<%--                            </ul>--%>
-<%--                        </li>--%>
-<%--                        <li><a href="index.jsp#">二级菜单</a>--%>
-<%--                        </li>--%>
-<%--                        <li>--%>
-<%--                            <a href="index.jsp#">二级菜单</a>--%>
-<%--                        </li>--%>
-<%--                        <li>--%>
-<%--                            <a href="index.jsp#">二级菜单</a>--%>
-<%--                        </li>--%>
-<%--                    </ul>--%>
-<%--                </li>--%>
             </ul>
 
         </div>
@@ -194,7 +125,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach var="orderlists" items="${order_message.AllOrderList}">
+                            <c:forEach var="orderlists" items="${order_message.list}">
                                 <tr class="order-table-column">
                                     <td class="text-center small">${orderlists.mId}</td>
                                     <td class="text-center small">${orderlists.mOrderNumber}</td>
@@ -266,12 +197,9 @@
             </div>
         </div>
         <div class="text-center"><!--按钮-->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal5">
-                上一页
-            </button>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal6">
-                下一页
-            </button>
+            <p><strong>${order_message.pageNum}/${order_message.pages}</strong></p>
+            <button type="button" class="btn btn-primary" onclick="previousOrderPage()">上一页</button>
+            <button type="button" class="btn btn-primary" onclick="nextOrderPage()">下一页</button>
         </div>
     </div>
 </div>
@@ -422,6 +350,30 @@
     // 补零函数，用于确保单个数字在前面加0
     function addZero(number) {
         return number < 10 ? '0' + number : number;
+    }
+    // 上一页按钮点击事件处理函数
+    function previousOrderPage() {
+        if (${order_message.hasPreviousPage}) {//hasPreviousPage
+            var newPageNum = ${order_message.prePage}; // 或 pageInfo.pageNum - 1;
+            // 发送请求到服务器获取新页面的数据，并更新页面内容
+            // 例如：updatePageContent(newPageNum);
+            console.log('切换到上一页，页码：' + newPageNum);
+        } else {
+            console.log('已经是第一页了');
+            alert("已经是第一页!");
+        }
+    }
+    // 下一页按钮点击事件处理函数
+    function nextOrderPage() {
+        if (${order_message.hasNextPage}) {
+            var newPageNum = ${order_message.nextPage}; // 或 pageInfo.pageNum + 1;
+            // 发送请求到服务器获取新页面的数据，并更新页面内容
+            // 例如：updatePageContent(newPageNum);
+            console.log('切换到下一页，页码：' + newPageNum);
+        } else {
+            console.log('已经是最后一页了');
+            alert("已经是最后一页!");
+        }
     }
 </script>
 

@@ -1,9 +1,8 @@
 package com.server.service;
 
-import com.server.model.pojo.AllTradingView;
-import com.server.model.pojo.MonthCountView;
-import com.server.model.pojo.OrderInfo;
-import com.server.model.pojo.Product;
+import com.github.pagehelper.PageInfo;
+import com.server.model.pojo.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,4 +30,7 @@ public interface OrderService {
     public boolean freshOrder(Map<String,Object> map);
     public List<Product> getAllProduct();
     public boolean up_product_Icon(Map<String,Object> map);
+    public List<MessageView> getCurrentMessage();
+    PageInfo<Product> getPageProduct(int pageNum,int pageSize);
+    PageInfo<OrderInfo> getPageAllOrder(int pageNum,int pageSize);
 }
