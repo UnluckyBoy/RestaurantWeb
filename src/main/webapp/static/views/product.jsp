@@ -75,13 +75,9 @@
                     <a href=""><i class="fas fa-address-card"></i> <span class="nav-label">个人信息</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="">个人资料</a>
-                        </li>
-                        <li><a href="">帮助中心</a>
-                        <li><a href="">登录</a>
-                        </li>
-                        <li><a href="/Restaurant/logout">退出</a>
-                        </li>
+                        <li><a href="">个人资料</a></li>
+                        <li><a href="">帮助中心</a></li>
+                        <li><a href="/Restaurant/logout">退出</a></li>
                     </ul>
                 </li>
             </ul>
@@ -124,7 +120,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach var="productLists" items="${product.ProductList}">
+                            <c:forEach var="productLists" items="${Product_message.ProductList}">
                                 <tr class="product-table-column">
                                     <td class="text-center">${productLists.pId}</td>
 <%--                                    <td class="text-center small">${productlists.pIcon}</td>--%>

@@ -556,10 +556,14 @@ public class GetInfoContro {
             //System.out.println("用户已登录:\t"+session.getAttribute("current_user"));
             model.addAttribute("message", session.getAttribute("current_user"));
             model.addAttribute("order_message",OrderDataMap());
+            model.addAttribute("Product_message",ProductMap());
             System.out.println("主页用户消息message:\t"+model.getAttribute("message"));
             System.out.println("主页订单消息order_message:\t"+model.getAttribute("order_message"));
-            //session.setAttribute("session_message",model.getAttribute("order_message"));
-            freshSession(session,"session_message", (Map<String, Object>) model.getAttribute("order_message"));
+            System.out.println("主页产品消息Product_message:\t"+model.getAttribute("Product_message"));
+            session.setAttribute("order_message",model.getAttribute("order_message"));
+            session.setAttribute("Product_message",model.getAttribute("Product_message"));
+            //freshSession(session,"session_message", (Map<String, Object>) model.getAttribute("order_message"));
+            //freshSession(session,"session_message", (Map<String, Object>) model.getAttribute("Product_message"));
             return "index";
         } else {
             // Session为空或不包含"userId"属性，表示用户未登录
@@ -582,8 +586,8 @@ public class GetInfoContro {
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
             model.addAttribute("message", session.getAttribute("current_user"));
-            model.addAttribute("order_message", session.getAttribute("session_message"));
-            System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("message"));
+            model.addAttribute("order_message", session.getAttribute("order_message"));
+            System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("order_message"));
         }
         return "orderManage";
     }
@@ -592,9 +596,9 @@ public class GetInfoContro {
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
             model.addAttribute("message", session.getAttribute("current_user"));
-//            model.addAttribute("order_message", session.getAttribute("session_message"));
-            model.addAttribute("product",ProductMap());
-            System.out.println("product:\t"+model.getAttribute("product"));
+            model.addAttribute("order_message", session.getAttribute("order_message"));
+            model.addAttribute("Product_message",session.getAttribute("Product_message"));
+            System.out.println("ProductPage消息Product_message:\t"+model.getAttribute("Product_message"));
         }
         return "product";
     }
@@ -603,8 +607,8 @@ public class GetInfoContro {
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
             model.addAttribute("message", session.getAttribute("current_user"));
-            model.addAttribute("order_message", session.getAttribute("session_message"));
-            System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("message"));
+            model.addAttribute("order_message", session.getAttribute("order_message"));
+            System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("order_message"));
         }
         return "commonMessage";
     }
@@ -623,7 +627,7 @@ public class GetInfoContro {
         requestMap.put("status",1);
         /**显示ip**/
         String currentIp= IPUtil.getIpAddress(request);
-        System.out.println("IP:"+currentIp);
+        //System.out.println("IP:"+currentIp);
         requestMap.put("addressIp",currentIp);
 
         /** 查询缓存是否存在
@@ -661,7 +665,7 @@ public class GetInfoContro {
                 boolean login_status= userService.fresh_status_login(requestMap);
                 if(login_status){
                     resultMap=CommonClass2Map(mUser);
-                    System.out.println("Server_running_login_Map:\n"+resultMap.toString());
+                    //System.out.println("Server_running_login_Map:\n"+resultMap.toString());
                     freshSession(session,"current_user",resultMap);
                     return "redirect:/Restaurant/IndexPage";//重定向到主页
                 }else{
@@ -684,11 +688,11 @@ public class GetInfoContro {
             //model.addAttribute("user", session.getAttribute("current_user"));
             //System.out.println("用户信息:"+model.getAttribute("user").getClass());//model.getAttribute("user"):java.util.HashMap
             Map<String, Object> requestMap=(Map) session.getAttribute("current_user");
-            System.out.println("用户信息:"+requestMap.get("account"));
+            //System.out.println("用户信息:"+requestMap.get("account"));
             requestMap.put("status",0);
-            System.out.println("登出请求Map:"+requestMap.toString());
-//            String mEncryPwd = Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password);
-//            requestMap.put("password",mEncryPwd);
+            //System.out.println("登出请求Map:"+requestMap.toString());
+            //String mEncryPwd = Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password);
+            //requestMap.put("password",mEncryPwd);
             try{
                 if((userService.infoQuery(requestMap).getmStatus()==1)){
                     boolean logout= userService.fresh_status_logout(requestMap);
@@ -719,7 +723,8 @@ public class GetInfoContro {
         System.out.println("订单修改数据:"+order_data.toString());
         boolean fresh_result=orderService.freshOrder(order_data);
         if(fresh_result){
-            freshSession(session,"session_message",OrderDataMap());
+            freshSession(session,"order_message",OrderDataMap());
+            freshSession(session,"Product_message",ProductMap());//更新产品Map
             return ResponseEntity.ok("success");
         }else{
             return ResponseEntity.ok("error");
@@ -729,7 +734,7 @@ public class GetInfoContro {
     @RequestMapping("/upload_product_head")
     public ResponseEntity<String> handleFileUpload(@RequestParam("image") MultipartFile file,
                                                    @RequestParam("pName") String pName,
-                                                   @RequestParam("pShopper") String pShopper,HttpSession session) throws IOException{
+                                                   @RequestParam("pShopper") String pShopper,HttpSession session,Model model) throws IOException{
         System.out.println("上传图片:"+pName+"___"+pShopper);
         if (file.isEmpty()) {
             return new ResponseEntity<>("请选择图片.", HttpStatus.BAD_REQUEST);
@@ -737,7 +742,7 @@ public class GetInfoContro {
         // 获取文件原始名称
         String originalFileName = file.getOriginalFilename();
         String image_suffix=originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();//后缀
-        String imageName=pName+"_"+pShopper+"."+image_suffix;
+        String imageName=pName+"_"+pShopper+"_"+TimeUtil.formatTime(TimeUtil.GetTime(true))+"."+image_suffix;
         Map<String, Object> up_headMap=new HashMap<>();
         String result=ImageFileIOUtil.writeImageResized(imageName,root_dir,product_dir,file);
         up_headMap.put("pIcon","/"+product_dir+imageName);
@@ -753,6 +758,8 @@ public class GetInfoContro {
 //            }
 //        }
         if(result=="success"&&orderService.up_product_Icon(up_headMap)){
+            freshSession(session,"order_message",OrderDataMap());//更新订单Map
+            freshSession(session,"Product_message",ProductMap());//更新产品Map
             return ResponseEntity.ok("success");
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:" + result);

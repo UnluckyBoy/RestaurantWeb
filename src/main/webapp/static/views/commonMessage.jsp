@@ -56,7 +56,7 @@
                             <li><a href="">信箱</a>
                             </li>
                             <li class="divider"></li>
-                            <li><a href="/UserInfo/logout">安全退出</a>
+                            <li><a href="/Restaurant/logout">安全退出</a>
                             </li>
                         </ul>
                     </div>
@@ -69,132 +69,120 @@
                     <a href="index.jsp"><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="/UserInfo/OrderManagerPage">订单数据</a>
+                        <li><a href="/Restaurant/OrderManagerPage">订单数据</a>
                         </li>
-                        <li><a href="/UserInfo/ProductPage">菜单管理</a></li>
-                        <li><a href="/UserInfo/CommonMessagePage">公共信息</a></li>
+                        <li><a href="/Restaurant/ProductPage">菜单管理</a></li>
+                        <li><a href="/Restaurant/CommonMessagePage">公共信息</a></li>
                     </ul>
                 </li>
                 <li>
                     <a href=""><i class="fas fa-address-card"></i> <span class="nav-label">个人信息</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="">个人资料</a>
-                        </li>
-                        <li><a href="">帮助中心</a>
-                        <li><a href="">登录</a>
-                        </li>
-                        <li><a href="/UserInfo/logout">退出</a>
-                        </li>
+                        <li><a href="">个人资料</a></li>
+                        <li><a href="">帮助中心</a></li>
+                        <li><a href="/Restaurant/logout">退出</a></li>
                     </ul>
                 </li>
             </ul>
-
         </div>
     </nav>
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-                <%--                <div class="navbar-header">--%>
-                <%--                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="/UserInfo/IndexPage"><i class="fas fa-desktop"></i> </a>--%>
-                <%--                </div>--%>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
-                        <span class="m-r-sm text-muted welcome-message"><a href="/UserInfo/IndexPage" title="返回首页">
+                        <span class="m-r-sm text-muted welcome-message"><a href="/Restaurant/IndexPage" title="返回首页">
                             <i class="fa fa-home"></i></a> <strong class="font-bold label-warning-light" >${message.name}</strong> | 欢迎使用
                         </span>
                     </li>
                     <li>
-                        <a href="/UserInfo/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
+                        <a href="/Restaurant/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
                     </li>
                 </ul>
             </nav>
         </div>
-        <div class="wrapper wrapper-content">
-            <div class="ibox-content">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <table class="table table-hover margin bottom">
-                            <thead>
-                            <tr>
-                                <th class="text-center">序号</th>
-                                <th class="text-center">订单号</th>
-                                <th class="text-center">订单详情</th>
-                                <th>客户</th>
-                                <th>商铺</th>
-                                <th class="text-center">交易金额</th>
-                                <th class="text-center">交易时间</th>
-                                <th class="text-center">修改人</th>
-                                <th class="text-center">修改时间</th>
-                                <th class="text-center">交易状态</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach var="orderlists" items="${order_message.AllOrderList}">
-                                <tr class="order-table-column">
-                                    <td class="text-center">${orderlists.mId}</td>
-                                    <td class="text-center small">${orderlists.mOrderNumber}</td>
-                                    <td>${orderlists.mContent}</td>
-                                    <td>${orderlists.mOrder}</td>
-                                    <td>${orderlists.mShopper}</td>
-                                    <td class="text-center"><span class="label label-primary">&yen;${orderlists.mTradingPrice}</span></td>
-                                    <td class="text-center small">${orderlists.mCreateTime}</td>
-                                    <td>${orderlists.mEditor}</td>
-                                    <td>${orderlists.mEditTime}</td>
-                                    <td class="text-center">${orderlists.mTradingType}</td>
-                                </tr>
-                            </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <!-- 弹窗的HTML结构 -->
-                <div class="modal inmodal" id="editModal" tabindex="-1" role="dialog"  aria-hidden="true">
-                    <div class="modal-dialog modal-lg"><!--modal-lg设置大窗口-->
-                        <div class="modal-content animated fadeIn"><!--设置窗口动画模式-->
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <i class="fa fa-clock-o modal-icon"></i>
-                                <h4 class="modal-title label label-primary center-block">订单修改</h4>
-                                <small class="label label-danger center-block">重要数据！请慎重!!!</small>
-                            </div>
-                            <div class="col-lg-12">
-                                <table class="table table-hover margin bottom" id="editTable"><!--border="1",显示表格边框,且边框宽度为1像素-->
-                                    <thead>
-                                    <tr>
-                                        <th class="small">序号</th>
-                                        <th class="small">订单号</th>
-                                        <th class="text-center small">订单详情</th>
-                                        <th class="text-center small">客户</th>
-                                        <th class="text-center small">商铺</th>
-                                        <th class="text-center small">交易金额</th>
-                                        <th class="text-center small">交易时间</th>
-                                        <th class="text-center small">修改人</th>
-                                        <th class="text-center small">修改时间</th>
-                                        <th class="text-center small">交易状态</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td id="td_data1"></td>
-                                        <td id="td_data2"></td>
-                                        <td contenteditable="true" id="td_data3"></td>
-                                        <td contenteditable="true" id="td_data4"></td>
-                                        <td contenteditable="true" id="td_data5"></td>
-                                        <td contenteditable="true" id="td_data6"></td>
-                                        <td id="td_data7"></td>
-                                        <td id="td_data8"></td>
-                                        <td id="td_data9"></td>
-                                        <td contenteditable="true" id="td_data10"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <%--                            <div class="modal-body">--%>
-                            <%--                            </div>--%>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                                <button type="button" class="btn btn-primary" onclick="saveEditedData()">保存</button>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="wrapper wrapper-content">
+                    <div class="row animated fadeInRight">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="text-center float-e-margins p-md">
+                                    <span>布局预览:</span>
+                                    <a href="/Restaurant/CommonMessagePage" class="btn btn-xs btn-primary" id="lightVersion">浅色</a>
+                                    <a href="/Restaurant/CommonMessagePage" class="btn btn-xs btn-success" id="darkVersion">深色</a>
+                                    <a href="/Restaurant/CommonMessagePage" class="btn btn-xs btn-info" id="leftVersion">布局切换</a>
+                                </div>
+                                <div class="" id="ibox-content">
+                                    <div id="vertical-timeline" class="vertical-container light-timeline">
+                                        <div class="vertical-timeline-block">
+                                            <div class="vertical-timeline-icon navy-bg">
+                                                <i class="fa fa-briefcase"></i>
+                                            </div>
+                                            <div class="vertical-timeline-content">
+                                                <h2>会议</h2>
+                                                <p>上一年的销售业绩发布会。总结产品营销和销售趋势及销售的现状。</p>
+<%--                                                <a href="timeline_v2.html#" class="btn btn-sm btn-primary"> 更多信息</a>--%>
+                                                <span class="vertical-date">今天
+                                                    <br><small>2月3日</small></br>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="vertical-timeline-block">
+                                            <div class="vertical-timeline-icon blue-bg">
+                                                <i class="fa fa-file-text"></i>
+                                            </div>
+                                            <div class="vertical-timeline-content">
+                                                <h2>给张三发送文档</h2>
+                                                <p>发送上年度《销售业绩报告》</p>
+<%--                                                <a href="timeline_v2.html#" class="btn btn-sm btn-success"> 下载文档 </a>--%>
+                                                <span class="vertical-date">今天
+                                                    <br><small>2月3日</small></br>
+                                            </span>
+                                            </div>
+                                        </div>
+                                        <div class="vertical-timeline-block">
+                                            <div class="vertical-timeline-icon lazur-bg">
+                                                <i class="fa fa-coffee"></i>
+                                            </div>
+
+                                            <div class="vertical-timeline-content">
+                                                <h2>喝咖啡休息</h2>
+                                                <p>喝咖啡啦，啦啦啦~~</p>
+<%--                                                <a href="timeline_v2.html#" class="btn btn-sm btn-info">更多</a>--%>
+                                                <span class="vertical-date">昨天
+                                                    <br><small>2月2日</small></br>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="vertical-timeline-block">
+                                            <div class="vertical-timeline-icon yellow-bg">
+                                                <i class="fa fa-phone"></i>
+                                            </div>
+                                            <div class="vertical-timeline-content">
+                                                <h2>给李四打电话</h2>
+                                                <p>给李四打电话分配本月工作任务</p>
+                                                <span class="vertical-date">昨天
+                                                    <br><small>2月2日</small></br>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="vertical-timeline-block">
+                                            <div class="vertical-timeline-icon lazur-bg">
+                                                <i class="fa fa-user-md"></i>
+                                            </div>
+                                            <div class="vertical-timeline-content">
+                                                <h2>公司年会</h2>
+                                                <p>发年终奖啦，啦啦啦~~</p>
+                                                <span class="vertical-date">前天
+                                                    <br><small>2月1日</small></br>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -203,12 +191,7 @@
         </div>
 
         <div class="text-center"><!--按钮-->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal5">
-                上一页
-            </button>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal6">
-                下一页
-            </button>
+            <button type="button" class="btn btn-success" >发布</button>
         </div>
     </div>
 </div>
@@ -246,120 +229,24 @@
 <!--给数据表添加点击响应逻辑-->
 <script>
     $(document).ready(function() {
-        // 给每一行添加点击事件
-        $(".order-table-column").on("click", function() {
-            // 获取当前行的数据，以示例为准，这里获取第一列的文本内容
-            var orderId = $(this).find("td:first").text();
-            console.log("点击的行: "+ orderId+ "\t"+$(this).find("td:eq(1)").text()
-                + "\t"+$(this).find("td:eq(2)").text()+ "\t"+$(this).find("td:eq(3)").text()
-                + "\t"+$(this).find("td:eq(4)").text()+ "\t"+$(this).find("td:eq(5)").text()
-                + "\t"+$(this).find("td:eq(6)").text()+ "\t"+$(this).find("td:eq(7)").text()
-                + "\t"+$(this).find("td:eq(8)").text()+ "\t"+$(this).find("td:eq(9)").text());
-            //var orderContent = $(this).find("td:eq(2)").text(); //以示例为准，获取第三列的内容
-            //console.log("内容: " + orderContent);
-
-
-            // // 在编辑弹窗中显示数据
-            //$("#modal-body-content").val(orderContent);
-            // var paragraph = document.getElementById("modal-body-content");
-            // paragraph.innerHTML =orderContent;
-            document.getElementById("td_data1").innerText = orderId;
-            document.getElementById("td_data2").innerText = $(this).find("td:eq(1)").text();
-            document.getElementById("td_data3").innerText = $(this).find("td:eq(2)").text();
-            document.getElementById("td_data4").innerText = $(this).find("td:eq(3)").text();
-            document.getElementById("td_data5").innerText = $(this).find("td:eq(4)").text();
-            document.getElementById("td_data6").innerText = $(this).find("td:eq(5)").text().slice(1);
-            document.getElementById("td_data7").innerText = $(this).find("td:eq(6)").text();
-            document.getElementById("td_data8").innerText = $(this).find("td:eq(7)").text();
-            document.getElementById("td_data9").innerText = $(this).find("td:eq(8)").text();
-            document.getElementById("td_data10").innerText = $(this).find("td:eq(9)").text();
-            // // 弹出编辑弹窗
-            // $("#editModal").css("display", "block");
-            $("#editModal").modal("show"); // 显示模态框(使用Bootstrap库显示)
-            //$("#editModal").modal("hide"); // 隐藏模态框
+        //修改页面布局
+        $('#lightVersion').click(function (event) {
+            event.preventDefault()
+            $('#ibox-content').removeClass('ibox-content');
+            $('#vertical-timeline').removeClass('dark-timeline');
+            $('#vertical-timeline').addClass('light-timeline');
+        });
+        $('#darkVersion').click(function (event) {
+            event.preventDefault()
+            $('#ibox-content').addClass('ibox-content');
+            $('#vertical-timeline').removeClass('light-timeline');
+            $('#vertical-timeline').addClass('dark-timeline');
+        });
+        $('#leftVersion').click(function (event) {
+            event.preventDefault()
+            $('#vertical-timeline').toggleClass('center-orientation');
         });
     });
-    // 点击保存按钮时的操作
-    function saveEditedData() {
-        // 获取编辑后的数据
-        var table=$("#editTable");
-        var result_data1 = table.find("td:eq(0)").text();
-        var result_data2 = table.find("td:eq(1)").text();
-        var result_data3 = table.find("td:eq(2)").text();
-        var result_data4 = table.find("td:eq(3)").text();
-        var result_data5 = table.find("td:eq(4)").text();
-        var result_data6 = table.find("td:eq(5)").text();
-        var result_data7 = table.find("td:eq(6)").text();
-        var result_data8 = '${message.name}';//修改人
-        var result_data9 = getCurrentDateTime();//修改时间
-        var result_data10 = table.find("td:eq(9)").text();
-        // 在这里可以执行保存操作，例如更新数据或者发送到后端
-        var result="{mId="+ result_data1+",mOrderNumber="+ result_data2+",mContent="+ result_data3
-            +",mOrder=" + result_data4+",mShopper=" + result_data5+",mTradingPrice="+ result_data6
-            +",mCreateTime="+ result_data7+",mEditor="+ result_data8+",mEditTime=" + result_data9
-            +",mTradingType="+ result_data10+"}";
-        console.log("编辑后的数据: " +result);
-
-        // 封装要发送的数据
-        var order_data = {
-            mId: result_data1,
-            mOrderNumber: result_data2,
-            mContent: result_data3,
-            mOrder: result_data4,
-            mShopper: result_data5,
-            mTradingPrice: result_data6,
-            mCreateTime: result_data7,
-            mEditor: result_data8,
-            mEditTime: result_data9,
-            mTradingType: result_data10
-        };
-
-        // 发送数据到后端
-        $.ajax({
-            url: '/UserInfo/update_order',  // 替换为实际的 Spring Boot 后端端点
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(order_data),
-            success: function(response) {
-                console.log('数据成功发送到后端',response);
-                // 在这里处理后端的响应
-                if(response=="success"){
-                    location.reload();
-                }
-            },
-            error: function(error) {
-                console.error('发送数据到后端时出错', error);
-            }
-        });
-
-        // 隐藏编辑弹窗
-        //$("#editModal").css("display", "none");
-        $("#editModal").modal("hide"); // 隐藏模态框
-    }
-
-
-
-    /**
-     * 获取当前时间
-     * @returns {string}
-     */
-    function getCurrentDateTime() {
-        var currentDate = new Date();
-        // 获取年、月、日、小时、分钟、秒
-        var year = currentDate.getFullYear();
-        var month = addZero(currentDate.getMonth() + 1);  // 月份从0开始，需要加1
-        var day = addZero(currentDate.getDate());
-        var hours = addZero(currentDate.getHours());
-        var minutes = addZero(currentDate.getMinutes());
-        var seconds = addZero(currentDate.getSeconds());
-        // 格式化为：yyyy-MM-dd HH:mm:ss
-        var formattedDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-        return formattedDateTime;
-    }
-    // 补零函数，用于确保单个数字在前面加0
-    function addZero(number) {
-        return number < 10 ? '0' + number : number;
-    }
 </script>
 
 </body>

@@ -119,13 +119,9 @@
                     <a href=""><i class="fas fa-address-card"></i> <span class="nav-label">个人信息</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="">个人资料</a>
-                        </li>
-                        <li><a href="">帮助中心</a>
-                        <li><a href="">登录</a>
-                        </li>
-                        <li><a href="/Restaurant/logout">退出</a>
-                        </li>
+                        <li><a href="">个人资料</a></li>
+                        <li><a href="">帮助中心</a></li>
+                        <li><a href="/Restaurant/logout">退出</a></li>
                     </ul>
                 </li>
 <%--                <li>--%>
