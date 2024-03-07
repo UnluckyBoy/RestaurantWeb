@@ -36,7 +36,7 @@
 
                     <div class="dropdown profile-element">
                         <span>
-                            <img alt="image" class="img-circle" src="http://localhost:8080${message.head}"/>
+                            <img id="user_head" alt="image" class="img-circle" src="http://localhost:8080${message.head}" onclick="upUserHead()"/>
                         </span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="index.jsp#">
                                 <span class="clear">
@@ -47,17 +47,12 @@
                                 </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a href="">修改头像</a>
-                            </li>
-                            <li><a href="">个人资料</a>
-                            </li>
-                            <li><a href="">联系我们</a>
-                            </li>
-                            <li><a href="">信箱</a>
-                            </li>
+<%--                            <li><a href="">修改头像</a></li>--%>
+                            <li><a href="">个人资料</a></li>
+                            <li><a href="">联系我们</a></li>
+                            <li><a href="#" id="mailboxLink">信箱</a></li>
                             <li class="divider"></li>
-                            <li><a href="/Restaurant/logout">安全退出</a>
-                            </li>
+                            <li><a href="/Restaurant/logout">安全退出</a></li>
                         </ul>
                     </div>
                 </li>
@@ -97,7 +92,7 @@
                         </span>
                     </li>
                     <li>
-                        <a href="/Restaurant/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
+                        <a href="/Restaurant/logout"><i class="fas fa-sign-out-alt"></i>退出</a>
                     </li>
                 </ul>
             </nav>
@@ -163,21 +158,21 @@
                 </div>
                 <!--图片修改弹窗-->
                 <die class="modal inmodal" id="imageEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
+                    <div class="modal-dialog"><!--放大窗口时添加:modal-lg-->
                         <div class="modal-content animated fadeIn">
                             <div class="modal-header">
                                 <label class="modal-title label label-primary center-block">图片更新</label>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <input type="file" id="product_head_file" name="" class="form-control">
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-primary" id="updateHead">保存</button>
+                                    <button type="button" class="btn btn-primary" id="updateImage">保存</button>
                                     <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
                                 </div>
                             </div>
@@ -235,6 +230,30 @@
             <button type="button" class="btn btn-primary" onclick="previousPage()">上一页</button>
             <button type="button" class="btn btn-primary" onclick="nextPage()">下一页</button>
         </div>
+
+        <!--图片修改弹窗-->
+        <die class="modal inmodal" id="userHeadEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <label class="modal-title label label-primary center-block">头像上传</label>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <input type="file" id="user_head_file" name="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary" id="updateHead" onclick="updateHead()">保存</button>
+                            <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </die>
     </div>
 </div>
 
@@ -277,25 +296,13 @@
 <!--给数据表添加点击响应逻辑-->
 <script>
     $(document).ready(function() {
-        // 给每一行添加点击事件
-        // $(".product-table-column").on("click", function() {
-        //     // 获取当前行的数据，以示例为准，这里获取第一列的文本内容
-        //     var orderId = $(this).find("td:first").text();
-        //     var orderContent = $(this).find("td:eq(6)").text(); //以示例为准，获取第三列的内容
-        //     console.log("内容: " + orderContent+"  长度:"+orderContent.length);
-        //     // 在编辑弹窗中显示数据
-        //     document.getElementById("td_data1").innerText = orderId;
-        //     document.getElementById("td_data2").innerText = $(this).find("td:eq(1)").attr("src");
-        //     document.getElementById("td_data3").innerText = $(this).find("td:eq(2)").text();
-        //     document.getElementById("td_data4").innerText = $(this).find("td:eq(3)").text();
-        //     document.getElementById("td_data5").innerText = $(this).find("td:eq(4)").text();
-        //     document.getElementById("td_data6").innerText = $(this).find("td:eq(5)").text();
-        //     document.getElementById("td_data7").innerText = $(this).find("td:eq(6)").text().slice(1);
-        //     // // 弹出编辑弹窗
-        //     // $("#editModal").css("display", "block");
-        //     $("#editModal").modal("show"); // 显示模态框(使用Bootstrap库显示)
-        //     //$("#editModal").modal("hide"); // 隐藏模态框
-        // });
+        //提示
+        document.getElementById('mailboxLink').addEventListener('click', function(event) {
+            // 阻止链接的默认行为（即刷新页面）
+            event.preventDefault();
+            // 弹出弹窗
+            alert('功能尚未实装！敬请期待！');
+        });
 
         /**
          * 第一行:first-child
@@ -308,11 +315,8 @@
             var pShopper=$(this).parent().find("td:eq(5)").text();
             console.log("点击了图片"+cellText);
             $("#imageEditModal").modal("show");
-
-            /**
-             * 头像按钮修改
-             */
-            document.getElementById('updateHead').addEventListener('click', function() {
+            /** 头像按钮修改 */
+            document.getElementById('updateImage').addEventListener('click', function() {
                 var fileInput = $("#product_head_file")[0];
                 var file = fileInput.files[0];
                 var productName =pName; //产品名称
@@ -395,39 +399,6 @@
     }
 
     /**
-     * 上传图片到后端
-     */
-    // function upProductHead(){
-    //     var fileInput = $("#product_head_file")[0];
-    //     var file = fileInput.files[0];
-    //     var productName ="测试"; //产品名称
-    //     var shopper = "测试"; //商家
-    //
-    //     var formData = new FormData();
-    //     if (file) {
-    //         formData.append("image", file);
-    //         formData.append("pName", productName);
-    //         formData.append("pShopper", shopper);
-    //         $.ajax({
-    //             url: "/Restaurant/upload_product_head", //SpringBoot应用地址
-    //             type: "POST",
-    //             data: formData,
-    //             contentType: false,
-    //             processData: false,
-    //             success: function(data) {
-    //                 alert("上传结果:" + data);
-    //             },
-    //             error: function(jqXHR, textStatus, errorMessage) {
-    //                 alert("上传结果:" + errorMessage);
-    //             }
-    //         });
-    //         $("#imageEditModal").modal("hide"); // 隐藏模态框
-    //     } else {
-    //         alert("请选择图片!");
-    //     }
-    // }
-
-    /**
      * 添加产品
      */
     function add_Product(){
@@ -468,6 +439,37 @@
         } else {
             console.log('已经是最后一页了');
             alert("已经是最后一页!");
+        }
+    }
+
+    function upUserHead(){
+        $("#userHeadEditModal").modal("show")
+    }
+    function updateHead(){
+        var fileInput = $("#user_head_file")[0];
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        if (file) {
+            formData.append("image", file);
+            formData.append("account", '${message.account}');
+            formData.append("name", '${message.name}');
+            $.ajax({
+                url: "/Restaurant/upload_user_head", //SpringBoot应用地址
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    alert("上传结果:" + data);
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorMessage) {
+                    alert("上传结果:" + errorMessage);
+                }
+            });
+            $("#userHeadEditModal").modal("hide"); // 隐藏模态框
+        } else {
+            alert("请选择图片!");
         }
     }
 

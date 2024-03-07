@@ -33,10 +33,9 @@
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
-
                     <div class="dropdown profile-element">
                         <span>
-                            <img alt="image" class="img-circle" src="http://localhost:8080${message.head}"/>
+                            <img id="user_head" alt="image" class="img-circle" src="http://localhost:8080${message.head}" onclick="upUserHead()"/>
                         </span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="index.jsp#">
                                 <span class="clear">
@@ -47,23 +46,14 @@
                                 </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a href="">修改头像</a>
-                            </li>
-                            <li><a href="">个人资料</a>
-                            </li>
-                            <li><a href="">联系我们</a>
-                            </li>
-                            <li><a href="">信箱</a>
-                            </li>
+<%--                            <li><a href="">修改头像</a></li>--%>
+                            <li><a href="">个人资料</a></li>
+                            <li><a href="">联系我们</a></li>
+                            <li><a href="#" id="mailboxLink">信箱</a></li>
                             <li class="divider"></li>
-                            <li><a href="/Restaurant/logout">安全退出</a>
-                            </li>
+                            <li><a href="/Restaurant/logout">安全退出</a></li>
                         </ul>
                     </div>
-                    <div class="logo-element">
-                        H+
-                    </div>
-
                 </li>
                 <li class="active">
                     <a href="index.jsp"><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
@@ -100,7 +90,7 @@
                         </span>
                     </li>
                     <li>
-                        <a href="/Restaurant/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
+                        <a href="/Restaurant/logout"><i class="fas fa-sign-out-alt"></i>退出</a>
                     </li>
                 </ul>
             </nav>
@@ -201,6 +191,30 @@
             <button type="button" class="btn btn-primary" onclick="previousOrderPage()">上一页</button>
             <button type="button" class="btn btn-primary" onclick="nextOrderPage()">下一页</button>
         </div>
+
+        <!--图片修改弹窗-->
+        <die class="modal inmodal" id="userHeadEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <label class="modal-title label label-primary center-block">头像上传</label>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <input type="file" id="user_head_file" name="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary" id="updateHead" onclick="updateHead()">保存</button>
+                            <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </die>
     </div>
 </div>
 
@@ -237,6 +251,14 @@
 <!--给数据表添加点击响应逻辑-->
 <script>
     $(document).ready(function() {
+        //信箱按钮弹窗
+        document.getElementById('mailboxLink').addEventListener('click', function(event) {
+            // 阻止链接的默认行为（即刷新页面）
+            event.preventDefault();
+            // 弹出弹窗
+            alert('功能尚未实装！敬请期待！');
+        });
+
         // 给每一行添加点击事件
         $(".order-table-column").on("click", function() {
             // 获取当前行的数据，以示例为准，这里获取第一列的文本内容
@@ -328,7 +350,36 @@
         $("#editModal").modal("hide"); // 隐藏模态框
     }
 
-
+    function upUserHead(){
+        $("#userHeadEditModal").modal("show")
+    }
+    function updateHead(){
+        var fileInput = $("#user_head_file")[0];
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        if (file) {
+            formData.append("image", file);
+            formData.append("account", '${message.account}');
+            formData.append("name", '${message.name}');
+            $.ajax({
+                url: "/Restaurant/upload_user_head", //SpringBoot应用地址
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    alert("上传结果:" + data);
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorMessage) {
+                    alert("上传结果:" + errorMessage);
+                }
+            });
+            $("#userHeadEditModal").modal("hide"); // 隐藏模态框
+        } else {
+            alert("请选择图片!");
+        }
+    }
 
     /**
      * 获取当前时间

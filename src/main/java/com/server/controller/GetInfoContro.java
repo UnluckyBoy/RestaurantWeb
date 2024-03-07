@@ -763,10 +763,20 @@ public class GetInfoContro {
         }
     }
 
+    @RequestMapping("/upload_user_head")
+    public ResponseEntity<String> handleHeadUpload(@RequestParam("image") MultipartFile file,
+                                                   @RequestParam("account") String account,
+                                                   @RequestParam("name") String name,
+                                                   HttpSession session,Model model) throws IOException{
+        System.out.println("上传用户头像:"+account+"___"+name);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
+    }
+
     @RequestMapping("/upload_product_head")
     public ResponseEntity<String> handleFileUpload(@RequestParam("image") MultipartFile file,
                                                    @RequestParam("pName") String pName,
-                                                   @RequestParam("pShopper") String pShopper,HttpSession session,Model model) throws IOException{
+                                                   @RequestParam("pShopper") String pShopper,
+                                                   HttpSession session,Model model) throws IOException{
         System.out.println("上传图片:"+pName+"___"+pShopper);
         if (file.isEmpty()) {
             return new ResponseEntity<>("请选择图片.", HttpStatus.BAD_REQUEST);

@@ -39,7 +39,7 @@
 
                     <div class="dropdown profile-element">
                         <span>
-                            <img alt="image" class="img-circle" src="http://localhost:8080${message.head}"/>
+                            <img id="user_head" alt="image" class="img-circle" src="http://localhost:8080${message.head}" onclick="upUserHead()"/>
                         </span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="index.jsp#">
                                 <span class="clear">
@@ -50,17 +50,12 @@
                                 </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a href="">修改头像</a>
-                            </li>
-                            <li><a href="">个人资料</a>
-                            </li>
-                            <li><a href="">联系我们</a>
-                            </li>
-                            <li><a href="">信箱</a>
-                            </li>
+<%--                            <li><a href="">修改头像</a></li>--%>
+                            <li><a href="">个人资料</a></li>
+                            <li><a href="">联系我们</a></li>
+                            <li><a href="#" id="mailboxLink">信箱</a></li>
                             <li class="divider"></li>
-                            <li><a href="/Restaurant/logout">安全退出</a>
-                            </li>
+                            <li><a href="/Restaurant/logout">安全退出</a></li>
                         </ul>
                     </div>
                     <div class="logo-element">
@@ -100,7 +95,7 @@
                         </span>
                     </li>
                     <li>
-                        <a href="/Restaurant/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
+                        <a href="/Restaurant/logout"><i class="fas fa-sign-out-alt"></i>退出</a>
                     </li>
                 </ul>
             </nav>
@@ -146,57 +141,6 @@
 <%--                                                </span>--%>
 <%--                                            </div>--%>
 <%--                                        </div>--%>
-<%--                                        <div class="vertical-timeline-block">--%>
-<%--                                            <div class="vertical-timeline-icon blue-bg">--%>
-<%--                                                <i class="fa fa-file-text"></i>--%>
-<%--                                            </div>--%>
-<%--                                            <div class="vertical-timeline-content">--%>
-<%--                                                <h2>给张三发送文档</h2>--%>
-<%--                                                <p>发送上年度《销售业绩报告》</p>--%>
-<%--&lt;%&ndash;                                                <a href="timeline_v2.html#" class="btn btn-sm btn-success"> 下载文档 </a>&ndash;%&gt;--%>
-<%--                                                <span class="vertical-date">今天--%>
-<%--                                                    <br><small>2月3日</small></br>--%>
-<%--                                            </span>--%>
-<%--                                            </div>--%>
-<%--                                        </div>--%>
-<%--                                        <div class="vertical-timeline-block">--%>
-<%--                                            <div class="vertical-timeline-icon lazur-bg">--%>
-<%--                                                <i class="fa fa-coffee"></i>--%>
-<%--                                            </div>--%>
-
-<%--                                            <div class="vertical-timeline-content">--%>
-<%--                                                <h2>喝咖啡休息</h2>--%>
-<%--                                                <p>喝咖啡啦，啦啦啦~~</p>--%>
-<%--&lt;%&ndash;                                                <a href="timeline_v2.html#" class="btn btn-sm btn-info">更多</a>&ndash;%&gt;--%>
-<%--                                                <span class="vertical-date">昨天--%>
-<%--                                                    <br><small>2月2日</small></br>--%>
-<%--                                                </span>--%>
-<%--                                            </div>--%>
-<%--                                        </div>--%>
-<%--                                        <div class="vertical-timeline-block">--%>
-<%--                                            <div class="vertical-timeline-icon yellow-bg">--%>
-<%--                                                <i class="fa fa-phone"></i>--%>
-<%--                                            </div>--%>
-<%--                                            <div class="vertical-timeline-content">--%>
-<%--                                                <h2>给李四打电话</h2>--%>
-<%--                                                <p>给李四打电话分配本月工作任务</p>--%>
-<%--                                                <span class="vertical-date">昨天--%>
-<%--                                                    <br><small>2月2日</small></br>--%>
-<%--                                                </span>--%>
-<%--                                            </div>--%>
-<%--                                        </div>--%>
-<%--                                        <div class="vertical-timeline-block">--%>
-<%--                                            <div class="vertical-timeline-icon lazur-bg">--%>
-<%--                                                <i class="fa fa-user-md"></i>--%>
-<%--                                            </div>--%>
-<%--                                            <div class="vertical-timeline-content">--%>
-<%--                                                <h2>公司年会</h2>--%>
-<%--                                                <p>发年终奖啦，啦啦啦~~</p>--%>
-<%--                                                <span class="vertical-date">前天--%>
-<%--                                                    <br><small>2月1日</small></br>--%>
-<%--                                                </span>--%>
-<%--                                            </div>--%>
-<%--                                        </div>--%>
                                     </div>
                                 </div>
                             </div>
@@ -209,6 +153,30 @@
         <div class="text-center"><!--按钮-->
             <button type="button" class="btn btn-success" >发布</button>
         </div>
+
+        <!--图片修改弹窗-->
+        <die class="modal inmodal" id="userHeadEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <label class="modal-title label label-primary center-block">头像上传</label>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <input type="file" id="user_head_file" name="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary" id="updateHead" onclick="updateHead()">保存</button>
+                            <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </die>
     </div>
 </div>
 
@@ -245,6 +213,14 @@
 <!--给数据表添加点击响应逻辑-->
 <script>
     $(document).ready(function() {
+        //信箱按钮弹窗
+        document.getElementById('mailboxLink').addEventListener('click', function(event) {
+            // 阻止链接的默认行为（即刷新页面）
+            event.preventDefault();
+            // 弹出弹窗
+            alert('功能尚未实装！敬请期待！');
+        });
+
         //修改页面布局
         $('#lightVersion').click(function (event) {
             event.preventDefault()
@@ -263,6 +239,37 @@
             $('#vertical-timeline').toggleClass('center-orientation');
         });
     });
+
+    function upUserHead(){
+        $("#userHeadEditModal").modal("show")
+    }
+    function updateHead(){
+        var fileInput = $("#user_head_file")[0];
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        if (file) {
+            formData.append("image", file);
+            formData.append("account", '${message.account}');
+            formData.append("name", '${message.name}');
+            $.ajax({
+                url: "/Restaurant/upload_user_head", //SpringBoot应用地址
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    alert("上传结果:" + data);
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorMessage) {
+                    alert("上传结果:" + errorMessage);
+                }
+            });
+            $("#userHeadEditModal").modal("hide"); // 隐藏模态框
+        } else {
+            alert("请选择图片!");
+        }
+    }
 
     function getSystemTime(mTime){
         var backendTimeStr = request.getParameter(mTime);

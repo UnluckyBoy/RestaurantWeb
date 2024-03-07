@@ -39,8 +39,8 @@
                     <div class="dropdown profile-element">
                         <span>
 <%--                            <img alt="image" class="img-circle" src="../img/profile_small.jpg" />--%>
-                            <img alt="image" class="img-circle" src="http://localhost:8080${message.head}"/>
-<%--                            <img alt="image" class="img-circle" src="http://localhost:8080"<%=session.getAttribute("head")%>/>--%>
+                            <!--data-toggle="modal" data-target="#confirm_Modal",onclick="upUserHead()-->
+                            <img id="user_head" alt="image" class="img-circle" src="http://localhost:8080${message.head}" onclick="upUserHead()"/>
                         </span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="index.jsp#">
                                 <span class="clear">
@@ -53,17 +53,12 @@
                                 </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a href="">修改头像</a>
-                            </li>
-                            <li><a href="">个人资料</a>
-                            </li>
-                            <li><a href="">联系我们</a>
-                            </li>
-                            <li><a href="">信箱</a>
-                            </li>
+<%--                            <li><a href="">修改头像</a></li>--%>
+                            <li><a href="">个人资料</a></li>
+                            <li><a href="">联系我们</a></li>
+                            <li><a href="#" id="mailboxLink">信箱</a></li>
                             <li class="divider"></li>
-                            <li><a href="/Restaurant/logout">安全退出</a>
-                            </li>
+                            <li><a href="/Restaurant/logout">安全退出</a></li>
                         </ul>
                     </div>
                     <div class="logo-element">
@@ -76,49 +71,9 @@
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="/Restaurant/OrderManagerPage">订单数据</a>
-<%--                            <ul class="nav nav-third-level">--%>
-<%--                                <li>--%>
-<%--                                    <a href="/Restaurant/OrderManagerPage">查看所有</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">修改</a>--%>
-<%--                                </li>--%>
-<%--                            </ul>--%>
                         </li>
                         <li><a href="/Restaurant/ProductPage">菜单管理</a></li>
                         <li><a href="/Restaurant/CommonMessagePage">公共信息</a></li>
-<%--                        <li><a href="">菜单管理<span class="fa arrow"></span></a>--%>
-<%--                            <ul class="nav nav-third-level">--%>
-<%--                                <li>--%>
-<%--                                    <a href="">查询</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">新增</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">修改</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">删除</a>--%>
-<%--                                </li>--%>
-<%--                            </ul>--%>
-<%--                        </li>--%>
-<%--                        <li><a href="">公共信息<span class="fa arrow"></span></a>--%>
-<%--                            <ul class="nav nav-third-level">--%>
-<%--                                <li>--%>
-<%--                                    <a href="">查询</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">新增</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">修改</a>--%>
-<%--                                </li>--%>
-<%--                                <li>--%>
-<%--                                    <a href="">删除</a>--%>
-<%--                                </li>--%>
-<%--                            </ul>--%>
-<%--                        </li>--%>
                     </ul>
                 </li>
                 <li>
@@ -154,7 +109,7 @@
                         </span>
                     </li>
                     <li>
-                        <a href="/Restaurant/logout"><i class="fas fa-sign-out-alt"></i> 退出</a>
+                        <a href="/Restaurant/logout"><i class="fas fa-sign-out-alt"></i>退出</a>
                     </li>
                 </ul>
             </nav>
@@ -312,6 +267,30 @@
                 </div>
             </div>
         </div>
+
+        <!--图片修改弹窗-->
+        <die class="modal inmodal" id="userHeadEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <label class="modal-title label label-primary center-block">头像上传</label>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <input type="file" id="user_head_file" name="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary" id="updateHead" onclick="updateHead()">保存</button>
+                            <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </die>
     </div>
 </div>
 
@@ -355,6 +334,8 @@
 
 <script>
     $(document).ready(function () {
+        //console.log("sessionData:"+'${message.name}');
+
         $('.chart').easyPieChart({
             barColor: '#f8ac59',
             //                scaleColor: false,
@@ -362,7 +343,6 @@
             lineWidth: 4,
             size: 80
         });
-
         $('.chart2').easyPieChart({
             barColor: '#1c84c6',
             //                scaleColor: false,
@@ -370,7 +350,6 @@
             lineWidth: 4,
             size: 80
         });
-
         // var data2 = [
         //     [gd(2012, 1, 1), 0], [gd(2012, 1, 2), 6], [gd(2012, 1, 3), 4], [gd(2012, 1, 4), 8],
         //     [gd(2012, 1, 5), 9], [gd(2012, 1, 6), 7], [gd(2012, 1, 7), 5], [gd(2012, 1, 8), 4],
@@ -393,7 +372,6 @@
         // ];
         var data2=${index_message.NearMonValidTrading};//有效订单
         var data3=${index_message.NearMonAllTrading};//全部订单
-
         var dataset = [
             {
                 label: "订单数",
@@ -405,7 +383,6 @@
                     barWidth: 24 * 60 * 60 * 600,
                     lineWidth: 0
                 }
-
             }, {
                 label: "付款数",
                 data: data2,
@@ -431,7 +408,6 @@
                 },
             }
         ];
-
         var options = {
             xaxis: {
                 mode: "time",
@@ -472,47 +448,83 @@
                 color: '#838383'
             }
         };
-
         function gd(year, month, day) {
             return new Date(year, month - 1, day).getTime();
         }
         var previousPoint = null,previousLabel = null;
         $.plot($("#flot-dashboard-chart"), dataset, options);
 
-        // var mapData = {
-        //     "US": 298,
-        //     "SA": 200,
-        //     "DE": 220,
-        //     "FR": 540,
-        //     "CN": 120,
-        //     "AU": 760,
-        //     "BR": 550,
-        //     "IN": 200,
-        //     "GB": 120,
-        // };
-        //
-        // $('#world-map').vectorMap({
-        //     map: 'world_mill_en',
-        //     backgroundColor: "transparent",
-        //     regionStyle: {
-        //         initial: {
-        //             fill: '#e4e4e4',
-        //             "fill-opacity": 0.9,
-        //             stroke: 'none',
-        //             "stroke-width": 0,
-        //             "stroke-opacity": 0
+        document.getElementById('mailboxLink').addEventListener('click', function(event) {
+            // 阻止链接的默认行为（即刷新页面）
+            event.preventDefault();
+            // 弹出弹窗
+            alert('功能尚未实装！敬请期待！');
+        });
+
+        //显示上传弹窗
+        // $("#user_head").click(function (){
+        //     $("#userHeadEditModal").modal("show");
+        //     $("#updateHead").click(function (){
+        //         var fileInput = $("#user_head_file")[0];
+        //         var file = fileInput.files[0];
+        //         var formData = new FormData();
+        //         if (file) {
+        //             formData.append("image", file);
+        //             formData.append("account", "测试");
+        //             formData.append("password", "测试");
+        //             formData.append("name", "测试");
+        //             $.ajax({
+        //                 url: "/Restaurant/upload_user_head", //SpringBoot应用地址
+        //                 type: "POST",
+        //                 data: formData,
+        //                 contentType: false,
+        //                 processData: false,
+        //                 success: function(data) {
+        //                     alert("上传结果:" + data);
+        //                     location.reload();
+        //                 },
+        //                 error: function(jqXHR, textStatus, errorMessage) {
+        //                     alert("上传结果:" + errorMessage);
+        //                 }
+        //             });
+        //             $("#userHeadEditModal").modal("hide");// 隐藏模态框
+        //         } else {
+        //             alert("请选择图片!");
         //         }
-        //     },
-        //
-        //     series: {
-        //         regions: [{
-        //             values: mapData,
-        //             scale: ["#1ab394", "#22d6b1"],
-        //             normalizeFunction: 'polynomial'
-        //         }]
-        //     },
+        //     });
         // });
     });
+
+    function upUserHead(){
+        $("#userHeadEditModal").modal("show")
+    }
+    function updateHead(){
+        var fileInput = $("#user_head_file")[0];
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        if (file) {
+            formData.append("image", file);
+            formData.append("account", '${message.account}');
+            formData.append("name", '${message.name}');
+            $.ajax({
+                url: "/Restaurant/upload_user_head", //SpringBoot应用地址
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    alert("上传结果:" + data);
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorMessage) {
+                    alert("上传结果:" + errorMessage);
+                }
+            });
+            $("#userHeadEditModal").modal("hide"); // 隐藏模态框
+        } else {
+            alert("请选择图片!");
+        }
+    }
 </script>
 
 </body>
