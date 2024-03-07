@@ -63,7 +63,8 @@ public class GetInfoContro {
     private static String PASSWORD_EncryKEY = "EncryptionKey_By-WuMing";//自定义密钥:EncryptionKey_By-WuMing
     private static String mHand="/default.png";//默认头像地址
     private static String root_dir=System.getProperty("user.dir")+"/BackResource/";
-    private static String product_dir="ProductIcon/";
+    private static String product_dir="ProductIcon/";//产品图片路径
+    private static String user_dir="HeadIcon/";//用户图片路径
 
 //    /**
 //     * 登录接口
@@ -398,6 +399,25 @@ public class GetInfoContro {
         return tempMap;
     }
 
+    public UserInfo freshUserInfo(HttpSession session,Model model){
+        Object currentUserObj = session.getAttribute("current_user");
+        if (currentUserObj instanceof Map) {
+            Map<String, String> currentUserMap = (Map<String, String>) currentUserObj;
+            String account = currentUserMap.get("account");
+            String password = currentUserMap.get("password");
+
+            Map<String,Object> map=new HashMap<>();
+            map.put("account",account);
+            map.put("password",password);
+            //System.out.println("刷新用户信息session:"+session.getAttribute("current_user"));
+            System.out.println("刷新用户信息:"+map.toString());
+            return userService.infoQuery(map);
+        } else {
+            System.out.println("The attribute 'current_user' is not a Map.");
+            return null;
+        }
+    }
+
     /**
      * 订单数据逻辑
      * @return
@@ -569,9 +589,16 @@ public class GetInfoContro {
         //Map<String,Object> resultMap=new HashMap<>();
         //HttpSession session = request.getSession();
         if (session != null && session.getAttribute("current_user") != null) {
+            //System.out.println("主页用户session消息message:\t"+session.getAttribute("current_user"));
+
+            mUser=freshUserInfo(session,model);
+            if(mUser!=null){
+                model.addAttribute("message", CommonClass2Map(mUser));
+                session.setAttribute("current_user",model.getAttribute("message"));
+            }else{
+                model.addAttribute("message", session.getAttribute("current_user"));
+            }
             // Session不为空且包含"userId"属性，表示用户已登录
-            //System.out.println("用户已登录:\t"+session.getAttribute("current_user"));
-            model.addAttribute("message", session.getAttribute("current_user"));
             model.addAttribute("index_message",indexDataMap());
             //model.addAttribute("Product_message",ProductMap());
             System.out.println("主页用户消息message:\t"+model.getAttribute("message"));
@@ -786,7 +813,43 @@ public class GetInfoContro {
                                                    @RequestParam("name") String name,
                                                    HttpSession session,Model model) throws IOException{
         System.out.println("上传用户头像:"+account+"___"+name);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
+        if (file.isEmpty()) {
+            return new ResponseEntity<>("请选择图片.", HttpStatus.BAD_REQUEST);
+        }
+        String image_suffix=ImageFileIOUtil.getSuffix(file);//后缀
+        String imageName=name+"_"+TimeUtil.formatTime(TimeUtil.GetTime(true))+"."+image_suffix;
+        //String imageName=name+"."+image_suffix;
+        String result=ImageFileIOUtil.writeImageResized(imageName,root_dir,user_dir,file);
+
+        Map<String, Object> user_headMap=new HashMap<>();
+        user_headMap.put("head","/"+user_dir+imageName);
+        user_headMap.put("account",account);
+        if(result=="success"&&userService.fresh_head(user_headMap)){
+            return ResponseEntity.ok("success");
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:" + result);
+        }
+    }
+
+    @RequestMapping("/upload_user_info")
+    public ResponseEntity<String> handleUpUserInfo(@RequestParam("account") String account,
+                                                   @RequestParam("name") String name,
+                                                   @RequestParam("phone") String phone,
+                                                   @RequestParam("email") String email,
+                                                   HttpSession session,Model model){
+        System.out.println("更新信息:"+account+name+phone+email);
+        Map<String,Object> map=new HashMap<>();
+        map.put("account",account);
+        map.put("name",name);
+        map.put("phone",phone);
+        map.put("email",email);
+        if(userService.fresh_segment_info(map)){
+            //freshSession(session,"current_user",);
+            return ResponseEntity.ok("success");
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
+        }
+        //return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
     }
 
     @RequestMapping("/upload_product_head")

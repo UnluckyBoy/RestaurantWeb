@@ -156,4 +156,24 @@
             </if>
         </where>
     </update>
+    <!--更新用户:昵称,phone,email等-->
+    <update id="fresh_segment_info" parameterType="java.util.HashMap">
+        update  user_info_data
+        <set >
+            <if test="name!=null">
+                uName=#{name},
+            </if>
+            <if test="phone!=null">
+                uPhone=#{phone},
+            </if>
+            <if test="email!=null">
+                uEmail=#{email}
+            </if>
+        </set>
+        <where>
+            <if test="account!=null">
+                uAccount=#{account,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </update>
 </mapper>

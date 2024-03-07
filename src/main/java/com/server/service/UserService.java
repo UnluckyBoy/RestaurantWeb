@@ -16,4 +16,5 @@ public interface UserService {
     public boolean fresh_head(Map<String,Object> map);//更新头像
     public int getUserCount();//查询用户数
     public int getUserOnlineCount();//查询当前在线用户
+    public boolean fresh_segment_info(Map<String,Object> map);
 }

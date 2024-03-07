@@ -122,4 +122,15 @@ public class ImageFileIOUtil {
             return e.getMessage();
         }
     }
+
+    /**
+     * 获取图片后缀名
+     * @param file
+     * @return
+     */
+    public static String getSuffix(MultipartFile file){
+        String originalFileName = file.getOriginalFilename();
+        String image_suffix=originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();//后缀
+        return image_suffix;
+    }
 }

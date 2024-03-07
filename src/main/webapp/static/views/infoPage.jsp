@@ -124,10 +124,33 @@
                 </p>
             </div>
         </div>
-
         <div class="text-center"><!--按钮-->
-            <button type="button" class="btn btn-warning" onclick="upUserInfo()">更新</button>
+            <button id="updateInfoBtn" type="button" class="btn btn-warning" onclick="upUserInfo()">更新</button>
         </div>
+
+        <!--图片修改弹窗-->
+        <die class="modal inmodal" id="userHeadEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <label class="modal-title label label-primary center-block">头像上传</label>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <input type="file" id="user_head_file" name="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary" id="updateHead" onclick="updateHead()">保存</button>
+                            <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </die>
     </div>
 </div>
 
@@ -175,20 +198,78 @@
         var uname=$("#name").val();
         var phone=$("#phone").val();
         var email=$("#email").val();
+        //var button = $("#updateInfoBtn");
         console.log("账户信息:"+$("#name").attr('placeholder')+"___"+
             $("#phone").attr('placeholder')+"___"+$("#email").attr('placeholder'));
         console.log("账户信息:"+$("#name").val()+"___"+ $("#phone").val()+"___"+$("#email").val());
-        if(uname==""||uname.trim()===''||uname==null){
+        if(uname.trim()===''){
             console.log("未输入name");
             uname=$("#name").attr('placeholder');
         }
-        if(phone==""||phone.trim()===''||phone==null){
+        if(phone.trim()===''){
             console.log("未输入phone");
             phone=$("#phone").attr('placeholder');
         }
-        if(email==""||email.trim()===''||email==null){
+        if(email.trim()===''){
             console.log("未输入email");
             email=$("#email").attr('placeholder');
+        }
+        // 封装要发送的数据
+        var formData = new FormData();
+        formData.append("account", '${message.account}');
+        formData.append("name", uname);
+        formData.append("phone", phone);
+        formData.append("email", email);
+        // 发送数据到后端
+        $.ajax({
+            url: '/Restaurant/upload_user_info',  // 替换为实际的 Spring Boot 后端端点
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                alert("更新成功:"+data);
+                location.reload();
+            },
+            error: function(jqXHR, textStatus, errorMessage) {
+                alert("更新失败:" + errorMessage);
+            }
+        });
+        // if(uname.trim() !== ''||phone.trim() !== ''||email.trim() !== ''){
+        //     button.disabled = false;
+        // }else{
+        //     button.disabled = true;
+        // }
+    }
+
+    function upUserHead(){
+        $("#userHeadEditModal").modal("show")
+    }
+    function updateHead(){
+        var fileInput = $("#user_head_file")[0];
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        if (file) {
+            formData.append("image", file);
+            formData.append("account", '${message.account}');
+            formData.append("name", '${message.name}');
+            $.ajax({
+                url: "/Restaurant/upload_user_head", //SpringBoot应用地址
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    alert("上传结果:" + data);
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorMessage) {
+                    alert("上传结果:" + errorMessage);
+                }
+            });
+            $("#userHeadEditModal").modal("hide"); // 隐藏模态框
+        } else {
+            alert("请选择图片!");
         }
     }
 </script>

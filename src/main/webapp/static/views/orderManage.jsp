@@ -325,7 +325,6 @@
             mEditTime: result_data9,
             mTradingType: result_data10
         };
-
         // 发送数据到后端
         $.ajax({
             url: '/Restaurant/update_order',  // 替换为实际的 Spring Boot 后端端点

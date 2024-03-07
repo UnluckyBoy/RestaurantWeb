@@ -60,4 +60,9 @@ public class UserServiceIpml implements UserService {
         return userMapper.getUserOnlineCount();
     }
 
+    @Override
+    public boolean fresh_segment_info(Map<String, Object> map) {
+        return userMapper.fresh_segment_info(map);
+    }
+
 }
