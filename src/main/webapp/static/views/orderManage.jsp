@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
 
-    <title>销售订单数据</title>
+    <title>私房菜后台管理-销售订单</title>
 
     <link href="../staticRes/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
     <!--图标库-->
@@ -47,7 +47,7 @@
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
 <%--                            <li><a href="">修改头像</a></li>--%>
-                            <li><a href="">个人资料</a></li>
+                            <li><a href="/Restaurant/userinfoPage">个人信息</a></li>
                             <li><a href="">联系我们</a></li>
                             <li><a href="#" id="mailboxLink">信箱</a></li>
                             <li class="divider"></li>
@@ -68,13 +68,12 @@
                     <a href=""><i class="fas fa-address-card"></i> <span class="nav-label">个人信息</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="">个人资料</a></li>
-                        <li><a href="">帮助中心</a></li>
+                        <li><a href="/Restaurant/userinfoPage">个人信息</a></li>
+                        <li><a href="/Restaurant/helpCenterPage">帮助中心</a></li>
                         <li><a href="/Restaurant/logout">退出</a></li>
                     </ul>
                 </li>
             </ul>
-
         </div>
     </nav>
     <div id="page-wrapper" class="gray-bg dashbard-1">

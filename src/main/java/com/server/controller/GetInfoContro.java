@@ -596,6 +596,23 @@ public class GetInfoContro {
         return "register";
     }
 
+    @RequestMapping("/helpCenterPage")
+    public String helpCenter(HttpServletRequest request,Model model,HttpSession session){
+        if (session != null && session.getAttribute("current_user") != null) {
+            model.addAttribute("message", session.getAttribute("current_user"));
+            model.addAttribute("index_message", session.getAttribute("index_message"));
+        }
+        return "helpCenter";
+    }
+    @RequestMapping("/userinfoPage")
+    public String UserInfoPage(HttpServletRequest request,Model model,HttpSession session){
+        if (session != null && session.getAttribute("current_user") != null) {
+            model.addAttribute("message", session.getAttribute("current_user"));
+            model.addAttribute("index_message", session.getAttribute("index_message"));
+        }
+        return "infoPage";
+    }
+
     @RequestMapping("/OrderManagerPage")
     public String OrderManagerPage(HttpServletRequest request,Model model,HttpSession session,
                                    @RequestParam(defaultValue = "1") int pageNum,
