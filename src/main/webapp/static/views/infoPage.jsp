@@ -44,7 +44,7 @@
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
                             <%--                            <li><a href="">修改头像</a></li>--%>
                             <li><a href="/Restaurant/userinfoPage">个人信息</a></li>
-                            <li><a href="">联系我们</a></li>
+<%--                            <li><a href="">联系我们</a></li>--%>
                             <li><a href="#" id="mailboxLink">信箱</a></li>
                             <li class="divider"></li>
                             <li><a href="/Restaurant/logout">安全退出</a></li>
@@ -91,23 +91,42 @@
             </nav>
         </div>
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="wrapper wrapper-content">
-                    <div class="row animated fadeInRight">
-                        <div class="col-lg-12">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">纯文本：</label>
-                                    <div class="col-sm-9">
-                                        <p class="form-control-static">这里是纯文字信息</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="text-center"><!--按钮-->
+            <p><strong class="text-center label-success">信息管理</strong></p>
+            <div class="text-center">
+                <p>
+                    <span>
+                        <img id="user_head_image" alt="image" class="img-circle" src="http://localhost:8080${message.head}" onclick="upUserHead()"/>
+                    </span>
+                </p>
+                <p>
+                    <label>账户ID:</label>
+                    <label id="account">${message.account}</label>
+                </p>
+                <p>
+                    <label>账号权限:</label>
+                    <label>${message.level}</label>
+                </p>
+                <p>
+                    <label>账户昵称:</label>
+<%--                    <label>${message.name}</label>--%>
+                    <input type="text" id="name" placeholder="${message.name}">
+                </p>
+                <p>
+                    <label>绑定手机:</label>
+<%--                    <label>${message.phone}</label>--%>
+                    <input type="text" id="phone" placeholder="${message.phone}">
+                </p>
+                <p>
+                    <label>绑定邮箱:</label>
+<%--                    <label>${message.email}</label>--%>
+                    <input type="text" id="email" placeholder="${message.email}">
+                </p>
             </div>
+        </div>
+
+        <div class="text-center"><!--按钮-->
+            <button type="button" class="btn btn-warning" onclick="upUserInfo()">更新</button>
         </div>
     </div>
 </div>
@@ -151,6 +170,27 @@
             alert('功能尚未实装！敬请期待！');
         });
     });
+
+    function upUserInfo(){
+        var uname=$("#name").val();
+        var phone=$("#phone").val();
+        var email=$("#email").val();
+        console.log("账户信息:"+$("#name").attr('placeholder')+"___"+
+            $("#phone").attr('placeholder')+"___"+$("#email").attr('placeholder'));
+        console.log("账户信息:"+$("#name").val()+"___"+ $("#phone").val()+"___"+$("#email").val());
+        if(uname==""||uname.trim()===''||uname==null){
+            console.log("未输入name");
+            uname=$("#name").attr('placeholder');
+        }
+        if(phone==""||phone.trim()===''||phone==null){
+            console.log("未输入phone");
+            phone=$("#phone").attr('placeholder');
+        }
+        if(email==""||email.trim()===''||email==null){
+            console.log("未输入email");
+            email=$("#email").attr('placeholder');
+        }
+    }
 </script>
 
 </body>

@@ -52,7 +52,7 @@
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
 <%--                            <li><a href="">修改头像</a></li>--%>
                             <li><a href="/Restaurant/userinfoPage">个人信息</a></li>
-                            <li><a href="">联系我们</a></li>
+<%--                            <li><a href="">联系我们</a></li>--%>
                             <li><a href="#" id="mailboxLink">信箱</a></li>
                             <li class="divider"></li>
                             <li><a href="/Restaurant/logout">安全退出</a></li>
@@ -118,7 +118,8 @@
                                         <c:forEach var="messagelists" items="${Announcement_message.AnnouncementList}">
                                             <div class="vertical-timeline-block">
                                                 <div class="vertical-timeline-icon navy-bg">
-                                                    <i class="fa fa-briefcase"></i>
+<%--                                                    <i class="fa fa-briefcase"></i>--%>
+                                                    <i class="fas fa-atom"></i>
                                                 </div>
                                                 <div class="vertical-timeline-content">
                                                     <h2>${messagelists.aTitle}</h2>
