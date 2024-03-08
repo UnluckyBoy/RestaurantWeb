@@ -123,6 +123,30 @@
                 </div>
             </div>
         </div>
+
+        <!--图片修改弹窗-->
+        <die class="modal inmodal" id="userHeadEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <label class="modal-title label label-primary center-block">头像上传</label>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <input type="file" id="user_head_file" name="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary" id="updateHead" onclick="updateHead()">保存</button>
+                            <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </die>
     </div>
 </div>
 
@@ -165,6 +189,37 @@
             alert('功能尚未实装！敬请期待！');
         });
     });
+
+    function upUserHead(){
+        $("#userHeadEditModal").modal("show")
+    }
+    function updateHead(){
+        var fileInput = $("#user_head_file")[0];
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        if (file) {
+            formData.append("image", file);
+            formData.append("account", '${message.account}');
+            formData.append("name", '${message.name}');
+            $.ajax({
+                url: "/Restaurant/upload_user_head", //SpringBoot应用地址
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    alert("上传结果:" + data);
+                    location.reload(true);
+                },
+                error: function(jqXHR, textStatus, errorMessage) {
+                    alert("上传结果:" + errorMessage);
+                }
+            });
+            $("#userHeadEditModal").modal("hide"); // 隐藏模态框
+        } else {
+            alert("请选择图片!");
+        }
+    }
 </script>
 
 

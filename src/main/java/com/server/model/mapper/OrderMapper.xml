@@ -207,4 +207,35 @@
             </if>
         </where>
     </update>
+    <!--更新产品信息-->
+    <update id="up_product_Info" parameterType="java.util.HashMap">
+        update product_info_data
+        <set>
+            <if test="name!=null">
+                pName=#{name},
+            </if>
+            <if test="description!=null">
+                pDescription=#{description},
+            </if>
+            <if test="type!=null">
+                pType=#{type},
+            </if>
+            <if test="shopper!=null">
+                pShopper=#{shopper},
+            </if>
+            <if test="price!=null">
+                pPrice=#{price},
+            </if>
+        </set>
+        <where>
+            <if test="id!=0">
+                pId=#{id}
+            </if>
+        </where>
+    </update>
+
+    <!--Delete逻辑-->
+    <delete id="delete_product" parameterType="String">
+        delete from product_info_data where pId=#{id}
+    </delete>
 </mapper>

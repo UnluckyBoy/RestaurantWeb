@@ -514,7 +514,7 @@
                 processData: false,
                 success: function(data) {
                     alert("上传结果:" + data);
-                    location.reload();
+                    location.reload(true);
                 },
                 error: function(jqXHR, textStatus, errorMessage) {
                     alert("上传结果:" + errorMessage);

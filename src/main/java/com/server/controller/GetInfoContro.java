@@ -626,6 +626,7 @@ public class GetInfoContro {
     @RequestMapping("/helpCenterPage")
     public String helpCenter(HttpServletRequest request,Model model,HttpSession session){
         if (session != null && session.getAttribute("current_user") != null) {
+
             model.addAttribute("message", session.getAttribute("current_user"));
             model.addAttribute("index_message", session.getAttribute("index_message"));
         }
@@ -634,7 +635,15 @@ public class GetInfoContro {
     @RequestMapping("/userinfoPage")
     public String UserInfoPage(HttpServletRequest request,Model model,HttpSession session){
         if (session != null && session.getAttribute("current_user") != null) {
-            model.addAttribute("message", session.getAttribute("current_user"));
+            mUser=freshUserInfo(session,model);
+            if(mUser!=null){
+                model.addAttribute("message", CommonClass2Map(mUser));
+                session.setAttribute("current_user",model.getAttribute("message"));
+            }else{
+                model.addAttribute("message", session.getAttribute("current_user"));
+            }
+
+            //model.addAttribute("message", session.getAttribute("current_user"));
             model.addAttribute("index_message", session.getAttribute("index_message"));
         }
         return "infoPage";
@@ -676,6 +685,27 @@ public class GetInfoContro {
         }
         return "product";
     }
+
+    @RequestMapping("/freshProductPage")
+    public ResponseEntity<String> freshProductPage(HttpServletRequest request,Model model,HttpSession session,
+                                                @RequestParam(defaultValue = "1") int pageNum,
+                                                @RequestParam(defaultValue = "6") int pageSize){
+        PageInfo<Product> pageInfo = orderService.getPageProduct(pageNum, pageSize);
+        if(pageInfo!=null){
+            //return pageInfo;
+            model.addAttribute("product_message", pageInfo);
+            session.setAttribute("product_message",model.getAttribute("product_message"));
+            return ResponseEntity.ok("success"+model.getAttribute("product_message"));
+        }else{
+            model.addAttribute("product_message", session.getAttribute("product_message"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
+            //return new PageInfo<Product>((List<Product>) session.getAttribute("product_message"));
+        }
+        //return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
+    }
+
+
+
     @RequestMapping("/CommonMessagePage")
     public String CommonMessagePage(HttpServletRequest request,HttpSession session,Model model){
         if (session != null && session.getAttribute("current_user") != null) {
@@ -806,6 +836,20 @@ public class GetInfoContro {
             return ResponseEntity.ok("error");
         }
     }
+    @RequestMapping("/update_product_info")
+    public ResponseEntity<String> UpProductInfo(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,
+                                          Model model, HttpSession session){
+        System.out.println("订单修改数据:"+requestBody.toString());
+        boolean fresh_result=orderService.up_product_Info(requestBody);
+        if(fresh_result){
+            //freshSession(session,"order_message",indexDataMap());
+            //freshSession(session,"product_message",ProductMap());//更新产品Map
+            return ResponseEntity.ok("success");
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
+        }
+        //return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
+    }
 
     @RequestMapping("/upload_user_head")
     public ResponseEntity<String> handleHeadUpload(@RequestParam("image") MultipartFile file,
@@ -817,8 +861,8 @@ public class GetInfoContro {
             return new ResponseEntity<>("请选择图片.", HttpStatus.BAD_REQUEST);
         }
         String image_suffix=ImageFileIOUtil.getSuffix(file);//后缀
-        String imageName=name+"_"+TimeUtil.formatTime(TimeUtil.GetTime(true))+"."+image_suffix;
-        //String imageName=name+"."+image_suffix;
+        //String imageName=name+"_"+TimeUtil.formatTime(TimeUtil.GetTime(true))+"."+image_suffix;
+        String imageName=name+"."+image_suffix;
         String result=ImageFileIOUtil.writeImageResized(imageName,root_dir,user_dir,file);
 
         Map<String, Object> user_headMap=new HashMap<>();
@@ -864,7 +908,8 @@ public class GetInfoContro {
         // 获取文件原始名称
         String originalFileName = file.getOriginalFilename();
         String image_suffix=originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();//后缀
-        String imageName=pName+"_"+pShopper+"_"+TimeUtil.formatTime(TimeUtil.GetTime(true))+"."+image_suffix;
+        //String imageName=pName+"_"+pShopper+"_"+TimeUtil.formatTime(TimeUtil.GetTime(true))+"."+image_suffix;
+        String imageName=pName+"_"+pShopper+"."+image_suffix;
         Map<String, Object> up_headMap=new HashMap<>();
         String result=ImageFileIOUtil.writeImageResized(imageName,root_dir,product_dir,file);
         up_headMap.put("pIcon","/"+product_dir+imageName);
@@ -876,6 +921,16 @@ public class GetInfoContro {
             return ResponseEntity.ok("success");
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:" + result);
+        }
+    }
+
+    @RequestMapping("/delete_product")
+    public ResponseEntity<String> handleDeleteProduct(HttpSession session,Model model,
+                                                      @RequestParam("id") String id){
+        if(orderService.delete_product(id)){
+            return ResponseEntity.ok("success");
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
         }
     }
 

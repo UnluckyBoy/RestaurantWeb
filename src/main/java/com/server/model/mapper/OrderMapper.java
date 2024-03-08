@@ -34,7 +34,10 @@ public interface OrderMapper {
     public List<Product> getAllProduct();//获取所有产品
     public boolean up_product_Icon(Map<String,Object> map);//更新产品头像
     public List<MessageView> getCurrentMessage();//获取前5消息显示
+    public boolean up_product_Info(Map<String,Object> map);//更新产品信息
+    public boolean delete_product(String id);//删除产品
 
+    /**分页操作**/
     @Select("select " +
             "pId, " +
             "pName, " +

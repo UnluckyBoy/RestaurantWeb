@@ -108,4 +108,14 @@ public class OrderServiceIpml implements OrderService {
         List<OrderInfo> orderList = orderMapper.getPageAllOrder(pageNum, pageSize);//多个数据分页
         return new PageInfo<>(orderList);
     }
+
+    @Override
+    public boolean up_product_Info(Map<String, Object> map) {
+        return orderMapper.up_product_Info(map);
+    }
+
+    @Override
+    public boolean delete_product(String id) {
+        return orderMapper.delete_product(id);
+    }
 }

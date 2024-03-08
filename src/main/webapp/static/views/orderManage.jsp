@@ -335,7 +335,7 @@
                 console.log('数据成功发送到后端',response);
                 // 在这里处理后端的响应
                 if(response=="success"){
-                    location.reload();
+                    location.reload(true);
                 }
             },
             error: function(error) {
@@ -367,7 +367,7 @@
                 processData: false,
                 success: function(data) {
                     alert("上传结果:" + data);
-                    location.reload();
+                    location.reload(true);
                 },
                 error: function(jqXHR, textStatus, errorMessage) {
                     alert("上传结果:" + errorMessage);
