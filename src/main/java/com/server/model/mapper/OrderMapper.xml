@@ -238,4 +238,10 @@
     <delete id="delete_product" parameterType="String">
         delete from product_info_data where pId=#{id}
     </delete>
+
+    <!--insert逻辑-->
+    <insert id="add_message" parameterType="java.util.HashMap">
+        insert into announcement_data
+            (aTitle,aContent,aPublisher,aCreateTime) values (#{title},#{content},#{publisher},#{createTime})
+    </insert>
 </mapper>

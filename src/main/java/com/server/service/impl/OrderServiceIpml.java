@@ -131,6 +131,12 @@ public class OrderServiceIpml implements OrderService {
     }
 
     @Override
+    public PageInfo<MessageView> getMessage(int pageNum, int pageSize) {
+        List<MessageView> messageViewList = orderMapper.getMessage(pageNum, pageSize);//多个数据分页
+        return new PageInfo<>(messageViewList);
+    }
+
+    @Override
     public boolean up_product_Info(Map<String, Object> map) {
         return orderMapper.up_product_Info(map);
     }
@@ -138,5 +144,10 @@ public class OrderServiceIpml implements OrderService {
     @Override
     public boolean delete_product(String id) {
         return orderMapper.delete_product(id);
+    }
+
+    @Override
+    public boolean add_message(Map<String, Object> map) {
+        return orderMapper.add_message(map);
     }
 }

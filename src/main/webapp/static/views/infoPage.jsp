@@ -235,11 +235,6 @@
                 alert("更新失败:" + errorMessage);
             }
         });
-        // if(uname.trim() !== ''||phone.trim() !== ''||email.trim() !== ''){
-        //     button.disabled = false;
-        // }else{
-        //     button.disabled = true;
-        // }
     }
 
     function upUserHead(){

@@ -661,6 +661,17 @@ public class GetInfoContro {
         }
         return "product";
     }
+    @RequestMapping("/CommonMessagePage")
+    public String CommonMessagePage(HttpServletRequest request,HttpSession session,Model model){
+        if (session != null && session.getAttribute("current_user") != null) {
+            // Session不为空且包含"userId"属性，表示用户已登录
+            model.addAttribute("message", session.getAttribute("current_user"));
+            //model.addAttribute("Announcement_message",MessageMap());
+            //session.setAttribute("Announcement_message",model.getAttribute("Announcement_message"));
+            //System.out.println("CommonMessagePage消息数据Announcement_message:"+session.getAttribute("Announcement_message"));
+        }
+        return "commonMessage";
+    }
 
     @RequestMapping("/freshOrderPage")
     public ResponseEntity<Object> freshOrderPage(HttpServletRequest request,Model model,HttpSession session,
@@ -706,19 +717,17 @@ public class GetInfoContro {
             //return new PageInfo<Product>((List<Product>) session.getAttribute("product_message"));
         }
     }
-
-
-
-    @RequestMapping("/CommonMessagePage")
-    public String CommonMessagePage(HttpServletRequest request,HttpSession session,Model model){
-        if (session != null && session.getAttribute("current_user") != null) {
-            // Session不为空且包含"userId"属性，表示用户已登录
-            model.addAttribute("message", session.getAttribute("current_user"));
-            model.addAttribute("Announcement_message",MessageMap());
-            session.setAttribute("Announcement_message",model.getAttribute("Announcement_message"));
-            System.out.println("CommonMessagePage消息数据Announcement_message:"+session.getAttribute("Announcement_message"));
+    @RequestMapping("/freshMessagePage")
+    public ResponseEntity<Object> freshMessagePage(HttpServletRequest request,Model model,HttpSession session,
+                                                 @RequestParam(defaultValue = "1") int pageNum,
+                                                 @RequestParam(defaultValue = "5") int pageSize){
+        PageInfo<MessageView> pageInfo = orderService.getMessage(pageNum, pageSize);
+        if(pageInfo!=null){
+            System.out.println("freshMessagePage返回的数据:"+pageInfo);
+            return ResponseEntity.ok(pageInfo);
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
         }
-        return "commonMessage";
     }
 
 

@@ -34,6 +34,8 @@ public interface OrderService {
     PageInfo<Product> getPageProduct(int pageNum,int pageSize);
     PageInfo<OrderInfo> getPageAllOrder(int pageNum,int pageSize);
     PageInfo<AllTradingView> getTradingView(int pageNum,int pageSize);
+    PageInfo<MessageView> getMessage(int pageNum,int pageSize);
     public boolean up_product_Info(Map<String,Object> map);//更新产品信息
     public boolean delete_product(String id);
+    public boolean add_message(Map<String,Object>map);
 }

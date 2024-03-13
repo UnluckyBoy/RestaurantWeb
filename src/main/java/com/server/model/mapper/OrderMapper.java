@@ -36,6 +36,7 @@ public interface OrderMapper {
     public List<MessageView> getCurrentMessage();//获取前5消息显示
     public boolean up_product_Info(Map<String,Object> map);//更新产品信息
     public boolean delete_product(String id);//删除产品
+    public boolean add_message(Map<String,Object>map);//发布信息
 
     /**分页操作**/
     @Select("select " +
@@ -78,4 +79,14 @@ public interface OrderMapper {
             "pType " +
             "from CTEMP")
     List<AllTradingView> getTradingView(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize);
+
+    @Select("select " +
+            "aId," +
+            "aTitle," +
+            "aContent," +
+            "aPublisher," +
+            "aCreateTime," +
+            "aType " +
+            "from announcement_data order by aCreateTime desc")
+    List<MessageView> getMessage(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize);
 }

@@ -115,18 +115,18 @@
                                 </div>
                                 <div class="" id="ibox-content">
                                     <div id="vertical-timeline" class="vertical-container light-timeline">
-                                        <c:forEach var="messagelists" items="${Announcement_message.AnnouncementList}">
-                                            <div class="vertical-timeline-block">
-                                                <div class="vertical-timeline-icon navy-bg">
-                                                    <i class="fas fa-atom"></i>
-                                                </div>
-                                                <div class="vertical-timeline-content">
-                                                    <h2>${messagelists.aTitle}</h2>
-                                                    <p>${messagelists.aContent}</p>
-                                                    <span class="vertical-date"><br><small>${messagelists.aCreateTime}</small></span>
-                                                </div>
-                                            </div>
-                                        </c:forEach>
+<%--                                        <c:forEach var="messagelists" items="${Announcement_message.AnnouncementList}">--%>
+<%--                                            <div class="vertical-timeline-block">--%>
+<%--                                                <div class="vertical-timeline-icon navy-bg">--%>
+<%--                                                    <i class="fas fa-atom"></i>--%>
+<%--                                                </div>--%>
+<%--                                                <div class="vertical-timeline-content">--%>
+<%--                                                    <h2>${messagelists.aTitle}</h2>--%>
+<%--                                                    <p>${messagelists.aContent}</p>--%>
+<%--                                                    <span class="vertical-date"><br><small>${messagelists.aCreateTime}</small></span>--%>
+<%--                                                </div>--%>
+<%--                                            </div>--%>
+<%--                                        </c:forEach>--%>
 <%--                                        <div class="vertical-timeline-block">--%>
 <%--                                            <div class="vertical-timeline-icon navy-bg">--%>
 <%--                                                <i class="fa fa-briefcase"></i>--%>
@@ -149,7 +149,12 @@
         </div>
 
         <div class="text-center"><!--按钮-->
-            <button type="button" class="btn btn-success" >发布</button>
+            <p>
+                <strong id="currentPage"></strong><strong id="allPage"></strong>
+            </p>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#messageEditModal">发布</button>
+            <button type="button" class="btn btn-primary" onclick="previousPage()">上一页</button>
+            <button type="button" class="btn btn-primary" onclick="nextPage()">下一页</button>
         </div>
 
         <!--图片修改弹窗-->
@@ -170,6 +175,32 @@
                         <div class="text-center">
                             <button type="button" class="btn btn-primary" id="updateHead" onclick="updateHead()">保存</button>
                             <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </die>
+
+        <!--发布消息弹窗-->
+        <die class="modal inmodal" id="messageEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog modal-lg"><!--放大窗口时添加:modal-lg-->
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header" style="display: flex; justify-content: center; align-items: center;">
+                        <div class="form-group">
+                            <input type="text" id="messageTitle" class="form-control" placeholder="消息标题" style="max-width: 500px;">
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <input type="text" id="messageContent" class="form-control" placeholder="消息内容...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary" id="updateMessage" onclick="upMessage()">推送</button>
+                            <button type="button" class="btn btn-white" data-dismiss="modal">取消</button>
                         </div>
                     </div>
                 </div>
@@ -210,6 +241,7 @@
 
 <!--给数据表添加点击响应逻辑-->
 <script>
+    let globalMessageData;
     $(document).ready(function() {
         //信箱按钮弹窗
         document.getElementById('mailboxLink').addEventListener('click', function(event) {
@@ -218,6 +250,8 @@
             // 弹出弹窗
             alert('功能尚未实装！敬请期待！');
         });
+        //初始化数据
+        freshData('/Restaurant/freshMessagePage',1);
 
         //修改页面布局
         $('#lightVersion').click(function (event) {
@@ -269,9 +303,123 @@
         }
     }
 
-    function getSystemTime(mTime){
-        var backendTimeStr = request.getParameter(mTime);
-        console.log("后台时间:"+backendTimeStr);
+    function upMessage(){
+        var title=$("#messageTitle").val();
+        var content=$("#messageContent").val();
+        if(title.trim()===''||content.trim()===''){
+            alert("请检查输入内容！");
+        }
+        // 封装要发送的数据
+        var formData = new FormData();
+        formData.append("title",title);
+        formData.append("content", content);
+        formData.append("publisher", '${message.account}');
+        formData.append("createtime", getCurrentDateTime());
+        console.log("后端数据:"+formData.get("title")+","+formData.get("content")+
+            ","+formData.get("publisher")+","+formData.get("createtime"));
+        // 发送数据到后端
+        // $.ajax({
+        //     url: '/Restaurant/upload_user_info',  // 替换为实际的 Spring Boot 后端端点
+        //     type: 'POST',
+        //     data: formData,
+        //     contentType: false,
+        //     processData: false,
+        //     success: function(data) {
+        //         alert("更新成功:"+data);
+        //         location.reload();
+        //     },
+        //     error: function(jqXHR, textStatus, errorMessage) {
+        //         alert("更新失败:" + errorMessage);
+        //     }
+        // });
+    }
+
+    function freshData(url,pagenum){
+        $.ajax({
+            url:url, // 你的后端 API 端点
+            type: 'GET',
+            data: { pageNum: pagenum},
+            dataType: 'json', // 期望返回的数据类型
+            success: function(data) {
+                globalMessageData=data;
+                if(data && data.list){
+                    var timelineContainer = $('#vertical-timeline');
+                    $.each(data.list, function(index, messagelist) {
+                        // 创建 .vertical-timeline-block 元素
+                        var timelineBlock = $('<div>').addClass('vertical-timeline-block');
+                        var timelineIcon = $('<div>').addClass('vertical-timeline-icon navy-bg');
+                        var icon = $('<i>').addClass('fas fa-atom');
+                        timelineIcon.append(icon);
+                        timelineBlock.append(timelineIcon);
+                        var timelineContent = $('<div>').addClass('vertical-timeline-content');
+                        var title = $('<h2>').text(messagelist.aTitle);
+                        var content = $('<p>').text(messagelist.aContent);
+                        var date = $('<span>').addClass('vertical-date').append($('<br>')).append($('<small>').text(messagelist.aCreateTime));
+                        timelineContent.append(title);
+                        timelineContent.append(content);
+                        timelineContent.append(date);
+                        timelineBlock.append(timelineContent);
+                        // 将新创建的元素添加到容器中
+                        timelineContainer.append(timelineBlock);
+                    });
+                    $("#currentPage").text(data.pageNum);
+                    $("#allPage").text("/"+data.pages);
+                }
+            },
+            error: function(xhr, status, error) {
+                // 处理错误情况
+                console.error("AJAX 请求失败: " + error);
+            }
+        });
+    }
+
+    // 上一页按钮点击事件处理函数
+    function previousPage() {
+        if (globalMessageData.pageNum>1) {//hasPreviousPage
+            var newPageNum = globalMessageData.prePage; // 或 pageInfo.pageNum - 1;
+            // 发送请求到服务器获取新页面的数据，并更新页面内容
+            // 例如：updatePageContent(newPageNum);
+            console.log('切换到上一页，页码：' + newPageNum);
+            fetchData('/Restaurant/freshProductPage',newPageNum);
+        } else {
+            console.log('已经是第一页了');
+            alert("已经是第一页!");
+        }
+    }
+    // 下一页按钮点击事件处理函数
+    function nextPage() {
+        if (globalMessageData.hasNextPage) {
+            var newPageNum = globalMessageData.nextPage; // 或 pageInfo.pageNum + 1;
+            // 发送请求到服务器获取新页面的数据，并更新页面内容
+            // 例如：updatePageContent(newPageNum);
+            console.log('切换到下一页，页码：' + newPageNum);
+            fetchData('/Restaurant/freshProductPage',newPageNum);
+        } else {
+            console.log('已经是最后一页了');
+            alert("已经是最后一页!");
+        }
+    }
+
+    /**
+     * 获取当前时间
+     * @returns {string}
+     */
+    function getCurrentDateTime() {
+        var currentDate = new Date();
+        // 获取年、月、日、小时、分钟、秒
+        var year = currentDate.getFullYear();
+        var month = addZero(currentDate.getMonth() + 1);  // 月份从0开始，需要加1
+        var day = addZero(currentDate.getDate());
+        var hours = addZero(currentDate.getHours());
+        var minutes = addZero(currentDate.getMinutes());
+        var seconds = addZero(currentDate.getSeconds());
+        // 格式化为：yyyy-MM-dd HH:mm:ss
+        var formattedDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+        return formattedDateTime;
+    }
+    // 补零函数，用于确保单个数字在前面加0
+    function addZero(number) {
+        return number < 10 ? '0' + number : number;
     }
 </script>
 
