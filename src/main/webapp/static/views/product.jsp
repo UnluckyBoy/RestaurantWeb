@@ -114,24 +114,24 @@
                                 <th class="text-center">备注</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <c:forEach var="productLists" items="${product_message.list}">
-                                <tr class="product-table-column">
-                                    <td class="text-center">
-                                        <img id="product_head" src="http://localhost:8080${productLists.pIcon}" alt="Image" width="64" height="64">
-                                    </td>
-                                    <td class="text-center">${productLists.pId}</td>
-                                    <td class="text-center" id="product_name">${productLists.pName}</td>
-                                    <td class="text-center">${productLists.pDescription}</td>
-                                    <td class="text-center">${productLists.pType}</td>
-                                    <td class="text-center" id="product_shopper">${productLists.pShopper}</td>
-                                    <td class="text-center"><span class="label label-primary">&yen;${productLists.pPrice}</span></td>
-                                    <td class="text-center small">
-                                        <button id="btn_add" type="button" class="btn-add btn btn-success">修改</button>
-                                        <button id="btn_delete" type="button" class="btn-delete btn btn-danger">删除</button>
-                                    </td>
-                                </tr>
-                            </c:forEach>
+                            <tbody id="product-table-body">
+<%--                            <c:forEach var="productLists" items="${product_message.list}">--%>
+<%--                                <tr class="product-table-column">--%>
+<%--                                    <td class="text-center">--%>
+<%--                                        <img id="product_head" src="http://localhost:8080${productLists.pIcon}" alt="Image" width="64" height="64">--%>
+<%--                                    </td>--%>
+<%--                                    <td class="text-center">${productLists.pId}</td>--%>
+<%--                                    <td class="text-center" id="product_name">${productLists.pName}</td>--%>
+<%--                                    <td class="text-center">${productLists.pDescription}</td>--%>
+<%--                                    <td class="text-center">${productLists.pType}</td>--%>
+<%--                                    <td class="text-center" id="product_shopper">${productLists.pShopper}</td>--%>
+<%--                                    <td class="text-center"><span class="label label-primary">&yen;${productLists.pPrice}</span></td>--%>
+<%--                                    <td class="text-center small">--%>
+<%--                                        <button id="btn_add" type="button" class="btn-add btn btn-success">修改</button>--%>
+<%--                                        <button id="btn_delete" type="button" class="btn-delete btn btn-danger">删除</button>--%>
+<%--                                    </td>--%>
+<%--                                </tr>--%>
+<%--                            </c:forEach>--%>
                             </tbody>
                         </table>
                     </div>
@@ -231,8 +231,7 @@
         </div>
         <div class="text-center"><!--按钮-->
             <p>
-                <strong id="currenPage">${product_message.pageNum}</strong>
-                <strong>/${product_message.pages}</strong>
+                <strong id="currentPage"></strong><strong id="allPage"></strong>
             </p>
             <button type="button" class="btn btn-success" onclick="add_Product()">添 加</button>
             <button type="button" class="btn btn-primary" onclick="previousPage()">上一页</button>
@@ -303,6 +302,7 @@
 
 <!--给数据表添加点击响应逻辑-->
 <script>
+    let globalProductData;//全局变量
     $(document).ready(function() {
         //提示
         document.getElementById('mailboxLink').addEventListener('click', function(event) {
@@ -312,122 +312,142 @@
             alert('功能尚未实装！敬请期待！');
         });
 
-        /**
-         * 第一行:first-child
-         * 第二行:nth-child(2)
-         */
-        $('table tr td:first-child').click(function() {
-            // 获取当前点击的<td>元素的文本或其他属性
-            var cellText = $(this).parent().find("td:eq(0)").text();
-            var pName=$(this).parent().find("td:eq(2)").text();
-            var pShopper=$(this).parent().find("td:eq(5)").text();
-            console.log("点击了图片"+cellText);
-            $("#imageEditModal").modal("show");
-            /** 头像按钮修改 */
-            document.getElementById('updateImage').addEventListener('click', function() {
-                var fileInput = $("#product_head_file")[0];
-                var file = fileInput.files[0];
-                var productName =pName; //产品名称
-                var productShopper = pShopper; //商家
-                var formData = new FormData();
-                if (file) {
-                    formData.append("image", file);
-                    formData.append("pName", productName);
-                    formData.append("pShopper", productShopper);
-                    $.ajax({
-                        url: "/Restaurant/upload_product_head", //SpringBoot应用地址
-                        type: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function(data) {
-                            alert("上传结果:" + data);
-                            location.reload(true);
-                        },
-                        error: function(jqXHR, textStatus, errorMessage) {
-                            alert("上传结果:" + errorMessage);
-                        }
+        // 发送 AJAX 请求获取产品数据
+        $.ajax({
+            url: '/Restaurant/freshProductPage', // 替换为你的后端服务URL
+            type: 'GET', // 或者 'POST'，取决于你的后端服务需要的请求类型
+            dataType: 'json', // 期望从服务器返回的数据类型
+            success: function(data) {
+                console.log("返回的数据:"+data.pageSize);
+                globalProductData=data;//全局变量赋值
+                var tbody = $('#product-table-body'); // 获取 tbody 元素
+                if(data && data.list){
+                    tbody.empty(); // 清空 tbody中的内容
+                    //var pageSize = data.pageSize; //分页默认大小
+                    //var displayedCount = 0; // 用于跟踪已经显示的产品数量
+                    // 遍历数据并创建表格行
+                    $.each(data.list, function(index, product) {
+                        // if (displayedCount >= pageSize) {
+                        //     return false; // 当达到 pageSize 时退出循环
+                        // }
+                        var row = $('<tr class="product-table-column"></tr>'); // 创建新的表格行
+                        // 创建并添加单元格到行中
+                        //row.append($('<td class="text-center"><img src="' + product.pIcon + '" alt="Image" width="64" height="64"></td>'));
+                        var imgCell = $('<td class="text-center"></td>').append($('<img src="' + product.pIcon + '" alt="Image" width="64" height="64">'));
+                        row.append(imgCell);
+                        row.append($('<td class="text-center">' + product.pId + '</td>'));
+                        row.append($('<td class="text-center">' + product.pName + '</td>'));
+                        row.append($('<td class="text-center">' + product.pDescription + '</td>'));
+                        row.append($('<td class="text-center">' + product.pType + '</td>'));
+                        row.append($('<td class="text-center">' + product.pShopper + '</td>'));
+                        row.append($('<td class="text-center"><span class="label label-primary">&yen;' + product.pPrice + '</span></td>'));
+                        // 创建修改按钮并添加事件处理函数
+                        var btnAdd = $('<button type="button" class="btn-add btn btn-success">修改</button>');
+                        var btnDet = $('<button type="button" class="btn-delete btn btn-danger">删除</button>');
+                        row.append($('<td class="text-center small"></td>').append(btnAdd).append(btnDet));
+                        // 为当前行的 <img> 元素添加点击事件
+                        imgCell.find('img').on('click', function() {
+                            // 在这里,访问到当前的product对象
+                            //alert('你点击了产品图片，产品名称是：' + product.pName);
+                            $("#imageEditModal").modal("show");
+                            /** 头像按钮修改 */
+                            document.getElementById('updateImage').addEventListener('click', function() {
+                                var fileInput = $("#product_head_file")[0];
+                                var file = fileInput.files[0];
+                                var productName =product.pName; //产品名称
+                                var productShopper = product.pShopper; //商家
+                                var formData = new FormData();
+                                if (file) {
+                                    formData.append("image", file);
+                                    formData.append("pName", productName);
+                                    formData.append("pShopper", productShopper);
+                                    $.ajax({
+                                        url: "/Restaurant/upload_product_head", //SpringBoot应用地址
+                                        type: "POST",
+                                        data: formData,
+                                        contentType: false,
+                                        processData: false,
+                                        success: function(data) {
+                                            alert("上传结果:" + data);
+                                            location.reload(true);
+                                        },
+                                        error: function(jqXHR, textStatus, errorMessage) {
+                                            alert("上传结果:" + errorMessage);
+                                        }
+                                    });
+                                    $("#imageEditModal").modal("hide"); // 隐藏模态框
+                                } else {
+                                    alert("请选择图片!");
+                                }
+                            });
+                        });
+                        // 将行添加到 tbody 中
+                        tbody.append(row);
+                        // 增加已显示的产品数量
+                        //displayedCount++;
                     });
-                    $("#imageEditModal").modal("hide"); // 隐藏模态框
-                } else {
-                    alert("请选择图片!");
+                    //显示页码
+                    $("#currentPage").text(data.pageNum);
+                    $("#allPage").text("/"+data.pages);
                 }
-            });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // 处理请求失败的情况
+                console.error('AJAX 请求失败: ' + textStatus, errorThrown);
+            }
         });
 
         // 修改按钮的点击事件
-        // $(document).on('click', '.btn-add', function() {
-        //     // 获取当前行的数据，例如产品ID或其他需要的信息
-        //     var productId = $(this).closest('tr').find("td:eq(0)").text(); // 假设有一个类为pId的td元素包含产品ID
-        //     var productName=$(this).closest('tr').find("td:eq(1)").text();
-        //     console.log("要修改的数据:"+productId+","+productName);
-        //     // 使用productId作为参数
-        //     alert("修改按钮被点击了，产品ID为: " + productId);
-        // });
-        document.querySelectorAll('.btn-add').forEach(function(button) {
-            button.addEventListener('click', function () {
-                // 找到按钮所在的表格行
-                var row = this.closest('tr');
-                // 获取自定义数据属性（可选，取决于您的需求）
-                //var productData = row.getAttribute('data-product');
-                // 遍历该行的所有td元素并获取其文本内容
-                var tds = row.querySelectorAll('td');
-                var tdData = [];
-                tds.forEach(function (td) {
-                    tdData.push(td.textContent.trim());
+        $(document).on('click', '.btn-add', function() {
+            // 获取当前行的数据，例如产品ID或其他需要的信息
+            var productId = $(this).closest('tr').find("td:eq(1)").text();
+            var productName=$(this).closest('tr').find("td:eq(2)").text();
+            var productDes = $(this).closest('tr').find("td:eq(3)").text();
+            var productType=$(this).closest('tr').find("td:eq(4)").text();
+            var productShopper = $(this).closest('tr').find("td:eq(5)").text();
+            var productPrice=$(this).closest('tr').find("td:eq(6)").text().slice(1);
+            console.log("要修改的数据:"+productId+","+productName);
+            // 使用productId作为参数
+            //alert("修改按钮被点击了，产品ID为: " + productId);
+            $("#editModal").modal("show");
+            $("#td_data1").text(productId);
+            $("#td_data2").text(productName);
+            $("#td_data3").text(productDes);
+            $("#td_data4").text(productType);
+            $("#td_data5").text(productShopper);
+            $("#td_data6").text(productPrice);
+            $("#updateProductBtn").click(function (){
+                // 封装要发送的数据
+                var order_data = {
+                    id: $("#td_data1").text(),
+                    name: $("#td_data2").text(),
+                    description: $("#td_data3").text(),
+                    type: $("#td_data4").text(),
+                    shopper: $("#td_data5").text(),
+                    price: $("#td_data6").text()
+                };
+                console.log("发送的封装数据:"+order_data.id+","+order_data.name+","+order_data.description
+                    +","+order_data.type+","+order_data.shopper+","+order_data.price)
+                // 发送数据到后端
+                $.ajax({
+                    url: '/Restaurant/update_product_info',  // 替换为实际的 Spring Boot 后端端点
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(order_data),
+                    success: function(response) {
+                        console.log('数据成功发送到后端',response);
+                        // 在这里处理后端的响应
+                        $("#editModal").modal("hide");
+                        location.reload();
+                    },
+                    error: function(jqXHR, textStatus, errorMessage) {
+                        console.log("数据上传异常:" + errorMessage);
+                        $("#editModal").modal("hide");
+                    }
                 });
-                // 输出或处理tdData，例如：
-                console.log(tdData[0],tdData[1],tdData[2],tdData[3],tdData[4],tdData[5],tdData[6].slice(1));
-                /**绑定数据**/
-                var result_data1 = tdData[1];
-                var result_data2 = tdData[2];
-                var result_data3 = tdData[3];
-                var result_data4 = tdData[4];
-                var result_data5 = tdData[5];
-                var result_data6 = tdData[6].slice(1);
-                if(tdData!=null){
-                    $("#editModal").modal("show");
-                    $("#td_data1").text(result_data1);
-                    $("#td_data2").text(result_data2);
-                    $("#td_data3").text(result_data3);
-                    $("#td_data4").text(result_data4);
-                    $("#td_data5").text(result_data5);
-                    $("#td_data6").text(result_data6);
-
-                    $("#updateProductBtn").click(function (){
-                        // 封装要发送的数据
-                        var order_data = {
-                            id: $("#td_data1").text(),
-                            name: $("#td_data2").text(),
-                            description: $("#td_data3").text(),
-                            type: $("#td_data4").text(),
-                            shopper: $("#td_data5").text(),
-                            price: $("#td_data6").text()
-                        };
-                        console.log("发送的封装数据:"+order_data.id+","+order_data.name+","+order_data.description
-                            +","+order_data.type+","+order_data.shopper+","+order_data.price)
-                        // 发送数据到后端
-                        $.ajax({
-                            url: '/Restaurant/update_product_info',  // 替换为实际的 Spring Boot 后端端点
-                            type: 'POST',
-                            contentType: 'application/json',
-                            data: JSON.stringify(order_data),
-                            success: function(response) {
-                                console.log('数据成功发送到后端',response);
-                                // 在这里处理后端的响应
-                                $("#editModal").modal("hide");
-                                location.reload();
-                            },
-                            error: function(jqXHR, textStatus, errorMessage) {
-                                console.log("数据上传异常:" + errorMessage);
-                                $("#editModal").modal("hide");
-                            }
-                        });
-                    });
-                }
             });
-        });
 
+        });
         // 删除按钮的点击事件
         $(document).on('click', '.btn-delete', function() {
             // 获取当前行的数据
@@ -473,11 +493,12 @@
 
     // 上一页按钮点击事件处理函数
     function previousPage() {
-        if (${product_message.hasPreviousPage}) {//hasPreviousPage
-            var newPageNum = ${product_message.prePage}; // 或 pageInfo.pageNum - 1;
+        if (globalProductData.pageNum>1) {//hasPreviousPage
+            var newPageNum = globalProductData.prePage; // 或 pageInfo.pageNum - 1;
             // 发送请求到服务器获取新页面的数据，并更新页面内容
             // 例如：updatePageContent(newPageNum);
             console.log('切换到上一页，页码：' + newPageNum);
+            fetchData('/Restaurant/freshProductPage',newPageNum);
         } else {
             console.log('已经是第一页了');
             alert("已经是第一页!");
@@ -485,28 +506,106 @@
     }
     // 下一页按钮点击事件处理函数
     function nextPage() {
-        if (${product_message.hasNextPage}) {
-            var newPageNum = ${product_message.nextPage}; // 或 pageInfo.pageNum + 1;
+        if (globalProductData.hasNextPage) {
+            var newPageNum = globalProductData.nextPage; // 或 pageInfo.pageNum + 1;
             // 发送请求到服务器获取新页面的数据，并更新页面内容
             // 例如：updatePageContent(newPageNum);
             console.log('切换到下一页，页码：' + newPageNum);
-            // 发送AJAX请求到后端获取下一页数据
-            $.ajax({
-                url: '/Restaurant/freshProductPage', // 你的后端接口URL
-                type: 'GET',
-                data: { pageNum: newPageNum}, // 将下一页的页码作为参数传递
-                success: function(data) {
-                    //location.reload(true);
-                    console.log("刷新成功:" + data);
-                },
-                error: function(jqXHR, textStatus, errorMessage) {
-                    console.log("刷新失败:" + errorMessage);
-                }
-            });
+            fetchData('/Restaurant/freshProductPage',newPageNum);
         } else {
             console.log('已经是最后一页了');
             alert("已经是最后一页!");
         }
+    }
+
+    //重复使用的ajax功能模块,用于刷新上下页
+    function fetchData(url,newPageNum){
+        // 发送AJAX请求到后端获取下一页数据
+        $.ajax({
+            url:url, // 你的后端Api:'/Restaurant/freshProductPage'
+            type: 'GET',
+            data: { pageNum: newPageNum}, // 将下一页的页码作为参数传递
+            dataType: 'json',
+            success: function(data) {
+                console.log("返回的数据:"+data.pageSize);
+                globalProductData=data;//全局变量赋值
+                var tbody = $('#product-table-body'); // 获取 tbody 元素
+                if(data && data.list){
+                    tbody.empty(); // 清空 tbody中的内容
+                    //var pageSize = data.pageSize; //分页默认大小
+                    //var displayedCount = 0; // 用于跟踪已经显示的产品数量
+                    //var displayedCount = 0; // 用于跟踪已经显示的产品数量
+                    // 遍历数据并创建表格行
+                    $.each(data.list, function(index, product) {
+                        // if (displayedCount >= pageSize) {
+                        //     return false; // 当达到 pageSize 时退出循环
+                        // }
+                        var row = $('<tr class="product-table-column"></tr>'); // 创建新的表格行
+                        // 创建并添加单元格到行中
+                        //row.append($('<td class="text-center"><img src="' + product.pIcon + '" alt="Image" width="64" height="64"></td>'));
+                        var imgCell = $('<td class="text-center"></td>').append($('<img src="' + product.pIcon + '" alt="Image" width="64" height="64">'));
+                        row.append(imgCell);
+                        row.append($('<td class="text-center">' + product.pId + '</td>'));
+                        row.append($('<td class="text-center">' + product.pName + '</td>'));
+                        row.append($('<td class="text-center">' + product.pDescription + '</td>'));
+                        row.append($('<td class="text-center">' + product.pType + '</td>'));
+                        row.append($('<td class="text-center">' + product.pShopper + '</td>'));
+                        row.append($('<td class="text-center"><span class="label label-primary">&yen;' + product.pPrice + '</span></td>'));
+                        // 创建修改按钮并添加事件处理函数
+                        var btnAdd = $('<button type="button" class="btn-add btn btn-success">修改</button>');
+                        var btnDet = $('<button type="button" class="btn-delete btn btn-danger">删除</button>');
+                        row.append($('<td class="text-center small"></td>').append(btnAdd).append(btnDet));
+                        // 为当前行的 <img> 元素添加点击事件
+                        imgCell.find('img').on('click', function() {
+                            // 在这里,访问到当前的product对象
+                            //alert('你点击了产品图片，产品名称是：' + product.pName);
+                            $("#imageEditModal").modal("show");
+                            /** 头像按钮修改 */
+                            document.getElementById('updateImage').addEventListener('click', function() {
+                                var fileInput = $("#product_head_file")[0];
+                                var file = fileInput.files[0];
+                                var productName =product.pName; //产品名称
+                                var productShopper = product.pShopper; //商家
+                                var formData = new FormData();
+                                if (file) {
+                                    formData.append("image", file);
+                                    formData.append("pName", productName);
+                                    formData.append("pShopper", productShopper);
+                                    $.ajax({
+                                        url: "/Restaurant/upload_product_head", //SpringBoot应用地址
+                                        type: "POST",
+                                        data: formData,
+                                        contentType: false,
+                                        processData: false,
+                                        success: function(data) {
+                                            alert("上传结果:" + data);
+                                            location.reload(true);
+                                        },
+                                        error: function(jqXHR, textStatus, errorMessage) {
+                                            alert("上传结果:" + errorMessage);
+                                        }
+                                    });
+                                    $("#imageEditModal").modal("hide"); // 隐藏模态框
+                                } else {
+                                    alert("请选择图片!");
+                                }
+                            });
+                        });
+                        // 将行添加到 tbody 中
+                        tbody.append(row);
+                        // 增加已显示的产品数量
+                        //displayedCount++;
+                    });
+                    //显示页码
+                    $("#currentPage").text(data.pageNum);
+                    $("#allPage").text("/"+data.pages);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // 处理请求失败的情况
+                console.error('AJAX 请求失败: ' + textStatus, errorThrown);
+            }
+        });
     }
 
     function upUserHead(){

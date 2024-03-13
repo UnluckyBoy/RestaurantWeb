@@ -113,21 +113,21 @@
                                 <th class="text-center">交易状态</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <c:forEach var="orderlists" items="${order_message.list}">
-                                <tr class="order-table-column">
-                                    <td class="text-center small">${orderlists.mId}</td>
-                                    <td class="text-center small">${orderlists.mOrderNumber}</td>
-                                    <td class="text-center small">${orderlists.mContent}</td>
-                                    <td class="text-center small">${orderlists.mOrder}</td>
-                                    <td class="text-center small">${orderlists.mShopper}</td>
-                                    <td class="text-center small"><span class="label label-primary">&yen;${orderlists.mTradingPrice}</span></td>
-                                    <td class="text-center small">${orderlists.mCreateTime}</td>
-                                    <td class="text-center small">${orderlists.mEditor}</td>
-                                    <td class="text-center small">${orderlists.mEditTime}</td>
-                                    <td class="text-center small">${orderlists.mTradingType}</td>
-                                </tr>
-                            </c:forEach>
+                            <tbody id="order-table-body">
+<%--                            <c:forEach var="orderlists" items="${order_message.list}">--%>
+<%--                                <tr class="order-table-column">--%>
+<%--                                    <td class="text-center small">${orderlists.mId}</td>--%>
+<%--                                    <td class="text-center small">${orderlists.mOrderNumber}</td>--%>
+<%--                                    <td class="text-center small">${orderlists.mContent}</td>--%>
+<%--                                    <td class="text-center small">${orderlists.mOrder}</td>--%>
+<%--                                    <td class="text-center small">${orderlists.mShopper}</td>--%>
+<%--                                    <td class="text-center small"><span class="label label-primary">&yen;${orderlists.mTradingPrice}</span></td>--%>
+<%--                                    <td class="text-center small">${orderlists.mCreateTime}</td>--%>
+<%--                                    <td class="text-center small">${orderlists.mEditor}</td>--%>
+<%--                                    <td class="text-center small">${orderlists.mEditTime}</td>--%>
+<%--                                    <td class="text-center small">${orderlists.mTradingType}</td>--%>
+<%--                                </tr>--%>
+<%--                            </c:forEach>--%>
                             </tbody>
                         </table>
                     </div>
@@ -186,7 +186,9 @@
             </div>
         </div>
         <div class="text-center"><!--按钮-->
-            <p><strong>${order_message.pageNum}/${order_message.pages}</strong></p>
+            <p>
+                <strong id="currentPage"></strong><strong id="allPage"></strong>
+            </p>
             <button type="button" class="btn btn-primary" onclick="previousOrderPage()">上一页</button>
             <button type="button" class="btn btn-primary" onclick="nextOrderPage()">下一页</button>
         </div>
@@ -249,48 +251,107 @@
 
 <!--给数据表添加点击响应逻辑-->
 <script>
+    let globalOrderData;//全局变量
+
     $(document).ready(function() {
         //信箱按钮弹窗
-        document.getElementById('mailboxLink').addEventListener('click', function(event) {
+        document.getElementById('mailboxLink').addEventListener('click', function (event) {
             // 阻止链接的默认行为（即刷新页面）
             event.preventDefault();
             // 弹出弹窗
             alert('功能尚未实装！敬请期待！');
         });
 
-        // 给每一行添加点击事件
-        $(".order-table-column").on("click", function() {
-            // 获取当前行的数据，以示例为准，这里获取第一列的文本内容
-            var orderId = $(this).find("td:first").text();
-            console.log("点击的行: "+ orderId+ "\t"+$(this).find("td:eq(1)").text()
-                + "\t"+$(this).find("td:eq(2)").text()+ "\t"+$(this).find("td:eq(3)").text()
-                + "\t"+$(this).find("td:eq(4)").text()+ "\t"+$(this).find("td:eq(5)").text()
-                + "\t"+$(this).find("td:eq(6)").text()+ "\t"+$(this).find("td:eq(7)").text()
-                + "\t"+$(this).find("td:eq(8)").text()+ "\t"+$(this).find("td:eq(9)").text());
-            //var orderContent = $(this).find("td:eq(2)").text(); //以示例为准，获取第三列的内容
-            //console.log("内容: " + orderContent);
+        // 发送 AJAX 请求获取产品数据
+        $.ajax({
+            url: '/Restaurant/freshOrderPage', // 替换为你的后端服务URL
+            type: 'GET', // 或者 'POST'，取决于你的后端服务需要的请求类型
+            dataType: 'json', // 期望从服务器返回的数据类型
+            success: function (data) {
+                globalOrderData = data;//全局变量赋值
+                var tbody = $('#order-table-body'); // 获取 tbody 元素
+                if (data && data.list) {
+                    tbody.empty(); // 清空 tbody中的内容
+                    // 遍历数据并创建表格行
+                    $.each(data.list, function (index, order) {
+                        var row = $('<tr class="order-table-column"></tr>'); // 创建新的表格行
+                        // 创建并添加单元格到行中
+                        row.append($('<td class="text-center small">' + order.mId + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mOrderNumber + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mContent + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mOrder + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mShopper + '</td>'));
+                        row.append($('<td class="text-center small"><span class="label label-primary">&yen;' + order.mTradingPrice + '</span></td>'));
+                        row.append($('<td class="text-center small">' + order.mCreateTime + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mEditor + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mEditTime + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mTradingType + '</td>'));
+                        // 将行添加到 tbody 中
+                        tbody.append(row);
 
-
-            // // 在编辑弹窗中显示数据
-             //$("#modal-body-content").val(orderContent);
-            // var paragraph = document.getElementById("modal-body-content");
-            // paragraph.innerHTML =orderContent;
-            document.getElementById("td_data1").innerText = orderId;
-            document.getElementById("td_data2").innerText = $(this).find("td:eq(1)").text();
-            document.getElementById("td_data3").innerText = $(this).find("td:eq(2)").text();
-            document.getElementById("td_data4").innerText = $(this).find("td:eq(3)").text();
-            document.getElementById("td_data5").innerText = $(this).find("td:eq(4)").text();
-            document.getElementById("td_data6").innerText = $(this).find("td:eq(5)").text().slice(1);
-            document.getElementById("td_data7").innerText = $(this).find("td:eq(6)").text();
-            document.getElementById("td_data8").innerText = $(this).find("td:eq(7)").text();
-            document.getElementById("td_data9").innerText = $(this).find("td:eq(8)").text();
-            document.getElementById("td_data10").innerText = $(this).find("td:eq(9)").text();
-            // // 弹出编辑弹窗
-            // $("#editModal").css("display", "block");
-            $("#editModal").modal("show"); // 显示模态框(使用Bootstrap库显示)
-            //$("#editModal").modal("hide"); // 隐藏模态框
+                        // 给这一行绑定点击事件
+                        row.on('click', function() {
+                            // 这里编写点击行时要执行的代码
+                            //alert('你点击了订单：' + order.mOrderNumber);
+                            document.getElementById("td_data1").innerText = order.mId;
+                            document.getElementById("td_data2").innerText = order.mOrderNumber;
+                            document.getElementById("td_data3").innerText = order.mContent;
+                            document.getElementById("td_data4").innerText = order.mOrder;
+                            document.getElementById("td_data5").innerText = order.mShopper;
+                            document.getElementById("td_data6").innerText = order.mTradingPrice;
+                            document.getElementById("td_data7").innerText = order.mCreateTime;
+                            document.getElementById("td_data8").innerText = order.mEditor;
+                            document.getElementById("td_data9").innerText = order.mEditTime;
+                            document.getElementById("td_data10").innerText = order.mTradingType;
+                            // // 弹出编辑弹窗
+                            $("#editModal").modal("show"); // 显示模态框(使用Bootstrap库显示)
+                            //$("#editModal").modal("hide"); // 隐藏模态框
+                        });
+                    });
+                    //显示页码
+                    $("#currentPage").text(data.pageNum);
+                    $("#allPage").text("/" + data.pages);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // 处理请求失败的情况
+                console.error('AJAX 请求失败: ' + textStatus, errorThrown);
+            }
         });
+
+        // 给每一行添加点击事件
+        // $(".order-table-column").on("click", function () {
+        //     // 获取当前行的数据，以示例为准，这里获取第一列的文本内容
+        //     var orderId = $(this).find("td:first").text();
+        //     console.log("点击的行: " + orderId + "\t" + $(this).find("td:eq(1)").text()
+        //         + "\t" + $(this).find("td:eq(2)").text() + "\t" + $(this).find("td:eq(3)").text()
+        //         + "\t" + $(this).find("td:eq(4)").text() + "\t" + $(this).find("td:eq(5)").text()
+        //         + "\t" + $(this).find("td:eq(6)").text() + "\t" + $(this).find("td:eq(7)").text()
+        //         + "\t" + $(this).find("td:eq(8)").text() + "\t" + $(this).find("td:eq(9)").text());
+        //     //var orderContent = $(this).find("td:eq(2)").text(); //以示例为准，获取第三列的内容
+        //     //console.log("内容: " + orderContent);
+        //     // // 在编辑弹窗中显示数据
+        //     //$("#modal-body-content").val(orderContent);
+        //     // var paragraph = document.getElementById("modal-body-content");
+        //     // paragraph.innerHTML =orderContent;
+        //     document.getElementById("td_data1").innerText = orderId;
+        //     document.getElementById("td_data2").innerText = $(this).find("td:eq(1)").text();
+        //     document.getElementById("td_data3").innerText = $(this).find("td:eq(2)").text();
+        //     document.getElementById("td_data4").innerText = $(this).find("td:eq(3)").text();
+        //     document.getElementById("td_data5").innerText = $(this).find("td:eq(4)").text();
+        //     document.getElementById("td_data6").innerText = $(this).find("td:eq(5)").text().slice(1);
+        //     document.getElementById("td_data7").innerText = $(this).find("td:eq(6)").text();
+        //     document.getElementById("td_data8").innerText = $(this).find("td:eq(7)").text();
+        //     document.getElementById("td_data9").innerText = $(this).find("td:eq(8)").text();
+        //     document.getElementById("td_data10").innerText = $(this).find("td:eq(9)").text();
+        //     // // 弹出编辑弹窗
+        //     // $("#editModal").css("display", "block");
+        //     $("#editModal").modal("show"); // 显示模态框(使用Bootstrap库显示)
+        //     //$("#editModal").modal("hide"); // 隐藏模态框
+        // });
     });
+
+
     // 点击保存按钮时的操作
     function saveEditedData() {
         // 获取编辑后的数据
@@ -402,11 +463,12 @@
     }
     // 上一页按钮点击事件处理函数
     function previousOrderPage() {
-        if (${order_message.hasPreviousPage}) {//hasPreviousPage
-            var newPageNum = ${order_message.prePage}; // 或 pageInfo.pageNum - 1;
+        if (globalOrderData.hasPreviousPage) {//hasPreviousPage
+            var newPageNum = globalOrderData.prePage; // 或 pageInfo.pageNum - 1;
             // 发送请求到服务器获取新页面的数据，并更新页面内容
             // 例如：updatePageContent(newPageNum);
             console.log('切换到上一页，页码：' + newPageNum);
+            freshData('/Restaurant/freshOrderPage',newPageNum);
         } else {
             console.log('已经是第一页了');
             alert("已经是第一页!");
@@ -414,15 +476,60 @@
     }
     // 下一页按钮点击事件处理函数
     function nextOrderPage() {
-        if (${order_message.hasNextPage}) {
-            var newPageNum = ${order_message.nextPage}; // 或 pageInfo.pageNum + 1;
-            // 发送请求到服务器获取新页面的数据，并更新页面内容
-            // 例如：updatePageContent(newPageNum);
+        if (globalOrderData.pageNum>1) {
+            var newPageNum = globalOrderData.nextPage;
             console.log('切换到下一页，页码：' + newPageNum);
+            freshData('/Restaurant/freshOrderPage',newPageNum);
         } else {
             console.log('已经是最后一页了');
             alert("已经是最后一页!");
         }
+    }
+
+    //刷新上下页公共方法:url:'/Restaurant/freshOrderPage'
+    function freshData(url,newPageNum){
+        $.ajax({
+            url:url, // 替换为你的后端服务URL
+            type: 'GET', // 或者 'POST'，取决于你的后端服务需要的请求类型
+            data: { pageNum: newPageNum}, //将页码作为参数传递
+            dataType: 'json',
+            success: function (data) {
+                console.log("返回的数据:" + data.list[0].mId+","+data.list[0].mOrderNumber+
+                    ","+data.list[0].mContent+","+data.list[0].mOrder+","+data.list[0].mShopper+
+                    ","+data.list[0].mTradingPrice+","+data.list[0].mCreateTime+","+data.list[0].mEditor+
+                    ","+data.list[0].mEditTime+","+data.list[0].mTradingType);
+
+                globalOrderData = data;//全局变量赋值
+                var tbody = $('#order-table-body'); // 获取 tbody 元素
+                if (data && data.list) {
+                    tbody.empty(); // 清空 tbody中的内容
+                    // 遍历数据并创建表格行
+                    $.each(data.list, function (index, order) {
+                        var row = $('<tr class="order-table-column"></tr>'); // 创建新的表格行
+                        // 创建并添加单元格到行中
+                        row.append($('<td class="text-center small">' + order.mId + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mOrderNumber + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mContent + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mOrder + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mShopper + '</td>'));
+                        row.append($('<td class="text-center small"><span class="label label-primary">&yen;' + order.mTradingPrice + '</span></td>'));
+                        row.append($('<td class="text-center small">' + order.mCreateTime + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mEditor + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mEditTime + '</td>'));
+                        row.append($('<td class="text-center small">' + order.mTradingType + '</td>'));
+                        // 将行添加到 tbody 中
+                        tbody.append(row);
+                    });
+                    //显示页码
+                    $("#currentPage").text(data.pageNum);
+                    $("#allPage").text("/" + data.pages);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // 处理请求失败的情况
+                console.error('AJAX 请求失败: ' + textStatus, errorThrown);
+            }
+        });
     }
 </script>
 

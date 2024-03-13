@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName OrderServiceIpml
@@ -106,7 +107,21 @@ public class OrderServiceIpml implements OrderService {
     @Override
     public PageInfo<OrderInfo> getPageAllOrder(int pageNum, int pageSize) {
         List<OrderInfo> orderList = orderMapper.getPageAllOrder(pageNum, pageSize);//多个数据分页
-        return new PageInfo<>(orderList);
+
+        // 遍历订单列表并转换null值为空字符串
+        List<OrderInfo> ordersWithEmptyString = orderList.stream()
+                .map(order -> {
+                    if (order.getmEditor() == null) { // 检查字段是否为null
+                        order.setmEditor(""); // 如果是，则设置为空字符串
+                    }
+                    if(order.getmEditTime()==null){
+                        order.setmEditTime("");
+                    }
+                    return order;
+                })
+                .collect(Collectors.toList());
+
+        return new PageInfo<>(ordersWithEmptyString);
     }
 
     @Override

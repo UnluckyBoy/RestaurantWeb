@@ -656,13 +656,6 @@ public class GetInfoContro {
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
             model.addAttribute("message", session.getAttribute("current_user"));
-            model.addAttribute("index_message", session.getAttribute("index_message"));
-            PageInfo<OrderInfo> pageInfo = orderService.getPageAllOrder(pageNum, pageSize);
-            model.addAttribute("order_message", pageInfo);
-            System.out.println("订单分页内容:"+model.getAttribute("order_message")+"页数:"+pageNum+"___页内容:"+pageSize);
-            session.setAttribute("order_message",model.getAttribute("order_message"));
-            //model.addAttribute("Product_message", session.getAttribute("Product_message"));
-            //System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("order_message"));
         }
         return "orderManage";
     }
@@ -673,35 +666,46 @@ public class GetInfoContro {
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
             model.addAttribute("message", session.getAttribute("current_user"));
-            model.addAttribute("index_message", session.getAttribute("index_message"));
-            model.addAttribute("order_message", session.getAttribute("order_message"));
-
-            PageInfo<Product> pageInfo = orderService.getPageProduct(pageNum, pageSize);
-            model.addAttribute("product_message", pageInfo);
-            System.out.println("产品分页内容:"+model.getAttribute("product_message")+"页数:"+pageNum+"___页内容:"+pageSize);
-            session.setAttribute("product_message",model.getAttribute("product_message"));
-            //model.addAttribute("Product_message",session.getAttribute("Product_message"));
-            //System.out.println("ProductPage消息Product_message:\t"+model.getAttribute("Product_message"));
         }
         return "product";
     }
 
+    @RequestMapping("/freshOrderPage")
+    public ResponseEntity<Object> freshOrderPage(HttpServletRequest request,Model model,HttpSession session,
+                                                   @RequestParam(defaultValue = "1") int pageNum,
+                                                   @RequestParam(defaultValue = "6") int pageSize){
+        PageInfo<OrderInfo> pageInfo = orderService.getPageAllOrder(pageNum, pageSize);
+        if(pageInfo!=null){
+            //return pageInfo;
+            //model.addAttribute("product_message", pageInfo);
+            //session.setAttribute("product_message",model.getAttribute("product_message"));
+            //return ResponseEntity.ok("success"+model.getAttribute("product_message"));
+            System.out.println("freshOrderPage返回的数据:"+pageInfo);
+            return ResponseEntity.ok(pageInfo);
+        }else{
+            //model.addAttribute("product_message", session.getAttribute("product_message"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
+            //return new PageInfo<Product>((List<Product>) session.getAttribute("product_message"));
+        }
+    }
+
     @RequestMapping("/freshProductPage")
-    public ResponseEntity<String> freshProductPage(HttpServletRequest request,Model model,HttpSession session,
+    public ResponseEntity<Object> freshProductPage(HttpServletRequest request,Model model,HttpSession session,
                                                 @RequestParam(defaultValue = "1") int pageNum,
                                                 @RequestParam(defaultValue = "6") int pageSize){
         PageInfo<Product> pageInfo = orderService.getPageProduct(pageNum, pageSize);
         if(pageInfo!=null){
             //return pageInfo;
-            model.addAttribute("product_message", pageInfo);
-            session.setAttribute("product_message",model.getAttribute("product_message"));
-            return ResponseEntity.ok("success"+model.getAttribute("product_message"));
+            //model.addAttribute("product_message", pageInfo);
+            //session.setAttribute("product_message",model.getAttribute("product_message"));
+            //return ResponseEntity.ok("success"+model.getAttribute("product_message"));
+            System.out.println("freshProductPage返回的数据:"+pageInfo);
+            return ResponseEntity.ok(pageInfo);
         }else{
-            model.addAttribute("product_message", session.getAttribute("product_message"));
+            //model.addAttribute("product_message", session.getAttribute("product_message"));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
             //return new PageInfo<Product>((List<Product>) session.getAttribute("product_message"));
         }
-        //return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
     }
 
 
