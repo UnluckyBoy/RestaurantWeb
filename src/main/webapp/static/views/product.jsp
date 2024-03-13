@@ -639,27 +639,6 @@
         }
     }
 
-    /**
-     * 获取当前时间
-     * @returns {string}
-     */
-    function getCurrentDateTime() {
-        var currentDate = new Date();
-        // 获取年、月、日、小时、分钟、秒
-        var year = currentDate.getFullYear();
-        var month = addZero(currentDate.getMonth() + 1);  // 月份从0开始，需要加1
-        var day = addZero(currentDate.getDate());
-        var hours = addZero(currentDate.getHours());
-        var minutes = addZero(currentDate.getMinutes());
-        var seconds = addZero(currentDate.getSeconds());
-        // 格式化为：yyyy-MM-dd HH:mm:ss
-        var formattedDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-        return formattedDateTime;
-    }
-    // 补零函数，用于确保单个数字在前面加0
-    function addZero(number) {
-        return number < 10 ? '0' + number : number;
-    }
 </script>
 
 </body>

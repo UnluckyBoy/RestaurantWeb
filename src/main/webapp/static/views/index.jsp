@@ -242,24 +242,31 @@
                                         <table class="table table-hover margin bottom">
                                             <thead>
                                             <tr>
-                                                <th>序号</th>
-                                                <th>商品</th>
+                                                <th class="text-center">序号</th>
+                                                <th class="text-center">商品</th>
                                                 <th class="text-center">类别</th>
                                                 <th class="text-center">销售额</th>
                                             </tr>
                                             </thead>
-                                            <tbody>
-                                            <c:forEach var="orderlist" items="${index_message.AllTradingList}">
-                                                <tr>
-                                                    <td>${orderlist.id}</td>
-                                                    <td>${orderlist.pName}</td>
-                                                    <td class="text-center small">${orderlist.pType}</td>
-                                                    <td class="text-center"><span class="label label-primary">&yen;${orderlist.mTradingPrice}</span></td>
-                                                </tr>
-                                            </c:forEach>
+                                            <tbody id="index_trading_table_body">
+<%--                                            <c:forEach var="orderlist" items="${index_message.AllTradingList}">--%>
+<%--                                                <tr>--%>
+<%--                                                    <td>${orderlist.id}</td>--%>
+<%--                                                    <td>${orderlist.pName}</td>--%>
+<%--                                                    <td class="text-center small">${orderlist.pType}</td>--%>
+<%--                                                    <td class="text-center"><span class="label label-primary">&yen;${orderlist.mTradingPrice}</span></td>--%>
+<%--                                                </tr>--%>
+<%--                                            </c:forEach>--%>
                                             </tbody>
                                         </table>
                                     </div>
+                                </div>
+                                <div class="text-center"><!--按钮-->
+                                    <p>
+                                        <strong id="currentPage"></strong><strong id="allPage"></strong>
+                                    </p>
+                                    <button type="button" class="btn btn-primary" onclick="previousOrderPage()" id="lastBtn">上一页</button>
+                                    <button type="button" class="btn btn-primary" onclick="nextOrderPage()">下一页</button>
                                 </div>
                             </div>
                         </div>
@@ -269,7 +276,7 @@
         </div>
 
         <!--图片修改弹窗-->
-        <die class="modal inmodal" id="userHeadEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal inmodal" id="userHeadEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content animated fadeIn">
                     <div class="modal-header">
@@ -290,7 +297,7 @@
                     </div>
                 </div>
             </div>
-        </die>
+        </div>
     </div>
 </div>
 
@@ -334,7 +341,18 @@
 
 <script>
     $(document).ready(function () {
-        //console.log("sessionData:"+'${message.name}');
+        let globalData;
+
+        //信箱按钮弹窗
+        document.getElementById('mailboxLink').addEventListener('click', function (event) {
+            // 阻止链接的默认行为（即刷新页面）
+            event.preventDefault();
+            // 弹出弹窗
+            alert('功能尚未实装！敬请期待！');
+        });
+
+        // 发送 AJAX 请求获取数据
+        freshData('/Restaurant/freshTradingViewPage',1);
 
         $('.chart').easyPieChart({
             barColor: '#f8ac59',
@@ -453,46 +471,6 @@
         }
         var previousPoint = null,previousLabel = null;
         $.plot($("#flot-dashboard-chart"), dataset, options);
-
-        document.getElementById('mailboxLink').addEventListener('click', function(event) {
-            // 阻止链接的默认行为（即刷新页面）
-            event.preventDefault();
-            // 弹出弹窗
-            alert('功能尚未实装！敬请期待！');
-        });
-
-        //显示上传弹窗
-        // $("#user_head").click(function (){
-        //     $("#userHeadEditModal").modal("show");
-        //     $("#updateHead").click(function (){
-        //         var fileInput = $("#user_head_file")[0];
-        //         var file = fileInput.files[0];
-        //         var formData = new FormData();
-        //         if (file) {
-        //             formData.append("image", file);
-        //             formData.append("account", "测试");
-        //             formData.append("password", "测试");
-        //             formData.append("name", "测试");
-        //             $.ajax({
-        //                 url: "/Restaurant/upload_user_head", //SpringBoot应用地址
-        //                 type: "POST",
-        //                 data: formData,
-        //                 contentType: false,
-        //                 processData: false,
-        //                 success: function(data) {
-        //                     alert("上传结果:" + data);
-        //                     location.reload();
-        //                 },
-        //                 error: function(jqXHR, textStatus, errorMessage) {
-        //                     alert("上传结果:" + errorMessage);
-        //                 }
-        //             });
-        //             $("#userHeadEditModal").modal("hide");// 隐藏模态框
-        //         } else {
-        //             alert("请选择图片!");
-        //         }
-        //     });
-        // });
     });
 
     function upUserHead(){
@@ -524,6 +502,67 @@
         } else {
             alert("请选择图片!");
         }
+    }
+
+    // 上一页按钮点击事件处理函数
+    function previousOrderPage() {
+        if (globalData.pageNum>1) {//hasPreviousPage
+            var newPageNum = globalData.prePage; // 或 pageInfo.pageNum - 1;
+            // 发送请求到服务器获取新页面的数据，并更新页面内容
+            // 例如：updatePageContent(newPageNum);
+            console.log('切换到上一页，页码：' + newPageNum);
+            freshData('/Restaurant/freshTradingViewPage',newPageNum);
+        } else {
+            console.log('已经是第一页了');
+            alert("已经是第一页!");
+            //$("#lastBtn").disabled = true;
+        }
+    }
+    // 下一页按钮点击事件处理函数
+    function nextOrderPage() {
+        if (globalData.hasNextPage) {
+            var newPageNum = globalData.nextPage;
+            console.log('切换到下一页，页码：' + newPageNum);
+            freshData('/Restaurant/freshTradingViewPage',newPageNum);
+        } else {
+            console.log('已经是最后一页了');
+            alert("已经是最后一页!");
+        }
+    }
+
+    function freshData(url,newPageNum){
+        // 发送 AJAX 请求获取数据
+        $.ajax({
+            url: url, // 替换为你的后端服务URL
+            type: 'GET',
+            data: { pageNum: newPageNum}, //将页码作为参数传递
+            dataType: 'json',
+            success: function (data) {
+                globalData = data;//全局变量赋值
+                var tbody = $('#index_trading_table_body'); // 获取 tbody 元素
+                if (data && data.list) {
+                    tbody.empty(); // 清空 tbody中的内容
+                    // 遍历数据并创建表格行
+                    $.each(data.list, function (index, order) {
+                        var row = $('<tr class="index-trading-table-column"></tr>'); // 创建新的表格行
+                        // 创建并添加单元格到行中
+                        row.append($('<td class="text-center">' + order.id + '</td>'));
+                        row.append($('<td class="text-center">' + order.pName + '</td>'));
+                        row.append($('<td class="text-center">' + order.pType + '</td>'));
+                        row.append($('<td class="text-center small"><span class="label label-primary">&yen;' + order.mTradingPrice + '</span></td>'));
+                        // 将行添加到 tbody 中
+                        tbody.append(row);
+                    });
+                    //显示页码
+                    $("#currentPage").text(data.pageNum);
+                    $("#allPage").text("/" + data.pages);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // 处理请求失败的情况
+                console.error('AJAX 请求失败: ' + textStatus, errorThrown);
+            }
+        });
     }
 </script>
 

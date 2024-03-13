@@ -109,19 +109,25 @@ public class OrderServiceIpml implements OrderService {
         List<OrderInfo> orderList = orderMapper.getPageAllOrder(pageNum, pageSize);//多个数据分页
 
         // 遍历订单列表并转换null值为空字符串
-        List<OrderInfo> ordersWithEmptyString = orderList.stream()
-                .map(order -> {
-                    if (order.getmEditor() == null) { // 检查字段是否为null
-                        order.setmEditor(""); // 如果是，则设置为空字符串
-                    }
-                    if(order.getmEditTime()==null){
-                        order.setmEditTime("");
-                    }
-                    return order;
-                })
-                .collect(Collectors.toList());
+//        List<OrderInfo> ordersWithEmptyString = orderList.stream()
+//                .map(order -> {
+//                    if (order.getmEditor() == null) { // 检查字段是否为null
+//                        order.setmEditor(""); // 如果是，则设置为空字符串
+//                    }
+//                    if(order.getmEditTime()==null){
+//                        order.setmEditTime("");
+//                    }
+//                    return order;
+//                })
+//                .collect(Collectors.toList());
+//        return new PageInfo<>(ordersWithEmptyString);
+        return new PageInfo<>(orderList);
+    }
 
-        return new PageInfo<>(ordersWithEmptyString);
+    @Override
+    public PageInfo<AllTradingView> getTradingView(int pageNum, int pageSize) {
+        List<AllTradingView> tradingViewList = orderMapper.getTradingView(pageNum, pageSize);//多个数据分页
+        return new PageInfo<>(tradingViewList);
     }
 
     @Override

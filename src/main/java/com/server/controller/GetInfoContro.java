@@ -447,7 +447,7 @@ public class GetInfoContro {
         indexMap.put("NearPriceValid",nearPriceValid);
         indexMap.put("NearMonAllTrading",getMonAllTradingData(false));//月全订单
         indexMap.put("NearMonValidTrading",getMonAllTradingData(true));//月有效订单
-        indexMap.put("AllTradingList",orderService.getAllTradingView());
+        //indexMap.put("AllTradingList",orderService.getAllTradingView());
         //orderMap.put("AllOrderList",orderService.orderQueryAll());
         return indexMap;
     }
@@ -469,7 +469,6 @@ public class GetInfoContro {
     public Map MessageMap(){
         Map<String,Object> messageMap=new HashMap<>();
         List<MessageView> messageList=orderService.getCurrentMessage();
-        //System.out.println("消息数据:"+messageList.toString());
         messageMap.put("AnnouncementList",messageList);
         return messageMap;
     }
@@ -586,11 +585,9 @@ public class GetInfoContro {
 
     @RequestMapping("/IndexPage")
     public String IndexPage(HttpServletRequest request,HttpSession session,Model model){
-        //Map<String,Object> resultMap=new HashMap<>();
-        //HttpSession session = request.getSession();
         if (session != null && session.getAttribute("current_user") != null) {
+            // Session不为空且包含"userId"属性，表示用户已登录
             //System.out.println("主页用户session消息message:\t"+session.getAttribute("current_user"));
-
             mUser=freshUserInfo(session,model);
             if(mUser!=null){
                 model.addAttribute("message", CommonClass2Map(mUser));
@@ -598,14 +595,9 @@ public class GetInfoContro {
             }else{
                 model.addAttribute("message", session.getAttribute("current_user"));
             }
-            // Session不为空且包含"userId"属性，表示用户已登录
             model.addAttribute("index_message",indexDataMap());
-            //model.addAttribute("Product_message",ProductMap());
             System.out.println("主页用户消息message:\t"+model.getAttribute("message"));
-            //System.out.println("主页订单消息order_message:\t"+model.getAttribute("order_message"));
-            //System.out.println("主页产品消息Product_message:\t"+model.getAttribute("Product_message"));
             session.setAttribute("index_message",model.getAttribute("index_message"));
-            //session.setAttribute("Product_message",model.getAttribute("Product_message"));
             return "index";
         } else {
             // Session为空或不包含"userId"属性，表示用户未登录
@@ -676,16 +668,23 @@ public class GetInfoContro {
                                                    @RequestParam(defaultValue = "6") int pageSize){
         PageInfo<OrderInfo> pageInfo = orderService.getPageAllOrder(pageNum, pageSize);
         if(pageInfo!=null){
-            //return pageInfo;
-            //model.addAttribute("product_message", pageInfo);
-            //session.setAttribute("product_message",model.getAttribute("product_message"));
-            //return ResponseEntity.ok("success"+model.getAttribute("product_message"));
             System.out.println("freshOrderPage返回的数据:"+pageInfo);
             return ResponseEntity.ok(pageInfo);
         }else{
-            //model.addAttribute("product_message", session.getAttribute("product_message"));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
-            //return new PageInfo<Product>((List<Product>) session.getAttribute("product_message"));
+        }
+    }
+
+    @RequestMapping("/freshTradingViewPage")
+    public ResponseEntity<Object> freshTradingViewPage(HttpServletRequest request,Model model,HttpSession session,
+                                                 @RequestParam(defaultValue = "1") int pageNum,
+                                                 @RequestParam(defaultValue = "6") int pageSize){
+        PageInfo<AllTradingView> pageInfo = orderService.getTradingView(pageNum, pageSize);
+        if(pageInfo!=null){
+            System.out.println("freshTradingViewPage返回的数据:"+pageInfo);
+            return ResponseEntity.ok(pageInfo);
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
         }
     }
 
@@ -715,12 +714,9 @@ public class GetInfoContro {
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
             model.addAttribute("message", session.getAttribute("current_user"));
-            model.addAttribute("order_message", session.getAttribute("order_message"));
-            model.addAttribute("Product_message",session.getAttribute("Product_message"));
             model.addAttribute("Announcement_message",MessageMap());
             session.setAttribute("Announcement_message",model.getAttribute("Announcement_message"));
             System.out.println("CommonMessagePage消息数据Announcement_message:"+session.getAttribute("Announcement_message"));
-            //System.out.println("OrderManagerPage消息order_message:\t"+model.getAttribute("order_message"));
         }
         return "commonMessage";
     }
@@ -776,7 +772,8 @@ public class GetInfoContro {
                 boolean login_status= userService.fresh_status_login(requestMap);
                 if(login_status){
                     resultMap=CommonClass2Map(mUser);
-                    freshSession(session,"current_user",resultMap);
+                    //freshSession(session,"current_user",resultMap);
+                    session.setAttribute("current_user",resultMap);
                     return "redirect:/Restaurant/IndexPage";//重定向到主页
                 }else{
                     resultMap.put("result","error");
@@ -833,8 +830,6 @@ public class GetInfoContro {
         System.out.println("订单修改数据:"+order_data.toString());
         boolean fresh_result=orderService.freshOrder(order_data);
         if(fresh_result){
-            //freshSession(session,"order_message",indexDataMap());
-            //freshSession(session,"product_message",ProductMap());//更新产品Map
             return ResponseEntity.ok("success");
         }else{
             return ResponseEntity.ok("error");
@@ -846,8 +841,6 @@ public class GetInfoContro {
         System.out.println("订单修改数据:"+requestBody.toString());
         boolean fresh_result=orderService.up_product_Info(requestBody);
         if(fresh_result){
-            //freshSession(session,"order_message",indexDataMap());
-            //freshSession(session,"product_message",ProductMap());//更新产品Map
             return ResponseEntity.ok("success");
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");

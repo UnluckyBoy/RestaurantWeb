@@ -56,10 +56,26 @@ public interface OrderMapper {
             "mOrder, " +
             "mShopper, " +
             "mTradingPrice, " +
-            "DATE_FORMAT(mCreateTime, '%Y-%m-%d %H:%i:%s') AS mCreateTime, " +
+            "DATE_FORMAT(mCreateTime, '%Y-%m-%d %H:%i:%s') as mCreateTime, " +
             "mEditor, " +
-            "DATE_FORMAT(mEditTime, '%Y-%m-%d %H:%i:%s') AS mEditTime, " +
+            "DATE_FORMAT(mEditTime, '%Y-%m-%d %H:%i:%s') as mEditTime, " +
             "mTradingType " +
             "from order_info_data")
     List<OrderInfo> getPageAllOrder(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize);//全部订单分页获取
+
+    @Select("with CTEMP as ("+"SELECT " + "ROW_NUMBER() OVER (order by (SELECT null)) as id, " +
+            "sum(order_info_data.mTradingPrice) as mTradingPrice, " +
+            "product_info_data.pName, " +
+            "product_info_data.pType " +
+            "from order_info_data join product_info_data " +
+            "on order_info_data.mShopper = product_info_data.pShopper " +
+            "where order_info_data.mTradingType=1 " +
+            "group by product_info_data.pName, product_info_data.pType" + ")" +
+            "SELECT " +
+            "id," +
+            "mTradingPrice, " +
+            "pName, " +
+            "pType " +
+            "from CTEMP")
+    List<AllTradingView> getTradingView(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize);
 }

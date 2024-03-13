@@ -118,15 +118,12 @@
                                         <c:forEach var="messagelists" items="${Announcement_message.AnnouncementList}">
                                             <div class="vertical-timeline-block">
                                                 <div class="vertical-timeline-icon navy-bg">
-<%--                                                    <i class="fa fa-briefcase"></i>--%>
                                                     <i class="fas fa-atom"></i>
                                                 </div>
                                                 <div class="vertical-timeline-content">
                                                     <h2>${messagelists.aTitle}</h2>
                                                     <p>${messagelists.aContent}</p>
-                                                    <span class="vertical-date">
-                                                        <br><small>${messagelists.aCreateTime}</small></br>
-                                                    </span>
+                                                    <span class="vertical-date"><br><small>${messagelists.aCreateTime}</small></span>
                                                 </div>
                                             </div>
                                         </c:forEach>
