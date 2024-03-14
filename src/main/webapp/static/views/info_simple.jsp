@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: matrix
-  Date: 2024/3/7 0007
-  Time: 14:10
+  Date: 2024/3/14 0014
+  Time: 13:43
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -43,32 +43,33 @@
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
                             <li><a href="/Restaurant/userinfoPage">个人信息</a></li>
-<%--                            <li><a href="">联系我们</a></li>--%>
+                            <%--                            <li><a href="">联系我们</a></li>--%>
                             <li><a href="#" id="mailboxLink">信箱</a></li>
                             <li class="divider"></li>
                             <li><a href="/Restaurant/logout">安全退出</a></li>
                         </ul>
                     </div>
                     <div class="logo-element">
-                        私房菜后台
+                        私房菜平台
                     </div>
-
-                </li>
-                <li class="active">
-                    <a href=""><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
-                        <span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li><a href="/Restaurant/OrderManagerPage">订单数据</a></li>
-                        <li><a href="/Restaurant/ProductPage">菜单管理</a></li>
-                        <li><a href="/Restaurant/CommonMessagePage">公共信息</a></li>
-                    </ul>
                 </li>
                 <li>
-                    <a href=""><i class="fas fa-address-card"></i> <span class="nav-label">个人信息</span><span class="fa arrow"></span></a>
+                    <a href="/Restaurant/IndexSimplePage">
+                        <i class="fa fa-th-large"></i>
+                        <span class="nav-label">商品列表</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="">
+                        <i class="fas fa-address-card"></i>
+                        <span class="nav-label">个人管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
                     <ul class="nav nav-second-level">
-                        <li><a href="/Restaurant/userinfoPage">个人信息</a></li>
-                        <li><a href="/Restaurant/helpCenterPage">帮助中心</a></li>
-                        <li><a href="/Restaurant/logout">退出</a></li>
+                        <li><a href="/Restaurant/infoSimplePage">个人信息</a></li>
+                        <li><a href="/Restaurant/helpCenterSimplePage">帮助中心</a>
+                        <li><a href="/Restaurant/logout">退出</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -79,7 +80,7 @@
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
-                        <span class="m-r-sm text-muted welcome-message"><a href="/Restaurant/IndexPage" title="返回首页">
+                        <span class="m-r-sm text-muted welcome-message"><a href="/Restaurant/IndexSimplePage" title="返回首页">
                             <i class="fa fa-home"></i></a> <strong class="font-bold label-warning-light" >${message.name}</strong> | 欢迎使用
                         </span>
                     </li>
@@ -108,17 +109,17 @@
                 </p>
                 <p>
                     <label>账户昵称:</label>
-<%--                    <label>${message.name}</label>--%>
+                    <%--                    <label>${message.name}</label>--%>
                     <input type="text" id="name" placeholder="${message.name}">
                 </p>
                 <p>
                     <label>绑定手机:</label>
-<%--                    <label>${message.phone}</label>--%>
+                    <%--                    <label>${message.phone}</label>--%>
                     <input type="text" id="phone" placeholder="${message.phone}">
                 </p>
                 <p>
                     <label>绑定邮箱:</label>
-<%--                    <label>${message.email}</label>--%>
+                    <%--                    <label>${message.email}</label>--%>
                     <input type="text" id="email" placeholder="${message.email}">
                 </p>
             </div>

@@ -47,7 +47,6 @@
                                 </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-<%--                            <li><a href="">修改头像</a></li>--%>
                             <li><a href="/Restaurant/userinfoPage">个人信息</a></li>
 <%--                            <li><a href="">联系我们</a></li>--%>
                             <li><a href="#" id="mailboxLink">信箱</a></li>
@@ -57,7 +56,7 @@
                     </div>
                 </li>
                 <li class="active">
-                    <a href="index.jsp"><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
+                    <a href=""><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="/Restaurant/OrderManagerPage">订单数据</a>
@@ -104,8 +103,9 @@
                         <table class="table table-hover margin bottom">
                             <thead>
                             <tr>
-                                <th class="text-center">商品样式</th>
                                 <th class="text-center">序号</th>
+                                <th class="text-center">商品样式</th>
+<%--                                <th class="text-center">序号</th>--%>
                                 <th class="text-center">商品名称</th>
                                 <th class="text-center">商品详情</th>
                                 <th class="text-center">商品类型</th>
@@ -401,7 +401,7 @@
         // 修改按钮的点击事件
         $(document).on('click', '.btn-add', function() {
             // 获取当前行的数据，例如产品ID或其他需要的信息
-            var productId = $(this).closest('tr').find("td:eq(1)").text();
+            var productId = $(this).closest('tr').find("td:eq(0)").text();
             var productName=$(this).closest('tr').find("td:eq(2)").text();
             var productDes = $(this).closest('tr').find("td:eq(3)").text();
             var productType=$(this).closest('tr').find("td:eq(4)").text();
@@ -452,7 +452,7 @@
         // 删除按钮的点击事件
         $(document).on('click', '.btn-delete', function() {
             // 获取当前行的数据
-            var productId = $(this).closest('tr').find("td:eq(1)").text(); // 假设有一个类为pId的td元素包含产品ID
+            var productId = $(this).closest('tr').find("td:eq(0)").text(); // 假设有一个类为pId的td元素包含产品ID
             // 弹出一个Bootstrap的确认框
             $('#productIdToDelete').text(productId);
             $('#confirm_Modal').modal('show');
@@ -538,15 +538,13 @@
                     //var displayedCount = 0; // 用于跟踪已经显示的产品数量
                     // 遍历数据并创建表格行
                     $.each(data.list, function(index, product) {
-                        // if (displayedCount >= pageSize) {
-                        //     return false; // 当达到 pageSize 时退出循环
-                        // }
                         var row = $('<tr class="product-table-column"></tr>'); // 创建新的表格行
                         // 创建并添加单元格到行中
+                        row.append($('<td class="text-center">' + product.pId + '</td>'));
                         //row.append($('<td class="text-center"><img src="' + product.pIcon + '" alt="Image" width="64" height="64"></td>'));
                         var imgCell = $('<td class="text-center"></td>').append($('<img src="' + product.pIcon + '" alt="Image" width="64" height="64">'));
                         row.append(imgCell);
-                        row.append($('<td class="text-center">' + product.pId + '</td>'));
+                        // row.append($('<td class="text-center">' + product.pId + '</td>'));
                         row.append($('<td class="text-center">' + product.pName + '</td>'));
                         row.append($('<td class="text-center">' + product.pDescription + '</td>'));
                         row.append($('<td class="text-center">' + product.pType + '</td>'));
@@ -573,7 +571,7 @@
                                     formData.append("pName", productName);
                                     formData.append("pShopper", productShopper);
                                     $.ajax({
-                                        url: "/Restaurant/upload_product_head", //SpringBoot应用地址
+                                        url: "/Restaurant/upload_product_head",
                                         type: "POST",
                                         data: formData,
                                         contentType: false,
@@ -594,8 +592,6 @@
                         });
                         // 将行添加到 tbody 中
                         tbody.append(row);
-                        // 增加已显示的产品数量
-                        //displayedCount++;
                     });
                     //显示页码
                     $("#currentPage").text(data.pageNum);
@@ -628,7 +624,7 @@
                 processData: false,
                 success: function(data) {
                     alert("上传结果:" + data);
-                    location.reload();
+                    location.reload(true);
                 },
                 error: function(jqXHR, textStatus, errorMessage) {
                     alert("上传结果:" + errorMessage);

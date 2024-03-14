@@ -194,7 +194,10 @@
         update product_info_data
         <set>
             <if test="pIcon!=null">
-                pIcon=#{pIcon}
+                pIcon=#{pIcon},
+            </if>
+            <if test="pImage!=null">
+                pImage=#{pImage}
             </if>
         </set>
         <where>

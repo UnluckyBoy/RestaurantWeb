@@ -606,6 +606,25 @@ public class GetInfoContro {
         }
     }
 
+    @RequestMapping("/IndexSimplePage")
+    public String indexSimplePage(HttpServletRequest request,HttpSession session,Model model){
+        if (session != null && session.getAttribute("current_user") != null) {
+            //System.out.println("主页用户session消息message:\t"+session.getAttribute("current_user"));
+            mUser=freshUserInfo(session,model);
+            if(mUser!=null){
+                model.addAttribute("message", CommonClass2Map(mUser));
+                session.setAttribute("current_user",model.getAttribute("message"));
+            }else{
+                model.addAttribute("message", session.getAttribute("current_user"));
+            }
+            return "index_simple";
+        }
+        else {
+            //System.out.println("用户未登录");
+            return "redirect:/Restaurant/loginPage";
+        }
+    }
+
     @RequestMapping("/loginPage")
     public String LoginPage(HttpServletRequest request,Model model){
         return "login";
@@ -624,6 +643,13 @@ public class GetInfoContro {
         }
         return "helpCenter";
     }
+    @RequestMapping("/helpCenterSimplePage")
+    public String helpCenterSimplePage(HttpServletRequest request,Model model,HttpSession session){
+        if (session != null && session.getAttribute("current_user") != null) {
+            model.addAttribute("message", session.getAttribute("current_user"));
+        }
+        return "helpCenter_simple";
+    }
     @RequestMapping("/userinfoPage")
     public String UserInfoPage(HttpServletRequest request,Model model,HttpSession session){
         if (session != null && session.getAttribute("current_user") != null) {
@@ -634,11 +660,23 @@ public class GetInfoContro {
             }else{
                 model.addAttribute("message", session.getAttribute("current_user"));
             }
-
-            //model.addAttribute("message", session.getAttribute("current_user"));
             model.addAttribute("index_message", session.getAttribute("index_message"));
         }
         return "infoPage";
+    }
+    @RequestMapping("/infoSimplePage")
+    public String InfoSimplePage(HttpServletRequest request,Model model,HttpSession session){
+        if (session != null && session.getAttribute("current_user") != null) {
+            mUser=freshUserInfo(session,model);
+            if(mUser!=null){
+                model.addAttribute("message", CommonClass2Map(mUser));
+                session.setAttribute("current_user",model.getAttribute("message"));
+            }else{
+                model.addAttribute("message", session.getAttribute("current_user"));
+            }
+            model.addAttribute("index_message", session.getAttribute("index_message"));
+        }
+        return "info_simple";
     }
 
     @RequestMapping("/OrderManagerPage")
@@ -710,9 +748,7 @@ public class GetInfoContro {
             System.out.println("freshProductPage返回的数据:"+pageInfo);
             return ResponseEntity.ok(pageInfo);
         }else{
-            //model.addAttribute("product_message", session.getAttribute("product_message"));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
-            //return new PageInfo<Product>((List<Product>) session.getAttribute("product_message"));
         }
     }
     @RequestMapping("/freshMessagePage")
@@ -745,8 +781,6 @@ public class GetInfoContro {
         return ResponseEntity.ok("success");
     }
 
-
-
     @RequestMapping("/login")
     public String Login(@RequestParam("account") String account, @RequestParam("password") String password,
                      HttpServletRequest request,Model model,HttpSession session){
@@ -773,8 +807,7 @@ public class GetInfoContro {
 //            //System.out.println("Redis is null");
 //            try{
 //                mUser=userService.login(requestMap);
-//                resultMap=CommonClass2Map("success",mUser);
-//
+//                resultMap=CommonClass2Map(mUser);
 //                //System.out.println("__写入Redis缓存Key："+acount);
 //                redisTemplate.opsForHash().putAll(account,resultMap);//写入Redis
 //                redisTemplate.expire(account,5, TimeUnit.MINUTES);
@@ -797,9 +830,12 @@ public class GetInfoContro {
                 boolean login_status= userService.fresh_status_login(requestMap);
                 if(login_status){
                     resultMap=CommonClass2Map(mUser);
-                    //freshSession(session,"current_user",resultMap);
                     session.setAttribute("current_user",resultMap);
-                    return "redirect:/Restaurant/IndexPage";//重定向到主页
+                    if(mUser.getmLevel()!=1){
+                        return "redirect:/Restaurant/IndexSimplePage";//重定向到主页
+                    }else{
+                        return "redirect:/Restaurant/IndexPage";//重定向到主页
+                    }
                 }else{
                     resultMap.put("result","error");
                     return "login";
@@ -882,7 +918,8 @@ public class GetInfoContro {
         String image_suffix=ImageFileIOUtil.getSuffix(file);//后缀
         //String imageName=name+"_"+TimeUtil.formatTime(TimeUtil.GetTime(true))+"."+image_suffix;
         String imageName=name+"."+image_suffix;
-        String result=ImageFileIOUtil.writeImageResized(imageName,root_dir,user_dir,file);
+        String iconName=imageName;
+        String result=ImageFileIOUtil.writeImageResized(iconName,imageName,root_dir,user_dir,file,false);
 
         Map<String, Object> user_headMap=new HashMap<>();
         user_headMap.put("head","/"+user_dir+imageName);
@@ -928,15 +965,17 @@ public class GetInfoContro {
         String originalFileName = file.getOriginalFilename();
         String image_suffix=originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();//后缀
         //String imageName=pName+"_"+pShopper+"_"+TimeUtil.formatTime(TimeUtil.GetTime(true))+"."+image_suffix;
-        String imageName=pName+"_"+pShopper+"."+image_suffix;
+        String iconName=pName+"_"+pShopper+"."+image_suffix;
+        String[] temp=iconName.split("\\.");
+        String imageName=temp[0]+"_image."+temp[1];
+
         Map<String, Object> up_headMap=new HashMap<>();
-        String result=ImageFileIOUtil.writeImageResized(imageName,root_dir,product_dir,file);
-        up_headMap.put("pIcon","/"+product_dir+imageName);
+        String result=ImageFileIOUtil.writeImageResized(iconName,imageName,root_dir,product_dir,file,true);
+        up_headMap.put("pIcon","/"+product_dir+iconName);
+        up_headMap.put("pImage","/"+product_dir+imageName);
         up_headMap.put("pName",pName);
         up_headMap.put("pShopper",pShopper);
         if(result=="success"&&orderService.up_product_Icon(up_headMap)){
-            //freshSession(session,"order_message",indexDataMap());//更新订单Map
-            //freshSession(session,"product_message",ProductMap());//更新产品Map
             return ResponseEntity.ok("success");
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:" + result);

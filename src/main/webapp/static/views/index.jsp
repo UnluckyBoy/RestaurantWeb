@@ -67,7 +67,7 @@
 
                 </li>
                 <li class="active">
-                    <a href="index.jsp"><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
+                    <a href=""><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="/Restaurant/OrderManagerPage">订单数据</a>
@@ -77,7 +77,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="index.jsp"><i class="fas fa-address-card"></i> <span class="nav-label">个人信息</span>
+                    <a href=""><i class="fas fa-address-card"></i> <span class="nav-label">个人管理</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="/Restaurant/userinfoPage">个人信息</a>

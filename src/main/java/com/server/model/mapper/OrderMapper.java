@@ -46,7 +46,8 @@ public interface OrderMapper {
             "pDescription, " +
             "pType, " +
             "pShopper, " +
-            "pPrice " +
+            "pPrice, " +
+            "pImage " +
             "from product_info_data")
     List<Product> getPageProduct(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize);//产品多数据分页
 

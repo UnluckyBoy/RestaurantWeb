@@ -15,6 +15,7 @@ public class Product implements Serializable {
     private String pType;
     private String pShopper;
     private String pPrice;
+    private String pImage;
 
     public int getpId() {
         return pId;
@@ -72,6 +73,14 @@ public class Product implements Serializable {
         this.pPrice = pPrice;
     }
 
+    public String getpImage() {
+        return pImage;
+    }
+
+    public void setpImage(String pImage) {
+        this.pImage = pImage;
+    }
+
     @Override
     public String toString() {
         return "pId=" + pId +
@@ -80,6 +89,7 @@ public class Product implements Serializable {
                 ", pDescription='" + pDescription + '\'' +
                 ", pType='" + pType + '\'' +
                 ", pShopper='" + pShopper + '\'' +
-                ", pPrice='" + pPrice + '\'';
+                ", pPrice='" + pPrice + '\''+
+                ", pImage='" + pImage + '\'';
     }
 }

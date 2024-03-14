@@ -39,7 +39,7 @@
             </div>
             <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
             <p class="text-muted text-center">
-                <a href=""><small>忘记密码了？</small></a> | <a href="/Restaurant/registerPage">注册一个新账号</a>
+                <a href=""><small>忘记密码了？</small></a> | <a href="/Restaurant/registerPage">注册新账号</a>
             </p>
         </form>
     </div>

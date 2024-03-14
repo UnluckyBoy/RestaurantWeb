@@ -5,5 +5,6 @@ create table product_info_data(
 `pDescription` varchar(25) comment '菜单描述',
 `pType` varchar(25) comment '菜单类别',
 `pShopper` varchar(25) comment '店铺',
-`pPrice` int DEFAULT 0 comment '价格'
+`pPrice` int DEFAULT 0 comment '价格',
+`pImage` varchar(255) DEFAULT '/ProductIcon/defalut_image.png' comment '商品图片',
 );

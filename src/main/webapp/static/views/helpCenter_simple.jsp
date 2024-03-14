@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: matrix
-  Date: 2024/3/7 0007
-  Time: 14:10
+  Date: 2024/3/14 0014
+  Time: 13:44
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -11,7 +11,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
-    <title>私房菜后台管理-个人信息</title>
+    <title>私房菜后台管理-帮助中心</title>
     <link href="../staticRes/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
     <!--图标库-->
     <link href="../staticRes/fontawesome_5.15.4/css/fontawesome.css" rel="stylesheet">
@@ -21,6 +21,7 @@
     <link href="../staticRes/js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
     <link href="../staticRes/css/animate.css" rel="stylesheet">
     <link href="../staticRes/css/style.css?v=2.2.0" rel="stylesheet">
+
 </head>
 <body>
 <div id="wrapper">
@@ -43,32 +44,32 @@
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
                             <li><a href="/Restaurant/userinfoPage">个人信息</a></li>
-<%--                            <li><a href="">联系我们</a></li>--%>
                             <li><a href="#" id="mailboxLink">信箱</a></li>
                             <li class="divider"></li>
                             <li><a href="/Restaurant/logout">安全退出</a></li>
                         </ul>
                     </div>
                     <div class="logo-element">
-                        私房菜后台
+                        私房菜平台
                     </div>
-
-                </li>
-                <li class="active">
-                    <a href=""><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
-                        <span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li><a href="/Restaurant/OrderManagerPage">订单数据</a></li>
-                        <li><a href="/Restaurant/ProductPage">菜单管理</a></li>
-                        <li><a href="/Restaurant/CommonMessagePage">公共信息</a></li>
-                    </ul>
                 </li>
                 <li>
-                    <a href=""><i class="fas fa-address-card"></i> <span class="nav-label">个人信息</span><span class="fa arrow"></span></a>
+                    <a href="/Restaurant/IndexSimplePage">
+                        <i class="fa fa-th-large"></i>
+                        <span class="nav-label">商品列表</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="">
+                        <i class="fas fa-address-card"></i>
+                        <span class="nav-label">个人管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
                     <ul class="nav nav-second-level">
-                        <li><a href="/Restaurant/userinfoPage">个人信息</a></li>
-                        <li><a href="/Restaurant/helpCenterPage">帮助中心</a></li>
-                        <li><a href="/Restaurant/logout">退出</a></li>
+                        <li><a href="/Restaurant/infoSimplePage">个人信息</a></li>
+                        <li><a href="/Restaurant/helpCenterSimplePage">帮助中心</a>
+                        <li><a href="/Restaurant/logout">退出</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -79,7 +80,7 @@
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
-                        <span class="m-r-sm text-muted welcome-message"><a href="/Restaurant/IndexPage" title="返回首页">
+                        <span class="m-r-sm text-muted welcome-message"><a href="/Restaurant/IndexSimplePage" title="返回首页">
                             <i class="fa fa-home"></i></a> <strong class="font-bold label-warning-light" >${message.name}</strong> | 欢迎使用
                         </span>
                     </li>
@@ -90,41 +91,36 @@
             </nav>
         </div>
 
-        <div class="text-center"><!--按钮-->
-            <p><strong class="text-center label-success">信息管理</strong></p>
-            <div class="text-center">
-                <p>
-                    <span>
-                        <img id="user_head_image" alt="image" class="img-circle" src="http://localhost:8080${message.head}" onclick="upUserHead()"/>
-                    </span>
-                </p>
-                <p>
-                    <label>账户ID:</label>
-                    <label id="account">${message.account}</label>
-                </p>
-                <p>
-                    <label>账号权限:</label>
-                    <label>${message.level}</label>
-                </p>
-                <p>
-                    <label>账户昵称:</label>
-<%--                    <label>${message.name}</label>--%>
-                    <input type="text" id="name" placeholder="${message.name}">
-                </p>
-                <p>
-                    <label>绑定手机:</label>
-<%--                    <label>${message.phone}</label>--%>
-                    <input type="text" id="phone" placeholder="${message.phone}">
-                </p>
-                <p>
-                    <label>绑定邮箱:</label>
-<%--                    <label>${message.email}</label>--%>
-                    <input type="text" id="email" placeholder="${message.email}">
-                </p>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="wrapper wrapper-content">
+                    <div class="row animated fadeInRight">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="text-center float-e-margins p-md">
+                                    <span><strong>帮助中心</strong></span>
+                                </div>
+                                <div class="" id="ibox-content">
+                                    <div id="vertical-timeline" class="vertical-container light-timeline">
+                                        <div class="vertical-timeline-block">
+                                            <div class="vertical-timeline-icon navy-bg">
+                                                <i class="fas fa-angle-double-right"></i>
+                                            </div>
+                                            <div class="vertical-timeline-content">
+                                                <h2>商务合作?</h2>
+                                                <p>平台反馈?</p>
+                                                <span class="vertical-date">
+                                                    <br><small>平台客服热线：xxxxxxxxx</small></br>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="text-center"><!--按钮-->
-            <button id="updateInfoBtn" type="button" class="btn btn-warning" onclick="upUserInfo()">更新</button>
         </div>
 
         <!--图片修改弹窗-->
@@ -193,49 +189,6 @@
         });
     });
 
-    function upUserInfo(){
-        var uname=$("#name").val();
-        var phone=$("#phone").val();
-        var email=$("#email").val();
-        //var button = $("#updateInfoBtn");
-        console.log("账户信息:"+$("#name").attr('placeholder')+"___"+
-            $("#phone").attr('placeholder')+"___"+$("#email").attr('placeholder'));
-        console.log("账户信息:"+$("#name").val()+"___"+ $("#phone").val()+"___"+$("#email").val());
-        if(uname.trim()===''){
-            console.log("未输入name");
-            uname=$("#name").attr('placeholder');
-        }
-        if(phone.trim()===''){
-            console.log("未输入phone");
-            phone=$("#phone").attr('placeholder');
-        }
-        if(email.trim()===''){
-            console.log("未输入email");
-            email=$("#email").attr('placeholder');
-        }
-        // 封装要发送的数据
-        var formData = new FormData();
-        formData.append("account", '${message.account}');
-        formData.append("name", uname);
-        formData.append("phone", phone);
-        formData.append("email", email);
-        // 发送数据到后端
-        $.ajax({
-            url: '/Restaurant/upload_user_info',  // 替换为实际的 Spring Boot 后端端点
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(data) {
-                alert("更新成功:"+data);
-                location.reload();
-            },
-            error: function(jqXHR, textStatus, errorMessage) {
-                alert("更新失败:" + errorMessage);
-            }
-        });
-    }
-
     function upUserHead(){
         $("#userHeadEditModal").modal("show")
     }
@@ -267,6 +220,5 @@
         }
     }
 </script>
-
 </body>
 </html>

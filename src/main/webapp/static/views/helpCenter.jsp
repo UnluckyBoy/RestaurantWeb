@@ -43,9 +43,7 @@
                                 </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <%--                            <li><a href="">修改头像</a></li>--%>
                             <li><a href="/Restaurant/userinfoPage">个人信息</a></li>
-<%--                            <li><a href="">联系我们</a></li>--%>
                             <li><a href="#" id="mailboxLink">信箱</a></li>
                             <li class="divider"></li>
                             <li><a href="/Restaurant/logout">安全退出</a></li>
@@ -57,7 +55,7 @@
 
                 </li>
                 <li class="active">
-                    <a href="index.jsp"><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
+                    <a href=""><i class="fa fa-th-large"></i> <span class="nav-label">数据管理</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="/Restaurant/OrderManagerPage">订单数据</a></li>
