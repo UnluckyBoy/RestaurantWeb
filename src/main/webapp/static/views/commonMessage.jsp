@@ -314,24 +314,25 @@
         formData.append("title",title);
         formData.append("content", content);
         formData.append("publisher", '${message.account}');
-        formData.append("createtime", getCurrentDateTime());
+        formData.append("createTime", getCurrentDateTime());
         console.log("后端数据:"+formData.get("title")+","+formData.get("content")+
-            ","+formData.get("publisher")+","+formData.get("createtime"));
+            ","+formData.get("publisher")+","+formData.get("createTime"));
         // 发送数据到后端
-        // $.ajax({
-        //     url: '/Restaurant/upload_user_info',  // 替换为实际的 Spring Boot 后端端点
-        //     type: 'POST',
-        //     data: formData,
-        //     contentType: false,
-        //     processData: false,
-        //     success: function(data) {
-        //         alert("更新成功:"+data);
-        //         location.reload();
-        //     },
-        //     error: function(jqXHR, textStatus, errorMessage) {
-        //         alert("更新失败:" + errorMessage);
-        //     }
-        // });
+        $.ajax({
+            url: '/Restaurant/addMessage',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                alert("推送成功！"+data);
+                $("#messageEditModal").modal("hide")
+                location.reload();
+            },
+            error: function(jqXHR, textStatus, errorMessage) {
+                alert("推送失败！" + errorMessage);
+            }
+        });
     }
 
     function freshData(url,pagenum){

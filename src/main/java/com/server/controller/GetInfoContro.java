@@ -652,9 +652,7 @@ public class GetInfoContro {
         return "orderManage";
     }
     @RequestMapping("/ProductPage")
-    public String ProductPage(HttpServletRequest request,Model model,HttpSession session,
-                              @RequestParam(defaultValue = "1") int pageNum,
-                              @RequestParam(defaultValue = "6") int pageSize){
+    public String ProductPage(HttpServletRequest request,Model model,HttpSession session){
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
             model.addAttribute("message", session.getAttribute("current_user"));
@@ -729,6 +727,24 @@ public class GetInfoContro {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
         }
     }
+    @RequestMapping("/addMessage")
+    public ResponseEntity<Object> addMessage(HttpServletRequest request,Model model,HttpSession session,
+                                             @RequestParam("title") String title, @RequestParam("content") String content,
+                                             @RequestParam("publisher") String publisher,
+                                             @RequestParam("createTime") String createTime){
+        //System.out.println("请求内容:"+title+","+content+","+publisher+","+createTime);
+        Map<String,Object> messageMap=new HashMap<>();
+        messageMap.put("title",title);
+        messageMap.put("content",content);
+        messageMap.put("publisher",publisher);
+        messageMap.put("createTime",createTime);
+        boolean result=orderService.add_message(messageMap);
+        if(!result){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
+        }
+        return ResponseEntity.ok("success");
+    }
+
 
 
     @RequestMapping("/login")
@@ -800,9 +816,6 @@ public class GetInfoContro {
     public String SignOut(HttpServletRequest request,HttpSession session,Model model){
         //System.out.println("用户信息:"+session.getAttribute("current_user").getClass());//java.util.HashMap
         if (session != null && session.getAttribute("current_user") != null) {
-            // Session不为空且包含"userId"属性，表示用户已登录,先释放session
-            //model.addAttribute("user", session.getAttribute("current_user"));
-            //System.out.println("用户信息:"+model.getAttribute("user").getClass());//model.getAttribute("user"):java.util.HashMap
             Map<String, Object> requestMap=(Map) session.getAttribute("current_user");
             //System.out.println("用户信息:"+requestMap.get("account"));
             requestMap.put("status",0);
