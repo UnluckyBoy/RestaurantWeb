@@ -279,6 +279,13 @@
                         var priceElement = $('<p>').addClass('price').text('￥' + product.pPrice);
                         var descriptionElement = $('<p>').text(product.pDescription);
                         var addToCartButton = $('<button>').addClass('btn btn-sm btn-primary add-to-cart').text('加入购物车');
+                        // 为添加到购物车的按钮添加点击事件
+                        addToCartButton.click(function() {
+                            // 在这里执行您希望当按钮被点击时发生的操作
+                            //alert('产品:' + product.pName + ' 已添加到购物车!');
+                            addShoppingCrat('/Restaurant/add_shopping_cart',product.pName,
+                                '${message.account}',product.pShopper,product.pPrice);
+                        });
                         productInfo.append(nameElement, priceElement, descriptionElement, addToCartButton);
                         productItem.append(productImage, productInfo);
                         // 将商品项添加到商品列表容器中
@@ -291,6 +298,26 @@
             },
             error: function(xhr, status, error) {
                 console.error("AJAX请求失败: " + error);
+            }
+        });
+    }
+
+    function addShoppingCrat(url,content,creator,shopper,tradingPrice){
+        $.ajax({
+            url:url,
+            type: 'GET',
+            data: {
+                content: content+"一份",
+                creator: creator,
+                shopper: shopper,
+                tradingPrice: tradingPrice
+            },
+            dataType: 'json', //服务器返回JSON格式
+            success: function(data) {
+
+            },
+            error: function(xhr, status, error) {
+                console.error("添加购物车失败: " + error);
             }
         });
     }

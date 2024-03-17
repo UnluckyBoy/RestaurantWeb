@@ -1,0 +1,8 @@
+create table shopping_cart_data(
+`cId` bigint(20)  not null auto_increment PRIMARY KEY comment '主键',
+`cContent` varchar(25) comment '购物车内容',
+`cCreator` varchar(25) comment '购物车用户',
+`cShopper` varchar(25) comment '购物车商品店铺',
+`cTradingPrice` int comment '商品交易金额',
+`cCreateTime` datetime comment '创建时间'
+);

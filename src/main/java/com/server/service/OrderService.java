@@ -38,4 +38,5 @@ public interface OrderService {
     public boolean up_product_Info(Map<String,Object> map);//更新产品信息
     public boolean delete_product(String id);
     public boolean add_message(Map<String,Object>map);
+    public boolean add_shopping_cart(Map<String,Object>map);
 }

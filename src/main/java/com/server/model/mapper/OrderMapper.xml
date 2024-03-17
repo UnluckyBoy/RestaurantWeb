@@ -243,8 +243,15 @@
     </delete>
 
     <!--insert逻辑-->
+    <!--消息发布-->
     <insert id="add_message" parameterType="java.util.HashMap">
         insert into announcement_data
             (aTitle,aContent,aPublisher,aCreateTime) values (#{title},#{content},#{publisher},#{createTime})
+    </insert>
+    <!--购物车添加-->
+    <insert id="add_shopping_cart" parameterType="java.util.HashMap">
+        insert into shopping_cart_data
+            (cContent,cCreator,cShopper,cTradingPrice,cCreateTime)
+            values (#{content},#{creator},#{shopper},#{tradingPrice},#{createTime})
     </insert>
 </mapper>

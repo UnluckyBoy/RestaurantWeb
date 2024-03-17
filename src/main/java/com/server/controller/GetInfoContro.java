@@ -780,6 +780,27 @@ public class GetInfoContro {
         }
         return ResponseEntity.ok("success");
     }
+    @RequestMapping("/add_shopping_cart")
+    public ResponseEntity<String> handleAddShoppingCart(HttpSession session,Model model,
+                                                        @RequestParam("content") String content,
+                                                        @RequestParam("creator") String creator,
+                                                        @RequestParam("shopper") String shopper,
+                                                        @RequestParam("tradingPrice") String tradingPrice){
+        System.out.println("请求内容:"+content+","+creator+","+shopper+","+tradingPrice);
+        Map<String,Object> shopping_cartMap=new HashMap<>();
+        shopping_cartMap.put("content",content);
+        shopping_cartMap.put("creator",creator);
+        shopping_cartMap.put("shopper",shopper);
+        shopping_cartMap.put("tradingPrice",tradingPrice);
+        shopping_cartMap.put("createTime",TimeUtil.GetTime(true));
+        if(orderService.add_shopping_cart(shopping_cartMap)){
+            return ResponseEntity.ok("success");
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
+        }
+        //return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
+    }
+
 
     @RequestMapping("/login")
     public String Login(@RequestParam("account") String account, @RequestParam("password") String password,

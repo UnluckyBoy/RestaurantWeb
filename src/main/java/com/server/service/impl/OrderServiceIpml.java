@@ -150,4 +150,9 @@ public class OrderServiceIpml implements OrderService {
     public boolean add_message(Map<String, Object> map) {
         return orderMapper.add_message(map);
     }
+
+    @Override
+    public boolean add_shopping_cart(Map<String, Object> map) {
+        return orderMapper.add_shopping_cart(map);
+    }
 }

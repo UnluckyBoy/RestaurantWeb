@@ -37,6 +37,7 @@ public interface OrderMapper {
     public boolean up_product_Info(Map<String,Object> map);//更新产品信息
     public boolean delete_product(String id);//删除产品
     public boolean add_message(Map<String,Object>map);//发布信息
+    public boolean add_shopping_cart(Map<String,Object>map);//购物车
 
     /**分页操作**/
     @Select("select " +
