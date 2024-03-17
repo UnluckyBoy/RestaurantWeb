@@ -800,6 +800,19 @@ public class GetInfoContro {
         }
         //return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
     }
+    @RequestMapping("/get_shopping_cart")
+    public ResponseEntity<Object> handleGetShoppingCart(HttpSession session,Model model,
+                                                        @RequestParam(defaultValue = "1") int pageNum,
+                                                        @RequestParam(defaultValue = "5") int pageSize,
+                                                        @RequestParam("creator") String creator){
+        System.out.println("请求内容:"+creator);
+        PageInfo<ShoppingCart> pageInfo=orderService.getShoppingCart(pageNum,pageSize,creator);
+        if(pageInfo!=null){
+            return ResponseEntity.ok(pageInfo);
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
+        }
+    }
 
 
     @RequestMapping("/login")
@@ -1015,13 +1028,13 @@ public class GetInfoContro {
 
     @RequestMapping("/test_page")
     public String listProducts(Model model,HttpSession session, @RequestParam(defaultValue = "1") int pageNum,
-                            @RequestParam(defaultValue = "6") int pageSize) {
-        PageInfo<Product> productInfo = orderService.getPageProduct(pageNum, pageSize);
-        PageInfo<OrderInfo> orderInfo = orderService.getPageAllOrder(pageNum, pageSize);
-        model.addAttribute("product_message", productInfo);
-        model.addAttribute("order_message", orderInfo);
-        System.out.println("分页测试product_message:"+model.getAttribute("product_message")+"页数:"+pageNum+"___页内容:"+pageSize);
-        System.out.println("分页测试order_message:"+model.getAttribute("order_message")+"页数:"+pageNum+"___页内容:"+pageSize);
+                            @RequestParam(defaultValue = "6") int pageSize,@RequestParam("test") String creator) {
+//        PageInfo<Product> productInfo = orderService.getPageProduct(pageNum, pageSize);
+//        PageInfo<OrderInfo> orderInfo = orderService.getPageAllOrder(pageNum, pageSize);
+//        System.out.println("分页测试product_message:"+model.getAttribute("product_message")+"页数:"+pageNum+"___页内容:"+pageSize);
+//        System.out.println("分页测试order_message:"+model.getAttribute("order_message")+"页数:"+pageNum+"___页内容:"+pageSize);
+        PageInfo<ShoppingCart> pageInfo=orderService.getShoppingCart(pageNum,pageSize,creator);
+        System.out.println("分页测试:"+pageInfo);
         return "";
     }
 }

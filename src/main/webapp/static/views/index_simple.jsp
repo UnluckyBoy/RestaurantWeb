@@ -266,9 +266,9 @@
             success: function(data) {
                 globalData=data;
                 if(data && data.list){
-                    // 清空之前的商品列表（如果有的话）
+                    // 清空之前数据
                     $('#product-list').empty();
-                    // 遍历商品数据并创建DOM元素
+                    // 遍历数据并创建DOM元素
                     $.each(data.list, function(index, product) {
                         var productItem = $('<div>').addClass('col-md-4 product-item product-item-spacing');
                         var productImage = $('<div>').addClass('product-image');

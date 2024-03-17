@@ -39,7 +39,8 @@ public interface OrderMapper {
     public boolean add_message(Map<String,Object>map);//发布信息
     public boolean add_shopping_cart(Map<String,Object>map);//购物车
 
-    /**分页操作**/
+    /***分页操作***/
+    /*产品分页*/
     @Select("select " +
             "pId, " +
             "pName, " +
@@ -52,6 +53,7 @@ public interface OrderMapper {
             "from product_info_data")
     List<Product> getPageProduct(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize);//产品多数据分页
 
+    /*订单分页*/
     @Select("select " +
             "mId, " +
             "mOrderNumber, " +
@@ -66,6 +68,7 @@ public interface OrderMapper {
             "from order_info_data")
     List<OrderInfo> getPageAllOrder(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize);//全部订单分页获取
 
+    /*销售视图分页*/
     @Select("with CTEMP as ("+"SELECT " + "ROW_NUMBER() OVER (order by (SELECT null)) as id, " +
             "sum(order_info_data.mTradingPrice) as mTradingPrice, " +
             "product_info_data.pName, " +
@@ -82,6 +85,7 @@ public interface OrderMapper {
             "from CTEMP")
     List<AllTradingView> getTradingView(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize);
 
+    /*消息分页*/
     @Select("select " +
             "aId," +
             "aTitle," +
@@ -91,4 +95,18 @@ public interface OrderMapper {
             "aType " +
             "from announcement_data order by aCreateTime desc")
     List<MessageView> getMessage(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize);
+
+    /*购物车分页*/
+    @Select("select " +
+            "cId," +
+            "cContent," +
+            "cCreator," +
+            "cShopper," +
+            "cTradingPrice," +
+            "cCreateTime " +
+            "from shopping_cart_data " +
+            "where cCreator = #{creator}")
+    List<ShoppingCart> getShoppingCart(@Param("pageNum") int pageNum,
+                                       @Param("pageSize") int pageSize,
+                                       @Param("creator") String creator);
 }

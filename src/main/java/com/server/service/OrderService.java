@@ -39,4 +39,5 @@ public interface OrderService {
     public boolean delete_product(String id);
     public boolean add_message(Map<String,Object>map);
     public boolean add_shopping_cart(Map<String,Object>map);
+    PageInfo<ShoppingCart> getShoppingCart(int pageNum,int pageSize,String creator);
 }

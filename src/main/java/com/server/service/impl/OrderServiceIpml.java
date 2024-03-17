@@ -155,4 +155,10 @@ public class OrderServiceIpml implements OrderService {
     public boolean add_shopping_cart(Map<String, Object> map) {
         return orderMapper.add_shopping_cart(map);
     }
+
+    @Override
+    public PageInfo<ShoppingCart> getShoppingCart(int pageNum, int pageSize,String creator) {
+        List<ShoppingCart> shoppingCartList=orderMapper.getShoppingCart(pageNum,pageSize,creator);
+        return new PageInfo<>(shoppingCartList);
+    }
 }
