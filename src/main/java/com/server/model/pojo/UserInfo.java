@@ -121,13 +121,16 @@ public class UserInfo implements Serializable {
     public String toString() {
         return "UserInfo{" +
                 "mId=" + mId +
-                ", mImage='" + mHead + '\'' +
+                ", mHead='" + mHead + '\'' +
                 ", mName='" + mName + '\'' +
                 ", mPassword='" + mPassword + '\'' +
                 ", mSex='" + mSex + '\'' +
-                ", mAcount='" + mAccount + '\'' +
+                ", mAccount='" + mAccount + '\'' +
                 ", mPhone='" + mPhone + '\'' +
                 ", mEmail='" + mEmail + '\'' +
+                ", mLevel=" + mLevel +
+                ", mStatus=" + mStatus +
+                ", mAddressIp='" + mAddressIp + '\'' +
                 '}';
     }
 }

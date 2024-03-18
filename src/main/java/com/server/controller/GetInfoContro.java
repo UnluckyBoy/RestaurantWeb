@@ -542,52 +542,10 @@ public class GetInfoContro {
         return resultList;
     }
 
-    /**
-     * 测试加密
-     * @param password
-     * @return
-     */
-    @RequestMapping("/test_password")
-    public Map TestPassword(@RequestParam String password){
-        Map<String,String> resultMap=new HashMap<>();
-        //对密码加密
-        String mEncryPwd = Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password);
-        System.out.println("加密前：\n"+password+"\n加密后：\n"+mEncryPwd);
-        System.out.println("\nServer_running___"+resultMap.toString());
-        return resultMap;
-    }
-    @RequestMapping("/test")
-    public void Test(){
-        float valid=(2/(float)3)*100;
-        DecimalFormat df = new DecimalFormat("#.00");//创建DecimalFormat对象,并使用格式字符串#.00指定保留两位小数
-        String formattedValue = df.format(valid);
-        System.out.println("百分比:"+formattedValue);
-
-        //System.out.println("月全订单数据:"+getMonAllTradingData().toString());
-
-//        orderMap.put("AllTradingList",orderService.getAllTradingView());
-//        orderMap.put("AllOrderList",orderService.orderQueryAll());
-        List<Product> test1=orderService.getAllProduct();
-        List<OrderInfo> test2=orderService.orderQueryAll();
-        System.out.println("test1:"+test1.size()+"\t"+test1.toString());
-        System.out.println("test2:"+test2.size()+"\t"+test2.toString());
-
-//        Map<String,Object> testMap=new HashMap<>();
-//        testMap.put("AllTradingList",orderService.getAllTradingView());
-//        testMap.put("AllOrderList",orderService.orderQueryAll());
-//        System.out.println("testMap:"+testMap.toString());
-
-        //生成订单
-        System.out.println("随机生成的订单号: " + OrderNumberUtil.randOrderNumber());
-
-
-    }
-
     @RequestMapping("/IndexPage")
     public String IndexPage(HttpServletRequest request,HttpSession session,Model model){
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
-            //System.out.println("主页用户session消息message:\t"+session.getAttribute("current_user"));
             mUser=freshUserInfo(session,model);
             if(mUser!=null){
                 model.addAttribute("message", CommonClass2Map(mUser));
@@ -596,11 +554,10 @@ public class GetInfoContro {
                 model.addAttribute("message", session.getAttribute("current_user"));
             }
             model.addAttribute("index_message",indexDataMap());
-            System.out.println("主页用户消息message:\t"+model.getAttribute("message"));
+            //System.out.println("主页用户消息message:\t"+model.getAttribute("message"));
             session.setAttribute("index_message",model.getAttribute("index_message"));
             return "index";
         } else {
-            // Session为空或不包含"userId"属性，表示用户未登录
             System.out.println("用户未登录");
             return "redirect:/Restaurant/loginPage";
         }
@@ -730,9 +687,6 @@ public class GetInfoContro {
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
             model.addAttribute("message", session.getAttribute("current_user"));
-            //model.addAttribute("Announcement_message",MessageMap());
-            //session.setAttribute("Announcement_message",model.getAttribute("Announcement_message"));
-            //System.out.println("CommonMessagePage消息数据Announcement_message:"+session.getAttribute("Announcement_message"));
         }
         return "commonMessage";
     }
@@ -914,109 +868,6 @@ public class GetInfoContro {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
         }
     }
-
-
-    @RequestMapping("/login")
-    public String Login(@RequestParam("account") String account, @RequestParam("password") String password,
-                     HttpServletRequest request,Model model,HttpSession session){
-        Map<String,Object> resultMap=new HashMap<>();
-        Map<String,Object> requestMap=new HashMap<>();
-        requestMap.put("account",account);
-        //对密码解密
-        String mEncryPwd = Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password);
-        requestMap.put("password",mEncryPwd);
-        requestMap.put("status",1);
-        /**显示ip**/
-        String currentIp= IPUtil.getIpAddress(request);
-        //System.out.println("IP:"+currentIp);
-        requestMap.put("addressIp",currentIp);
-
-        /** 查询缓存是否存在
-         * 否则查询数据库，写入Redis缓存
-         * */
-//        BoundHashOperations hashOps = redisTemplate.boundHashOps(account);
-//        if(hashOps.entries().size()>0){
-//            //System.out.println("Redis not null");
-//            resultMap=hashOps.entries();
-//        } else{
-//            //System.out.println("Redis is null");
-//            try{
-//                mUser=userService.login(requestMap);
-//                resultMap=CommonClass2Map(mUser);
-//                //System.out.println("__写入Redis缓存Key："+acount);
-//                redisTemplate.opsForHash().putAll(account,resultMap);//写入Redis
-//                redisTemplate.expire(account,5, TimeUnit.MINUTES);
-//            }catch (Exception e){
-//                System.out.println("查询异常——mUser is:"+e.getMessage());
-//                resultMap.put("result","error");
-//            }
-//        }
-        try{
-            mUser= userService.login(requestMap);
-            if(mUser.getmStatus()!=0){
-                /*
-                if(mUser.getmAddressIp()!=currentIp){
-                    System.out.println("两次登录ip不一致"+mUser.getmAddressIp()+currentIp);
-                }
-                */
-                resultMap.put("result","login_lock");
-                return "login";
-            }else{
-                boolean login_status= userService.fresh_status_login(requestMap);
-                if(login_status){
-                    resultMap=CommonClass2Map(mUser);
-                    session.setAttribute("current_user",resultMap);
-                    if(mUser.getmLevel()!=1){
-                        return "redirect:/Restaurant/IndexSimplePage";//重定向到主页
-                    }else{
-                        return "redirect:/Restaurant/IndexPage";//重定向到主页
-                    }
-                }else{
-                    resultMap.put("result","error");
-                    return "login";
-                }
-            }
-        }catch (Exception e){
-            System.out.println("查询异常:"+e.getMessage());
-            resultMap.put("result","error");
-            return "login";
-        }
-    }
-
-    @RequestMapping("/logout")
-    public String SignOut(HttpServletRequest request,HttpSession session,Model model){
-        //System.out.println("用户信息:"+session.getAttribute("current_user").getClass());//java.util.HashMap
-        if (session != null && session.getAttribute("current_user") != null) {
-            Map<String, Object> requestMap=(Map) session.getAttribute("current_user");
-            //System.out.println("用户信息:"+requestMap.get("account"));
-            requestMap.put("status",0);
-            //System.out.println("登出请求Map:"+requestMap.toString());
-            //String mEncryPwd = Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password);
-            //requestMap.put("password",mEncryPwd);
-            try{
-                if((userService.infoQuery(requestMap).getmStatus()==1)){
-                    boolean logout= userService.fresh_status_logout(requestMap);
-                    if(logout){
-                        session.invalidate(); //使当前session失效
-                        return "redirect:/Restaurant/loginPage";
-                    }else{
-                        System.out.println("登出异常:"+logout);
-                        return "";
-                    }
-                }else{
-                    System.out.println("登出异常:尚未登录");
-                    return "";
-                }
-            }catch (Exception e){
-                System.out.println("登出异常:"+e.getMessage());
-                return "";
-            }
-            //session.invalidate(); //使当前session失效
-            //session.removeAttribute("attributeName"); // 移除名为"attributeName"的属性
-        }
-        return "";
-    }
-
     @RequestMapping("/update_order")
     public ResponseEntity<String> UpOrder(@RequestBody Map<String, Object> order_data, HttpServletRequest request,
                                           Model model, HttpSession session){
@@ -1030,7 +881,7 @@ public class GetInfoContro {
     }
     @RequestMapping("/update_product_info")
     public ResponseEntity<String> UpProductInfo(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,
-                                          Model model, HttpSession session){
+                                                Model model, HttpSession session){
         System.out.println("订单修改数据:"+requestBody.toString());
         boolean fresh_result=orderService.up_product_Info(requestBody);
         if(fresh_result){
@@ -1140,6 +991,110 @@ public class GetInfoContro {
         }
     }
 
+
+    @RequestMapping("/login")
+    public String Login(@RequestParam("account") String account, @RequestParam("password") String password,
+                     HttpServletRequest request,Model model,HttpSession session){
+        Map<String,Object> resultMap=new HashMap<>();
+        Map<String,Object> requestMap=new HashMap<>();
+        requestMap.put("account",account);
+        //对密码解密
+        String mEncryPwd = Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password);
+        requestMap.put("password",mEncryPwd);
+        requestMap.put("status",1);
+        /**显示ip**/
+        String currentIp= IPUtil.getIpAddress(request);
+        //System.out.println("IP:"+currentIp);
+        requestMap.put("addressIp",currentIp);
+
+        /** 查询缓存是否存在
+         * 否则查询数据库，写入Redis缓存
+         * */
+//        BoundHashOperations hashOps = redisTemplate.boundHashOps(account);
+//        if(hashOps.entries().size()>0){
+//            //System.out.println("Redis not null");
+//            resultMap=hashOps.entries();
+//        } else{
+//            //System.out.println("Redis is null");
+//            try{
+//                mUser=userService.login(requestMap);
+//                resultMap=CommonClass2Map(mUser);
+//                //System.out.println("__写入Redis缓存Key："+acount);
+//                redisTemplate.opsForHash().putAll(account,resultMap);//写入Redis
+//                redisTemplate.expire(account,5, TimeUnit.MINUTES);
+//            }catch (Exception e){
+//                System.out.println("查询异常——mUser is:"+e.getMessage());
+//                resultMap.put("result","error");
+//            }
+//        }
+        try{
+            mUser= userService.login(requestMap);
+            if(mUser.getmStatus()!=0){
+                /*
+                if(mUser.getmAddressIp()!=currentIp){
+                    System.out.println("两次登录ip不一致"+mUser.getmAddressIp()+currentIp);
+                }
+                */
+                //resultMap.put("result","login_lock");
+                return "login";
+            }else{
+                boolean login_status= userService.fresh_status_login(requestMap);
+                if(login_status){
+                    resultMap=CommonClass2Map(mUser);
+                    session.setAttribute("current_user",resultMap);
+                    //session.setAttribute("current_user",mUser);
+                    if(mUser.getmLevel()!=1){
+                        return "redirect:/Restaurant/IndexSimplePage";//重定向到主页
+                    }else{
+                        return "redirect:/Restaurant/IndexPage";//重定向到主页
+                    }
+                }else{
+                    resultMap.put("result","error");
+                    return "login";
+                }
+            }
+        }catch (Exception e){
+            System.out.println("查询异常:"+e.getMessage());
+            resultMap.put("result","error");
+            return "login";
+        }
+    }
+
+    @RequestMapping("/logout")
+    public String SignOut(HttpServletRequest request,HttpSession session,Model model){
+        //System.out.println("用户信息:"+session.getAttribute("current_user").getClass());//java.util.HashMap
+        if (session != null && session.getAttribute("current_user") != null) {
+            Map<String, Object> requestMap=(Map) session.getAttribute("current_user");
+            //System.out.println("用户信息:"+requestMap.get("account"));
+            requestMap.put("status",0);
+            //System.out.println("登出请求Map:"+requestMap.toString());
+            //String mEncryPwd = Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password);
+            //requestMap.put("password",mEncryPwd);
+            try{
+                if((userService.infoQuery(requestMap).getmStatus()==1)){
+                    boolean logout= userService.fresh_status_logout(requestMap);
+                    if(logout){
+                        session.invalidate();
+                        return "redirect:/Restaurant/loginPage";
+                    }else{
+                        System.out.println("登出异常:"+logout);
+                        return "";
+                    }
+                }else{
+                    System.out.println("登出异常:尚未登录");
+                    return "";
+                }
+            }catch (Exception e){
+                System.out.println("登出异常:"+e.getMessage());
+                return "";
+            }
+            //session.invalidate(); //使当前session失效
+            //session.removeAttribute("attributeName"); // 移除名为"attributeName"的属性
+        }
+        return "";
+    }
+
+
     @RequestMapping("/test_page")
     public String listProducts(Model model,HttpSession session, @RequestParam(defaultValue = "1") int pageNum,
                             @RequestParam(defaultValue = "6") int pageSize,@RequestParam("test") String creator) {
@@ -1150,5 +1105,43 @@ public class GetInfoContro {
         PageInfo<ShoppingCart> pageInfo=orderService.getShoppingCart(pageNum,pageSize,creator);
         System.out.println("分页测试:"+pageInfo);
         return "";
+    }
+    /**
+     * 测试加密
+     * @param password
+     * @return
+     */
+    @RequestMapping("/test_password")
+    public Map TestPassword(@RequestParam String password){
+        Map<String,String> resultMap=new HashMap<>();
+        //对密码加密
+        String mEncryPwd = Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password);
+        System.out.println("加密前：\n"+password+"\n加密后：\n"+mEncryPwd);
+        System.out.println("\nServer_running___"+resultMap.toString());
+        return resultMap;
+    }
+    @RequestMapping("/test")
+    public void Test(){
+        float valid=(2/(float)3)*100;
+        DecimalFormat df = new DecimalFormat("#.00");//创建DecimalFormat对象,并使用格式字符串#.00指定保留两位小数
+        String formattedValue = df.format(valid);
+        System.out.println("百分比:"+formattedValue);
+
+        //System.out.println("月全订单数据:"+getMonAllTradingData().toString());
+
+//        orderMap.put("AllTradingList",orderService.getAllTradingView());
+//        orderMap.put("AllOrderList",orderService.orderQueryAll());
+        List<Product> test1=orderService.getAllProduct();
+        List<OrderInfo> test2=orderService.orderQueryAll();
+        System.out.println("test1:"+test1.size()+"\t"+test1.toString());
+        System.out.println("test2:"+test2.size()+"\t"+test2.toString());
+
+//        Map<String,Object> testMap=new HashMap<>();
+//        testMap.put("AllTradingList",orderService.getAllTradingView());
+//        testMap.put("AllOrderList",orderService.orderQueryAll());
+//        System.out.println("testMap:"+testMap.toString());
+
+        //生成订单
+        System.out.println("随机生成的订单号: " + OrderNumberUtil.randOrderNumber());
     }
 }
