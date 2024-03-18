@@ -1,5 +1,6 @@
 package com.server.service;
 
+import cn.hutool.db.sql.Order;
 import com.github.pagehelper.PageInfo;
 import com.server.model.pojo.*;
 import org.apache.ibatis.annotations.Param;
@@ -35,9 +36,12 @@ public interface OrderService {
     PageInfo<OrderInfo> getPageAllOrder(int pageNum,int pageSize);
     PageInfo<AllTradingView> getTradingView(int pageNum,int pageSize);
     PageInfo<MessageView> getMessage(int pageNum,int pageSize);
+    PageInfo<ShoppingCart> getShoppingCart(int pageNum,int pageSize,String creator);
+    PageInfo<OrderInfo> getOrderList(int pageNum,int pageSize,String order);
     public boolean up_product_Info(Map<String,Object> map);//更新产品信息
     public boolean delete_product(String id);
     public boolean add_message(Map<String,Object>map);
     public boolean add_shopping_cart(Map<String,Object>map);
-    PageInfo<ShoppingCart> getShoppingCart(int pageNum,int pageSize,String creator);
+    public boolean buy_create_order(Map<String,Object>map);
+    public boolean delete_shopping_cart(Map<String,Object>map);
 }

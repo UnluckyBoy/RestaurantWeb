@@ -14,4 +14,10 @@ public class OrderNumberUtil {
         String shortOrderId =TimeUtil.formatTime(orderId.toString().substring(0, 8)+TimeUtil.GetTime(true));
         return shortOrderId;
     }
+
+    public static String randOrderNumberParam(String time){
+        UUID orderId = UUID.randomUUID();
+        String shortOrderId =TimeUtil.formatTime(orderId.toString().substring(0, 8)+time);
+        return shortOrderId;
+    }
 }

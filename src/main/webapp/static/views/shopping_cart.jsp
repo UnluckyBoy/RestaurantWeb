@@ -67,6 +67,7 @@
                     </a>
                     <ul class="nav nav-second-level">
                         <li><a href="/Restaurant/shopping_cartPage">购物车</a></li>
+                        <li><a href="/Restaurant/order_historyPage">购买记录</a></li>
                         <li><a href="/Restaurant/infoSimplePage">个人信息</a></li>
                         <li><a href="/Restaurant/helpCenterSimplePage">帮助中心</a>
                         <li><a href="/Restaurant/logout">退出</a>
@@ -254,9 +255,9 @@
                         row.append($('<td class="text-center small"><span class="label label-primary">&yen;' + product.cTradingPrice + '</span></td>'));
                         row.append($('<td class="text-center small">' + product.cCreateTime + '</td>'));
                         // 创建修改按钮并添加事件处理函数
-                        var btnBuy = $('<button type="button" class="btn-buy btn btn-sm btn-success">购买</button>');
-                        var btndel = $('<button type="button" class="btn-del btn btn-sm btn-danger">删除</button>');
-                        row.append($('<td class="text-center small"></td>').append(btnBuy).append(btndel));
+                        var btnBuy = $('<button type="button" class="btn-buy btn btn-sm btn-primary">购买</button>');
+                        var btnDel = $('<button type="button" class="btn-del btn btn-sm btn-danger">删除</button>');
+                        row.append($('<td class="text-center small"></td>').append(btnBuy).append(btnDel));
 
                         tbody.append(row);
                     });
@@ -273,7 +274,52 @@
 
     /*购买*/
     $(document).on('click', '.btn-buy', function(){
+        var content = $(this).closest('tr').find("td:eq(1)").text();
+        var order='${message.account}';
+        var shopper = $(this).closest('tr').find("td:eq(2)").text();
+        var tradingPrice=$(this).closest('tr').find("td:eq(4)").text().slice(1);
+        var createTime=$(this).closest('tr').find("td:eq(5)").text();
+        $.ajax({
+            url:'/Restaurant/add_order',
+            type: 'GET',
+            data: {
+                content: content,
+                order: order,
+                shopper: shopper,
+                tradingPrice: tradingPrice,
+                createTime:createTime
+            },
+            //dataType: 'json',
+            success: function(data) {
+                alert("购买成功！(温馨提示:项目演示，不作支付接口!)")
+                location.reload(true);
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX请求失败: " + error);
+            }
+        });
+    });
 
+    /*删除*/
+    $(document).on('click', '.btn-del', function(){
+        var order='${message.account}';
+        var createTime=$(this).closest('tr').find("td:eq(5)").text();
+        $.ajax({
+            url:'/Restaurant/delete_shopping_cart',
+            type: 'GET',
+            data: {
+                order: order,
+                createTime:createTime
+            },
+            //dataType: 'json',
+            success: function(data) {
+                alert("清除购物车成功!")
+                location.reload(true);
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX请求失败: " + error);
+            }
+        });
     });
 
     function previousPage() {

@@ -38,6 +38,8 @@ public interface OrderMapper {
     public boolean delete_product(String id);//删除产品
     public boolean add_message(Map<String,Object>map);//发布信息
     public boolean add_shopping_cart(Map<String,Object>map);//购物车
+    public boolean buy_create_order(Map<String,Object>map);//购买插入
+    public boolean delete_shopping_cart(Map<String,Object>map);//删除购物车数据
 
     /***分页操作***/
     /*产品分页*/
@@ -111,4 +113,20 @@ public interface OrderMapper {
     List<ShoppingCart> getShoppingCart(@Param("pageNum") int pageNum,
                                        @Param("pageSize") int pageSize,
                                        @Param("creator") String creator);
+    /*分页获取购买记录*/
+    @Select("select " +
+            "mId," +
+            "mOrderNumber," +
+            "mContent," +
+            "mOrder," +
+            "mShopper," +
+            "mTradingPrice," +
+            "mCreateTime," +
+            "mEditor," +
+            "mEditTime," +
+            "mTradingType " +
+            "from order_info_data where mOrder=#{order}")
+    List<OrderInfo> getOrderList(@Param("pageNum") int pageNum,
+                                       @Param("pageSize") int pageSize,
+                                       @Param("order") String order);
 }

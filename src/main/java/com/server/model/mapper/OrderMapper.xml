@@ -238,8 +238,13 @@
     </update>
 
     <!--Delete逻辑-->
+    <!--删除产品-->
     <delete id="delete_product" parameterType="String">
         delete from product_info_data where pId=#{id}
+    </delete>
+    <!--删除购物车-->
+    <delete id="delete_shopping_cart" parameterType="java.util.HashMap">
+        delete from shopping_cart_data where cCreateTime=#{createTime} and cCreator=#{creator}
     </delete>
 
     <!--insert逻辑-->
@@ -253,5 +258,11 @@
         insert into shopping_cart_data
             (cTitle,cContent,cCreator,cShopper,cNumber,cTradingPrice,cCreateTime)
             values (#{title},#{content},#{creator},#{shopper},#{number},#{tradingPrice},#{createTime})
+    </insert>
+    <!--购买数据添加-->
+    <insert id="buy_create_order" parameterType="java.util.HashMap">
+        insert into order_info_data
+            (mOrderNumber,mContent,mOrder,mShopper,mTradingPrice,mCreateTime,mTradingType)
+            values (#{orderNumber},#{content},#{order},#{shopper},#{tradingPrice},#{createTime},#{tradingType})
     </insert>
 </mapper>

@@ -157,8 +157,24 @@ public class OrderServiceIpml implements OrderService {
     }
 
     @Override
+    public boolean buy_create_order(Map<String, Object> map) {
+        return orderMapper.buy_create_order(map);
+    }
+
+    @Override
+    public boolean delete_shopping_cart(Map<String, Object> map) {
+        return orderMapper.delete_shopping_cart(map);
+    }
+
+    @Override
     public PageInfo<ShoppingCart> getShoppingCart(int pageNum, int pageSize,String creator) {
         List<ShoppingCart> shoppingCartList=orderMapper.getShoppingCart(pageNum,pageSize,creator);
         return new PageInfo<>(shoppingCartList);
+    }
+
+    @Override
+    public PageInfo<OrderInfo> getOrderList(int pageNum, int pageSize, String order) {
+        List<OrderInfo> orderHistoryList=orderMapper.getOrderList(pageNum,pageSize,order);
+        return new PageInfo<>(orderHistoryList);
     }
 }

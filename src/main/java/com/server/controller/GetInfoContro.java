@@ -692,6 +692,20 @@ public class GetInfoContro {
         }
         return "shopping_cart";
     }
+    @RequestMapping("/order_historyPage")
+    public String OrderHistoryPage(HttpServletRequest request,Model model,HttpSession session){
+        if (session != null && session.getAttribute("current_user") != null) {
+            mUser=freshUserInfo(session,model);
+            if(mUser!=null){
+                model.addAttribute("message", CommonClass2Map(mUser));
+                session.setAttribute("current_user",model.getAttribute("message"));
+            }else{
+                model.addAttribute("message", session.getAttribute("current_user"));
+            }
+            model.addAttribute("index_message", session.getAttribute("index_message"));
+        }
+        return "order_history";
+    }
 
     @RequestMapping("/OrderManagerPage")
     public String OrderManagerPage(HttpServletRequest request,Model model,HttpSession session,
@@ -743,6 +757,20 @@ public class GetInfoContro {
         PageInfo<AllTradingView> pageInfo = orderService.getTradingView(pageNum, pageSize);
         if(pageInfo!=null){
             System.out.println("freshTradingViewPage返回的数据:"+pageInfo);
+            return ResponseEntity.ok(pageInfo);
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
+        }
+    }
+
+    @RequestMapping("/order_history")
+    public ResponseEntity<Object> getOrderHistory(HttpServletRequest request,Model model,HttpSession session,
+                                                  @RequestParam(defaultValue = "1") int pageNum,
+                                                  @RequestParam(defaultValue = "6") int pageSize,
+                                                  @RequestParam("order") String order){
+        PageInfo<OrderInfo> pageInfo = orderService.getOrderList(pageNum, pageSize,order);
+        if(pageInfo!=null){
+            System.out.println("历史订单数据:"+pageInfo);
             return ResponseEntity.ok(pageInfo);
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
@@ -818,6 +846,16 @@ public class GetInfoContro {
         }
         //return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
     }
+
+    /**
+     * 获取购物车信息
+     * @param session
+     * @param model
+     * @param pageNum
+     * @param pageSize
+     * @param creator
+     * @return
+     */
     @RequestMapping("/get_shopping_cart")
     public ResponseEntity<Object> handleGetShoppingCart(HttpSession session,Model model,
                                                         @RequestParam(defaultValue = "1") int pageNum,
@@ -828,6 +866,50 @@ public class GetInfoContro {
         if(pageInfo!=null){
             System.out.println("购物车数据:"+pageInfo);
             return ResponseEntity.ok(pageInfo);
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
+        }
+    }
+
+    /**
+     * 购买生成订单
+     * @param session
+     * @param model
+     * @param content
+     * @param order
+     * @param shopper
+     * @param tradingPrice
+     * @return
+     */
+    @RequestMapping("/add_order")
+    public ResponseEntity<String> handleAddOrder(HttpSession session,Model model,
+                                                 @RequestParam("content") String content,
+                                                 @RequestParam("order") String order,
+                                                 @RequestParam("shopper") String shopper,
+                                                 @RequestParam("createTime") String createTime,
+                                                 @RequestParam("tradingPrice") String tradingPrice){
+        System.out.println("请求内容:"+content);
+        Map<String,Object> addOrderMap=new HashMap<>();
+        Map<String,Object> delete_shopping_cartMap=new HashMap<>();
+        String current_time=TimeUtil.GetTime(true);
+        addOrderMap.put("orderNumber",OrderNumberUtil.randOrderNumberParam(current_time));
+        addOrderMap.put("content",content);
+        addOrderMap.put("order",order);
+        addOrderMap.put("shopper",shopper);
+        addOrderMap.put("tradingPrice",tradingPrice);
+        addOrderMap.put("createTime",current_time);
+        addOrderMap.put("tradingType",1);
+
+        delete_shopping_cartMap.put("createTime",createTime);
+        delete_shopping_cartMap.put("creator",order);
+        boolean add_result=orderService.buy_create_order(addOrderMap);
+        if(add_result){
+            boolean delete_result=orderService.delete_shopping_cart(delete_shopping_cartMap);
+            if(delete_result){
+                return ResponseEntity.ok("success");
+            }else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
+            }
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
         }
@@ -1039,6 +1121,19 @@ public class GetInfoContro {
     public ResponseEntity<String> handleDeleteProduct(HttpSession session,Model model,
                                                       @RequestParam("id") String id){
         if(orderService.delete_product(id)){
+            return ResponseEntity.ok("success");
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
+        }
+    }
+    @RequestMapping("/delete_shopping_cart")
+    public ResponseEntity<String> handleDeleteShoppingCart(HttpSession session,Model model,
+                                                           @RequestParam("order") String order,
+                                                           @RequestParam("createTime") String createTime){
+        Map<String,Object> del_ShoppingCartMap=new HashMap<>();
+        del_ShoppingCartMap.put("creator",order);
+        del_ShoppingCartMap.put("createTime",createTime);
+        if(orderService.delete_shopping_cart(del_ShoppingCartMap)){
             return ResponseEntity.ok("success");
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
