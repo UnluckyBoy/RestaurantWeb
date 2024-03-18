@@ -28,34 +28,31 @@
 <div class="middle-box text-center loginscreen   animated fadeInDown">
     <div>
         <div>
-
             <h1 class="logo-name"></h1>
-
         </div>
         <h3>欢迎注册</h3>
         <p>创建一个新账户</p>
-        <form class="m-t" role="form" action="/Restaurant/registerPage">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="请输入用户名" required="">
+        <div class="form-group">
+            <input id="input_name" type="text" class="form-control" placeholder="请输入账户名">
+        </div>
+        <div class="form-group">
+            <input id="account" type="text" class="form-control" placeholder="请输入账户">
+        </div>
+        <div class="form-group">
+            <input id="password" type="password" class="form-control" placeholder="请输入密码">
+        </div>
+        <div class="form-group">
+            <input id="password_confirm" type="password" class="form-control" placeholder="请再次输入密码">
+        </div>
+        <div class="form-group text-left">
+            <div class="checkbox i-checks">
+                <label class="no-padding">
+                    <input type="checkbox"><i></i> 我同意注册协议</label>
             </div>
-            <div class="form-group">
-                <input type="password" class="form-control" placeholder="请输入密码" required="">
-            </div>
-            <div class="form-group">
-                <input type="password" class="form-control" placeholder="请再次输入密码" required="">
-            </div>
-            <div class="form-group text-left">
-                <div class="checkbox i-checks">
-                    <label class="no-padding">
-                        <input type="checkbox"><i></i> 我同意注册协议</label>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary block full-width m-b">注 册</button>
-
-            <p class="text-muted text-center"><small>已经有账户了？</small><a href="/Restaurant/loginPage">点此登录</a>
-            </p>
-
-        </form>
+        </div>
+        <button type="submit" class="btn btn-primary block full-width m-b" id="register_btn">注 册</button>
+        <p class="text-muted text-center"><small>已经有账户了？</small><a href="/Restaurant/loginPage">点此登录</a>
+        </p>
     </div>
 </div>
 
@@ -70,6 +67,64 @@
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green',
         });
+
+        // 绑定注册按钮的点击事件
+        $('#register_btn').on('click', function(e) {
+            var name=$("#input_name").val();
+            var account=$("#account").val();
+            var password=$("#password").val();
+            var password_confirm=$("#password_confirm").val();
+            //console.log(name+","+account+","+password+","+password_confirm);
+            var isChecked = $('input[type="checkbox"]', '.i-checks').iCheck('isChecked');
+            if(name.trim()===''||account.trim()===''||password.trim()===''||password_confirm.trim()===''){
+                alert("请检查输入!");
+            }else {
+                if (password != password_confirm) {
+                    alert("密码不一致!");
+                } else {
+                    // 检测复选框是否被勾选
+                    var isChecked = $('input[type="checkbox"]', '.i-checks').iCheck('isChecked');
+                    if (!isChecked) {
+                        // 如果没有勾选，则显示提示
+                        alert('请勾选“我同意注册协议”以完成注册！');
+                    }else {
+                        //alert('已勾选!');
+                        $.ajax({
+                            url:'/Restaurant/register',
+                            type: 'Post',
+                            data: {
+                                name: name,
+                                account: account,
+                                password: password
+                            },
+                            success: function(data) {
+                                alert("注册成功!");
+                                window.location.href ='/Restaurant/loginPage';
+                            },
+                            error: function(xhr, status, errorMessage) {
+                                //console.log("注册失败:"+xhr.responseText);
+                                if(xhr.responseText==="isRegister"){
+                                    alert("此账号已注册,请检查!");
+                                }else{
+                                    alert("注册失败!");
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        // 监听复选框状态变化
+        $('input[type="checkbox"]', '.i-checks').on('ifChanged', function(event) {
+            // 如果复选框被勾选，则启用注册按钮
+            if ($(this).is(':checked')) {
+                $('#register_btn').prop('disabled', false);
+            }
+        });
+        // 页面加载时，如果复选框未被勾选，则禁用注册按钮
+        if (!$('input[type="checkbox"]', '.i-checks').is(':checked')) {
+            $('#register_btn').prop('disabled', true);
+        }
     });
 </script>
 </body>

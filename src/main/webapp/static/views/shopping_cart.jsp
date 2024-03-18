@@ -263,7 +263,11 @@
                     });
                     //显示页码
                     $("#currentPage").text(data.pageNum);
-                    $("#allPage").text("/"+data.pages);
+                    if(data.pages==0){
+                        $("#allPage").text("/"+add_num(data.pages));
+                    }else{
+                        $("#allPage").text("/"+data.pages);
+                    }
                 }
             },
             error: function(xhr, status, error) {
@@ -341,6 +345,14 @@
             console.log('已经是最后一页了');
             alert("已经是最后一页!");
         }
+    }
+
+    /**
+     * 将String数据转为int并自加1
+     * @param num
+     */
+    function add_num(num){
+        return parseInt(num)+1;
     }
 </script>
 </body>

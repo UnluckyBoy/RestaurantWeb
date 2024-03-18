@@ -35,7 +35,6 @@
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
-
                     <div class="dropdown profile-element">
                         <span>
 <%--                            <img alt="image" class="img-circle" src="../img/profile_small.jpg" />--%>

@@ -45,7 +45,7 @@ import java.util.*;
 @RequestMapping("/Restaurant")
 public class GetInfoContro {
     private static String system_Path=System.getProperty("user.dir")+"/BackResource/";
-    private static String user_info_Path="/HeadIcon";
+    //private static String user_head_Path="/HeadIcon";
 
     @Autowired
     private UserService userService;
@@ -61,7 +61,7 @@ public class GetInfoContro {
     private UserInfo mUser;
     //private List<UserInfo> mListUser;
     private static String PASSWORD_EncryKEY = "EncryptionKey_By-WuMing";//自定义密钥:EncryptionKey_By-WuMing
-    private static String mHand="/default.png";//默认头像地址
+    private static String mHand="default.png";//默认头像地址
     private static String root_dir=System.getProperty("user.dir")+"/BackResource/";
     private static String product_dir="ProductIcon/";//产品图片路径
     private static String user_dir="HeadIcon/";//用户图片路径
@@ -1092,6 +1092,39 @@ public class GetInfoContro {
             //session.removeAttribute("attributeName"); // 移除名为"attributeName"的属性
         }
         return "";
+    }
+
+    /**
+     * 注册接口
+     * @param name
+     * @param account   账户
+     * @param password  密码
+     * @return
+     */
+    @RequestMapping("/register")
+    public ResponseEntity<String> Register(@RequestParam("name") String name,
+                                           @RequestParam("account") String account,
+                                           @RequestParam("password") String password){
+        System.out.println("Request_name="+name+"___account="+account+"___password="+password);
+        Map<String,Object> resultMap=new HashMap<>();
+        Map<String,Object> requestMap=new HashMap<>();
+
+        requestMap.put("head","/"+user_dir+mHand);
+        requestMap.put("name",name);
+        requestMap.put("account",account);
+        requestMap.put("sex","男");
+        //对密码加密
+        String mEncryPwd = Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password);
+        requestMap.put("password",mEncryPwd);
+        if((userService.infoQuery(requestMap)==null)){
+            boolean regKey= userService.register(requestMap);
+            if(regKey){
+                return ResponseEntity.ok("success");
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("isRegister");
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
     }
 
 
