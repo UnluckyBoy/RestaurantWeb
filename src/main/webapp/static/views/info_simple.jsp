@@ -66,6 +66,7 @@
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level">
+                        <li><a href="/Restaurant/shopping_cartPage">购物车</a></li>
                         <li><a href="/Restaurant/infoSimplePage">个人信息</a></li>
                         <li><a href="/Restaurant/helpCenterSimplePage">帮助中心</a>
                         <li><a href="/Restaurant/logout">退出</a>

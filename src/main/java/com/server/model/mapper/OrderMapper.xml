@@ -251,7 +251,7 @@
     <!--购物车添加-->
     <insert id="add_shopping_cart" parameterType="java.util.HashMap">
         insert into shopping_cart_data
-            (cContent,cCreator,cShopper,cTradingPrice,cCreateTime)
-            values (#{content},#{creator},#{shopper},#{tradingPrice},#{createTime})
+            (cTitle,cContent,cCreator,cShopper,cNumber,cTradingPrice,cCreateTime)
+            values (#{title},#{content},#{creator},#{shopper},#{number},#{tradingPrice},#{createTime})
     </insert>
 </mapper>

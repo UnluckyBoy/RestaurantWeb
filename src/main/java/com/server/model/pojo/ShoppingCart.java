@@ -9,9 +9,11 @@ import java.io.Serializable;
  */
 public class ShoppingCart implements Serializable {
     private int cId;
+    private String cTitle;
     private String cContent;
     private String cCreator;
     private String cShopper;
+    private int cNumber;
     private String cTradingPrice;
     private String cCreateTime;
 
@@ -21,6 +23,14 @@ public class ShoppingCart implements Serializable {
 
     public void setcId(int cId) {
         this.cId = cId;
+    }
+
+    public String getcTitle() {
+        return cTitle;
+    }
+
+    public void setcTitle(String cTitle) {
+        this.cTitle = cTitle;
     }
 
     public String getcContent() {
@@ -47,6 +57,14 @@ public class ShoppingCart implements Serializable {
         this.cShopper = cShopper;
     }
 
+    public int getcNumber() {
+        return cNumber;
+    }
+
+    public void setcNumber(int cNumber) {
+        this.cNumber = cNumber;
+    }
+
     public String getcTradingPrice() {
         return cTradingPrice;
     }
@@ -65,8 +83,13 @@ public class ShoppingCart implements Serializable {
 
     @Override
     public String toString() {
-        return "cId=" + cId + ", cContent='" + cContent + '\'' + ", cCreator='" + cCreator + '\'' +
-                ", cShopper='" + cShopper + '\'' + ", cTradingPrice='" + cTradingPrice + '\'' +
-                ", cCreateTime='" + cCreateTime;
+        return "cId=" + cId +
+                ", cTitle='" + cTitle + '\'' +
+                ", cContent='" + cContent + '\'' +
+                ", cCreator='" + cCreator + '\'' +
+                ", cShopper='" + cShopper + '\'' +
+                ", cNumber=" + cNumber +
+                ", cTradingPrice='" + cTradingPrice + '\'' +
+                ", cCreateTime='" + cCreateTime + '\'';
     }
 }

@@ -678,6 +678,20 @@ public class GetInfoContro {
         }
         return "info_simple";
     }
+    @RequestMapping("/shopping_cartPage")
+    public String ShoppingCartPage(HttpServletRequest request,Model model,HttpSession session){
+        if (session != null && session.getAttribute("current_user") != null) {
+            mUser=freshUserInfo(session,model);
+            if(mUser!=null){
+                model.addAttribute("message", CommonClass2Map(mUser));
+                session.setAttribute("current_user",model.getAttribute("message"));
+            }else{
+                model.addAttribute("message", session.getAttribute("current_user"));
+            }
+            model.addAttribute("index_message", session.getAttribute("index_message"));
+        }
+        return "shopping_cart";
+    }
 
     @RequestMapping("/OrderManagerPage")
     public String OrderManagerPage(HttpServletRequest request,Model model,HttpSession session,
@@ -782,15 +796,19 @@ public class GetInfoContro {
     }
     @RequestMapping("/add_shopping_cart")
     public ResponseEntity<String> handleAddShoppingCart(HttpSession session,Model model,
+                                                        @RequestParam("title") String title,
                                                         @RequestParam("content") String content,
                                                         @RequestParam("creator") String creator,
                                                         @RequestParam("shopper") String shopper,
+                                                        @RequestParam("number") String number,
                                                         @RequestParam("tradingPrice") String tradingPrice){
         System.out.println("请求内容:"+content+","+creator+","+shopper+","+tradingPrice);
         Map<String,Object> shopping_cartMap=new HashMap<>();
+        shopping_cartMap.put("title",title);
         shopping_cartMap.put("content",content);
         shopping_cartMap.put("creator",creator);
         shopping_cartMap.put("shopper",shopper);
+        shopping_cartMap.put("number",number);
         shopping_cartMap.put("tradingPrice",tradingPrice);
         shopping_cartMap.put("createTime",TimeUtil.GetTime(true));
         if(orderService.add_shopping_cart(shopping_cartMap)){
@@ -808,6 +826,7 @@ public class GetInfoContro {
         System.out.println("请求内容:"+creator);
         PageInfo<ShoppingCart> pageInfo=orderService.getShoppingCart(pageNum,pageSize,creator);
         if(pageInfo!=null){
+            System.out.println("购物车数据:"+pageInfo);
             return ResponseEntity.ok(pageInfo);
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");

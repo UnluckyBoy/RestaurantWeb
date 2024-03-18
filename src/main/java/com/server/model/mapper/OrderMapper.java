@@ -99,9 +99,11 @@ public interface OrderMapper {
     /*购物车分页*/
     @Select("select " +
             "cId," +
+            "cTitle," +
             "cContent," +
             "cCreator," +
             "cShopper," +
+            "cNumber," +
             "cTradingPrice," +
             "cCreateTime " +
             "from shopping_cart_data " +
