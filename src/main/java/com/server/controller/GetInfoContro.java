@@ -659,6 +659,14 @@ public class GetInfoContro {
         }
         return "commonMessage";
     }
+    @RequestMapping("/userManagePage")
+    public String userManagePage(HttpServletRequest request,HttpSession session,Model model){
+        if (session != null && session.getAttribute("current_user") != null) {
+            // Session不为空且包含"userId"属性，表示用户已登录
+            model.addAttribute("message", session.getAttribute("current_user"));
+        }
+        return "userManage";
+    }
 
     @RequestMapping("/freshOrderPage")
     public ResponseEntity<Object> freshOrderPage(HttpServletRequest request,Model model,HttpSession session,
@@ -694,6 +702,19 @@ public class GetInfoContro {
         PageInfo<OrderInfo> pageInfo = orderService.getOrderList(pageNum, pageSize,order);
         if(pageInfo!=null){
             System.out.println("历史订单数据:"+pageInfo);
+            return ResponseEntity.ok(pageInfo);
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
+        }
+    }
+
+    @RequestMapping("/get_all_userInfo")
+    public ResponseEntity<Object> getAllUserInfo(HttpServletRequest request,Model model,HttpSession session,
+                                                  @RequestParam(defaultValue = "1") int pageNum,
+                                                  @RequestParam(defaultValue = "6") int pageSize){
+        PageInfo<UserInfo> pageInfo = userService.getPageUserInfo(pageNum, pageSize);
+        if(pageInfo!=null){
+            System.out.println("用户信息分页数据:"+pageInfo);
             return ResponseEntity.ok(pageInfo);
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed");
@@ -763,6 +784,38 @@ public class GetInfoContro {
         shopping_cartMap.put("tradingPrice",tradingPrice);
         shopping_cartMap.put("createTime",TimeUtil.GetTime(true));
         if(orderService.add_shopping_cart(shopping_cartMap)){
+            return ResponseEntity.ok("success");
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
+        }
+    }
+
+    @RequestMapping("/update_user_info")
+    public ResponseEntity<String> handleUpdateUserInfo(HttpSession session,Model model,
+                                                       @RequestParam("account") String account,
+                                                       @RequestParam("password") String password,
+                                                       @RequestParam("name") String name,
+                                                       @RequestParam("sex") String sex,
+                                                       @RequestParam("phone") String phone,
+                                                       @RequestParam("email") String email,
+                                                       @RequestParam("level") String level,
+                                                       @RequestParam("decodeKey") boolean decodeKey){
+        System.out.println("请求的数据:"+account+","+password+","+name+","+
+                sex+","+phone+","+email+","+level+","+decodeKey);
+        Map<String,Object> userInfoMap=new HashMap<>();
+        userInfoMap.put("account",account);
+        if(decodeKey){
+            String new_password=Pwd3DESUtil.decode3Des(PASSWORD_EncryKEY,password);//密码没发生改变,需要先解密,再加密
+            userInfoMap.put("password",Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, new_password));
+        }else{
+            userInfoMap.put("password",Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password));
+        }
+        userInfoMap.put("name",name);
+        userInfoMap.put("sex",sex);
+        userInfoMap.put("phone",phone);
+        userInfoMap.put("email",email);
+        userInfoMap.put("level",level);
+        if(userService.update_user_info(userInfoMap)){
             return ResponseEntity.ok("success");
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");

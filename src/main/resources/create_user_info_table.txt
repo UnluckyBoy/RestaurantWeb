@@ -1,6 +1,6 @@
 create table user_info_data(
 `uId` bigint(20)  not null auto_increment PRIMARY KEY comment '主键',
-`uHead` varchar(255) DEFAULT '/HeadIcon/defalut.png' comment'头像地址',
+`uHead` varchar(255) DEFAULT '/HeadIcon/default.png' comment'头像地址',
 `uName` varchar(255) not null DEFAULT '' comment '昵称',
 `uPassword` varchar(255) comment '密码',
 `uSex` varchar(25) DEFAULT '男' comment '性别',

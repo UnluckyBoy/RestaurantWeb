@@ -176,4 +176,33 @@
             </if>
         </where>
     </update>
+    <!--更新用户信息-->
+    <update id="update_user_info" parameterType="java.util.HashMap">
+        update  user_info_data
+        <set >
+            <if test="name!=null">
+                uName=#{name},
+            </if>
+            <if test="password!=null">
+                uPassword=#{password},
+            </if>
+            <if test="sex!=null">
+                uSex=#{sex},
+            </if>
+            <if test="phone!=null">
+                uPhone=#{phone},
+            </if>
+            <if test="email!=null">
+                uEmail=#{email},
+            </if>
+            <if test="level!=null">
+                uLevel=#{level}
+            </if>
+        </set>
+        <where>
+            <if test="account!=null">
+                uAccount=#{account,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </update>
 </mapper>

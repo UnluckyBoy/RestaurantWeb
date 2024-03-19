@@ -20,11 +20,11 @@
     <link href="../staticRes/css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="../staticRes/css/animate.css" rel="stylesheet">
     <link href="../staticRes/css/style.css?v=2.2.0" rel="stylesheet">
+    <link href="../staticRes/css/matrix.css" rel="stylesheet">
 
 </head>
 
-<body class="gray-bg">
-
+<body class="matrix-bg">
 <div class="middle-box text-center loginscreen   animated fadeInDown">
     <div>
         <div>
@@ -47,7 +47,7 @@
         <div class="form-group text-left">
             <div class="checkbox i-checks">
                 <label class="no-padding" for="agreement-btn">
-                    <input id="agreement-btn" type="checkbox" value="checked">我同意注册协议
+                    <input id="agreement-btn" type="checkbox" value="checked"><i style="color: yellowgreen;">我同意注册协议</i>
                 </label>
             </div>
         </div>

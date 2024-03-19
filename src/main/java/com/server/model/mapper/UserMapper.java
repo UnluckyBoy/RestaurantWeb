@@ -1,7 +1,10 @@
 package com.server.model.mapper;
 
+import com.server.model.pojo.Product;
 import com.server.model.pojo.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,4 +26,23 @@ public interface UserMapper {
     public int getUserCount();//查询用户数
     public int getUserOnlineCount();//查询当前在线用户
     public boolean fresh_segment_info(Map<String,Object> map);//更新部分信息
+    public boolean update_user_info(Map<String,Object> map);//更新用户信息,管理员端
+
+    /***分页操作***/
+    /*用户信息分页*/
+    @Select("select " +
+            "uId," +
+            "uHead," +
+            "uName," +
+            "uPassword," +
+            "uSex," +
+            "uAccount," +
+            "uPhone," +
+            "uEmail," +
+            "uLevel," +
+            "uStatus," +
+            "uAddressIp " +
+            "from user_info_data")
+    List<UserInfo> getPageUserInfo(@Param("pageNum") int pageNum,
+                                   @Param("pageSize") int pageSize);
 }

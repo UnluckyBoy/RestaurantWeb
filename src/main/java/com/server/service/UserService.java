@@ -1,5 +1,7 @@
 package com.server.service;
+import com.github.pagehelper.PageInfo;
 import com.server.model.pojo.UserInfo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,4 +19,6 @@ public interface UserService {
     public int getUserCount();//查询用户数
     public int getUserOnlineCount();//查询当前在线用户
     public boolean fresh_segment_info(Map<String,Object> map);
+    public boolean update_user_info(Map<String,Object> map);
+    PageInfo<UserInfo> getPageUserInfo(int pageNum, int pageSize);
 }

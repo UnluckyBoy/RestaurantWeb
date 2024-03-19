@@ -61,6 +61,7 @@
                         <li><a href="/Restaurant/OrderManagerPage">订单数据</a></li>
                         <li><a href="/Restaurant/ProductPage">菜单管理</a></li>
                         <li><a href="/Restaurant/CommonMessagePage">公共信息</a></li>
+                        <li><a href="/Restaurant/userManagePage">用户管理</a></li>
                     </ul>
                 </li>
                 <li>

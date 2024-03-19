@@ -1,5 +1,6 @@
 package com.server.service.impl;
 
+import com.github.pagehelper.PageInfo;
 import com.server.model.mapper.UserMapper;
 import com.server.model.pojo.UserInfo;
 import com.server.service.UserService;
@@ -63,6 +64,17 @@ public class UserServiceIpml implements UserService {
     @Override
     public boolean fresh_segment_info(Map<String, Object> map) {
         return userMapper.fresh_segment_info(map);
+    }
+
+    @Override
+    public boolean update_user_info(Map<String, Object> map) {
+        return userMapper.update_user_info(map);
+    }
+
+    @Override
+    public PageInfo<UserInfo> getPageUserInfo(int pageNum,int pageSize) {
+        List<UserInfo> userInfoList=userMapper.getPageUserInfo(pageNum,pageSize);
+        return new PageInfo<>(userInfoList);
     }
 
 }

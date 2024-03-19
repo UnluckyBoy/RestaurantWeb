@@ -106,6 +106,8 @@
                                     <th class="text-center small">详情</th>
                                     <th class="text-center small">商家</th>
                                     <th class="text-center small">价格</th>
+                                    <th class="text-center small">交易时间</th>
+                                    <th class="text-center small">交易状态</th>
                                     <th class="text-center small">备注</th>
                                 </tr>
                                 </thead>
@@ -251,11 +253,19 @@
                         row.append($('<td class="text-center small">' + order.mContent + '</td>'));
                         row.append($('<td class="text-center small">' + order.mShopper + '</td>'));
                         row.append($('<td class="text-center small"><span class="label label-primary">&yen;' + order.mTradingPrice + '</span></td>'));
-                        if(isMoreThanThreeDays(order.mCreateTime)||order.mTradingType==0){
-                            // 创建修改按钮并添加事件处理函数
-                            var btnCancel = $('<button type="button" class="btn-cancel btn btn-sm btn-disable" disabled>撤销</button>');
+                        row.append($('<td class="text-center small">' + order.mCreateTime + '</td>'));
+                        if(!isMoreThanThreeDays(order.mCreateTime)){
+                            if(order.mTradingType==0){
+                                row.append($('<td class="text-center small">' +"用户已撤销"+ '</td>'));
+                                var btnCancel = $('<button type="button" class="btn-cancel btn btn-sm btn-disable" disabled>撤销</button>');
+                            }else{
+                                row.append($('<td class="text-center small">' +"正在交易中"+ '</td>'));
+                                var btnCancel = $('<button type="button" class="btn-cancel btn btn-sm btn-success">撤销</button>');
+                            }
                         }else{
-                            var btnCancel = $('<button type="button" class="btn-cancel btn btn-sm btn-success">撤销</button>');
+                                row.append($('<td class="text-center small">' +"订单已完成"+ '</td>'));
+                                // 创建修改按钮并添加事件处理函数
+                                var btnCancel = $('<button type="button" class="btn-cancel btn btn-sm btn-disable" disabled>撤销</button>');
                         }
                         //撤销
                         btnCancel.click(function() {
