@@ -6,6 +6,7 @@ package com.server.tools;
  * @Date 2024/1/14 0014 20:12
  */
 
+import org.springframework.boot.system.ApplicationHome;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -13,6 +14,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
+import java.io.File;
 
 /**
  * 配置类:
@@ -55,8 +58,16 @@ public class CORSConfiguration extends WebMvcConfigurationSupport {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String dirPath=System.getProperty("user.dir")+"/BackResource/";
-        String static_dirPath=System.getProperty("user.dir")+"/staticRes/";
+        //String static_dirPath=System.getProperty("user.dir")+"/staticRes/";
         //System.out.println("头像路径:"+dirPath);
+
+//        //获取jar包所在目录
+//        ApplicationHome h = new ApplicationHome(getClass());
+//        File jarF = h.getSource();
+//        //在jar包所在目录下生成一个upload文件夹用来存储上传的图片
+//        String dirPath = jarF.getParentFile().toString()+"/BackResource/";
+//        System.out.println(dirPath);
+
         //和页面有关的静态目录都放在项目的static目录下(异常,放在"/BackResource/webStaticRes/"下)
         //registry.addResourceHandler("/**").addResourceLocations("classpath:/WEB-INF/");
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");

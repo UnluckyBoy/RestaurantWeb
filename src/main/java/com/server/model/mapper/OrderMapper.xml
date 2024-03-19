@@ -137,7 +137,7 @@
                pPrice
         from product_info_data
     </select>
-    <!--查询最近5条公共信息-->
+    <!--查询最近1条公共信息-->
     <select id="getCurrentMessage" resultType="com.server.model.pojo.MessageView">
         select
             aId,
@@ -146,7 +146,7 @@
             aPublisher,
             aCreateTime,
             aType
-        from announcement_data order by aCreateTime desc limit 5
+        from announcement_data order by aCreateTime desc limit 1
     </select>
 
     <!--UpDate逻辑-->

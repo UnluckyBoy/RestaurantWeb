@@ -25,12 +25,17 @@
 <%--<body class="gray-bg">--%>
 <body class="matrix-bg">
 <div class="middle-box text-center loginscreen  animated fadeInDown">
-    <div>
-        <div>
-            <h1 class="logo-name">
-                <span><img src="http://localhost:8080/staticRes/img/icon.png" alt="Logo" class="logo-image"></span>
-            </h1>
+    <div class="container">
+        <div class="position-relative">
+            <span><img src="http://localhost:8080/staticRes/img/icon.png" class="position-absolute top-0 start-0 logo-image" alt="Logo"></span>
         </div>
+    </div>
+    <div>
+<%--        <div>--%>
+<%--            <h1 class="logo-name">--%>
+<%--                <span><img src="http://localhost:8080/staticRes/img/icon.png" alt="Logo" class="logo-image"></span>--%>
+<%--            </h1>--%>
+<%--        </div>--%>
         <h2 style="font-weight: bold; color: white;">基于JAVA Web的阿婆私房菜管理平台的设计与开发</h2>
         <h3 style="font-weight: bold; color: white;">欢迎使用</h3>
         <form class="m-t" role="form" action="/Restaurant/login" method="post">

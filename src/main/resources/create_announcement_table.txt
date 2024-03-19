@@ -4,5 +4,5 @@ create table announcement_data(
 `aContent` varchar(25) comment '公告内容描述',
 `aPublisher` varchar(25) comment '公告发布人',
 `aCreateTime` datetime DEFAULT null comment '发布时间',
-`aType` varchar(25) DEFAULT 'normal' comment '公告类型'
+`aType` varchar(25) DEFAULT 'normal' comment '公告类型:simple,normal,warning,danger四种'
 );

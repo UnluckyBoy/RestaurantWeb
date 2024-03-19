@@ -453,37 +453,6 @@ public class GetInfoContro {
     }
 
     /**
-     * 产品数据逻辑
-     * @return
-     */
-    public Map ProductMap(){
-        Map<String,Object> productMap=new HashMap<>();
-        productMap.put("ProductList",orderService.getAllProduct());
-        return productMap;
-    }
-
-    /**
-     * 消息数据逻辑
-     * @return
-     */
-    public Map MessageMap(){
-        Map<String,Object> messageMap=new HashMap<>();
-        List<MessageView> messageList=orderService.getCurrentMessage();
-        messageMap.put("AnnouncementList",messageList);
-        return messageMap;
-    }
-
-    /**
-     * 刷新session
-     * @param session
-     * @param sessionKey
-     * @param map
-     */
-    public void freshSession(HttpSession session,String sessionKey,Map<String,Object> map){
-        session.setAttribute(sessionKey,map);
-    }
-
-    /**
      * 百分比计算
      * @param number
      * @return
@@ -823,6 +792,16 @@ public class GetInfoContro {
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed:");
         }
+    }
+
+    @RequestMapping("/get_new_message")
+    public ResponseEntity<Object> getNewMessage(){
+        //List<MessageView> messageViewList=new ArrayList<>();
+        MessageView messageView=orderService.getCurrentMessage().get(0);
+        if(messageView==null){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
+        }
+        return ResponseEntity.ok(messageView);
     }
 
     /**

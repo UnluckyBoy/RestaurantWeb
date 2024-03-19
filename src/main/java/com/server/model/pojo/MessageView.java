@@ -65,11 +65,13 @@ public class MessageView implements Serializable {
 
     @Override
     public String toString() {
-        return "aId=" + aId +
+        return "MessageView{" +
+                "aId=" + aId +
                 ", aTitle='" + aTitle + '\'' +
                 ", aContent='" + aContent + '\'' +
                 ", aPublisher='" + aPublisher + '\'' +
                 ", aCreateTime='" + aCreateTime + '\'' +
-                ", aType='" + aType;
+                ", aType='" + aType + '\'' +
+                '}';
     }
 }

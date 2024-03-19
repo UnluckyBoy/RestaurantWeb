@@ -27,6 +27,7 @@
     <link href="../staticRes/css/animate.css" rel="stylesheet">
     <link href="../staticRes/css/style.css?v=2.2.0" rel="stylesheet">
     <link href="../staticRes/css/matrix.css" rel="stylesheet">
+    <link href="../staticRes/css/plugins/toastr/toastr.min.css" rel="stylesheet">
 
 </head>
 
@@ -180,6 +181,8 @@
 <script src="../staticRes/js/plugins/sparkline/jquery.sparkline.min.js"></script>
 <!-- Sparkline demo data  -->
 <script src="../staticRes/js/demo/sparkline-demo.js"></script>
+<!-- Toastr script -->
+<script src="../staticRes/js/plugins/toastr/toastr.min.js"></script>
 
 <style>
     .copyrights{text-indent:-9999px;height:0;line-height:0;font-size:0;overflow:hidden;}
@@ -187,7 +190,7 @@
 
 <script>
     $(document).ready(function () {
-        let globalData;
+        let globalData1;
 
         //信箱按钮弹窗
         document.getElementById('mailboxLink').addEventListener('click', function (event) {
@@ -199,7 +202,60 @@
 
         freshData('/Restaurant/freshProductPage',1);
 
+        showToast();
+
     });
+
+    function showToast(){
+        //toastr.success('测试', '测试消息')
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "onclick": null,
+            "showDuration": "400",
+            "hideDuration": "1000",
+            "timeOut": "7000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        $.ajax({
+            url:'/Restaurant/get_new_message',
+            type: 'post',
+            dataType: 'json',
+            success: function(data) {
+                //console.log("返回的数据:"+data.aId);
+                /**
+                 * 显示toastr
+                 * toastr[type](msg, title)
+                 * 其中type包括:'success','info','warning','error'四种样式
+                 */
+                switch (data.aType){
+                    case 'simple':
+                        toastr['success'](data.aContent+'<br>'+data.aCreateTime, data.aTitle);
+                        break;
+                    case 'normal':
+                        toastr['info'](data.aContent+'<br>'+data.aCreateTime, data.aTitle);
+                        break;
+                    case 'warning':
+                        toastr['warning'](data.aContent+'<br>'+data.aCreateTime, data.aTitle);
+                        break;
+                    case 'danger':
+                        toastr['error'](data.aContent+'<br>'+data.aCreateTime, data.aTitle);
+                        break;
+                    default:
+                        toastr['info'](data.aContent+'<br>'+data.aCreateTime, data.aTitle);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("请求数据失败: " + error);
+            }
+        });
+    }
 
     function upUserHead(){
         $("#userHeadEditModal").modal("show")
@@ -234,8 +290,8 @@
 
     // 上一页按钮点击事件处理函数
     function previousPage() {
-        if (globalData.pageNum>1) {//hasPreviousPage
-            var newPageNum = globalData.prePage; // 或 pageInfo.pageNum - 1;
+        if (globalData1.pageNum>1) {//hasPreviousPage
+            var newPageNum = globalData1.prePage; // 或 pageInfo.pageNum - 1;
             // 发送请求到服务器获取新页面的数据，并更新页面内容
             // 例如：updatePageContent(newPageNum);
             console.log('切换到上一页，页码：' + newPageNum);
@@ -248,8 +304,8 @@
     }
     // 下一页按钮点击事件处理函数
     function nextPage() {
-        if (globalData.hasNextPage) {
-            var newPageNum = globalData.nextPage;
+        if (globalData1.hasNextPage) {
+            var newPageNum = globalData1.nextPage;
             console.log('切换到下一页，页码：' + newPageNum);
             freshData('/Restaurant/freshProductPage',newPageNum);
         } else {
@@ -266,7 +322,7 @@
             data: { pageNum: newPageNum},
             dataType: 'json', //服务器返回JSON格式
             success: function(data) {
-                globalData=data;
+                globalData1=data;
                 if(data && data.list){
                     // 清空之前数据
                     $('#product-list').empty();

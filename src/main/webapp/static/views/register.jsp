@@ -46,8 +46,9 @@
         </div>
         <div class="form-group text-left">
             <div class="checkbox i-checks">
-                <label class="no-padding">
-                    <input type="checkbox"><i></i> 我同意注册协议</label>
+                <label class="no-padding" for="agreement-btn">
+                    <input id="agreement-btn" type="checkbox" value="checked">我同意注册协议
+                </label>
             </div>
         </div>
         <button type="submit" class="btn btn-primary block full-width m-b" id="register_btn">注 册</button>
@@ -75,7 +76,6 @@
             var password=$("#password").val();
             var password_confirm=$("#password_confirm").val();
             //console.log(name+","+account+","+password+","+password_confirm);
-            var isChecked = $('input[type="checkbox"]', '.i-checks').iCheck('isChecked');
             if(name.trim()===''||account.trim()===''||password.trim()===''||password_confirm.trim()===''){
                 alert("请检查输入!");
             }else {
@@ -83,7 +83,9 @@
                     alert("密码不一致!");
                 } else {
                     // 检测复选框是否被勾选
-                    var isChecked = $('input[type="checkbox"]', '.i-checks').iCheck('isChecked');
+                    //var isChecked = $('input[type="checkbox"]', '.i-checks').iCheck('isChecked');
+                    var isChecked=$('#agreement-btn').prop('checked')
+                    console.log("勾选框值:"+isChecked);
                     if (!isChecked) {
                         // 如果没有勾选，则显示提示
                         alert('请勾选“我同意注册协议”以完成注册！');
@@ -115,16 +117,18 @@
             }
         });
         // 监听复选框状态变化
-        $('input[type="checkbox"]', '.i-checks').on('ifChanged', function(event) {
-            // 如果复选框被勾选，则启用注册按钮
-            if ($(this).is(':checked')) {
-                $('#register_btn').prop('disabled', false);
-            }
-        });
-        // 页面加载时，如果复选框未被勾选，则禁用注册按钮
-        if (!$('input[type="checkbox"]', '.i-checks').is(':checked')) {
-            $('#register_btn').prop('disabled', true);
-        }
+        // $('input[type="checkbox"]', '.i-checks').on('ifChanged', function(event) {
+        //     // 如果复选框被勾选，则启用注册按钮
+        //     if ($(this).is(':checked')) {
+        //         $('#register_btn').prop('disabled', false);
+        //     }else{
+        //         $('#register_btn').prop('disabled', true);
+        //     }
+        // });
+        // // 页面加载时，如果复选框未被勾选，则禁用注册按钮
+        // if (!$('input[type="checkbox"]', '.i-checks').is(':checked')) {
+        //     $('#register_btn').prop('disabled', true);
+        // }
     });
 </script>
 </body>

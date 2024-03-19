@@ -33,7 +33,7 @@ public interface OrderMapper {
     public boolean freshOrder(Map<String,Object> map);//更新订单信息
     public List<Product> getAllProduct();//获取所有产品
     public boolean up_product_Icon(Map<String,Object> map);//更新产品头像
-    public List<MessageView> getCurrentMessage();//获取前5消息显示
+    public List<MessageView> getCurrentMessage();//获取前1消息显示
     public boolean up_product_Info(Map<String,Object> map);//更新产品信息
     public boolean delete_product(String id);//删除产品
     public boolean add_message(Map<String,Object>map);//发布信息
