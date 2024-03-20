@@ -254,18 +254,18 @@
                         row.append($('<td class="text-center small">' + order.mShopper + '</td>'));
                         row.append($('<td class="text-center small"><span class="label label-primary">&yen;' + order.mTradingPrice + '</span></td>'));
                         row.append($('<td class="text-center small">' + order.mCreateTime + '</td>'));
-                        if(!isMoreThanThreeDays(order.mCreateTime)){
-                            if(order.mTradingType==0){
-                                row.append($('<td class="text-center small">' +"用户已撤销"+ '</td>'));
-                                var btnCancel = $('<button type="button" class="btn-cancel btn btn-sm btn-disable" disabled>撤销</button>');
-                            }else{
+                        if(order.mTradingType==0){
+                            row.append($('<td class="text-center small">' +"用户已撤销"+ '</td>'));
+                            var btnCancel = $('<button type="button" class="btn-cancel btn btn-sm btn-disable" disabled>撤销</button>');
+                        }else{
+                            if(!isMoreThanThreeDays(order.mCreateTime)){
                                 row.append($('<td class="text-center small">' +"正在交易中"+ '</td>'));
                                 var btnCancel = $('<button type="button" class="btn-cancel btn btn-sm btn-success">撤销</button>');
-                            }
-                        }else{
+                            }else{
                                 row.append($('<td class="text-center small">' +"订单已完成"+ '</td>'));
                                 // 创建修改按钮并添加事件处理函数
                                 var btnCancel = $('<button type="button" class="btn-cancel btn btn-sm btn-disable" disabled>撤销</button>');
+                            }
                         }
                         //撤销
                         btnCancel.click(function() {
@@ -380,8 +380,8 @@
         const diff = Math.abs(date2 - date1);
         // 将毫秒转换为天
         const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
-        // 检查是否超过3天
-        return diffDays > 3;
+        // 检查是否超过1天
+        return diffDays > 1;
     }
 
     /**
