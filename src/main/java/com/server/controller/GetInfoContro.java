@@ -563,16 +563,28 @@ public class GetInfoContro {
     @RequestMapping("/helpCenterPage")
     public String helpCenter(HttpServletRequest request,Model model,HttpSession session){
         if (session != null && session.getAttribute("current_user") != null) {
-
-            model.addAttribute("message", session.getAttribute("current_user"));
-            model.addAttribute("index_message", session.getAttribute("index_message"));
+            mUser=freshUserInfo(session,model);
+            if(mUser!=null){
+                model.addAttribute("message", CommonClass2Map(mUser));
+                session.setAttribute("current_user",model.getAttribute("message"));
+            }else{
+                model.addAttribute("message", session.getAttribute("current_user"));
+            }
+            //model.addAttribute("message", session.getAttribute("current_user"));
+            //model.addAttribute("index_message", session.getAttribute("index_message"));
         }
         return "helpCenter";
     }
     @RequestMapping("/helpCenterSimplePage")
     public String helpCenterSimplePage(HttpServletRequest request,Model model,HttpSession session){
         if (session != null && session.getAttribute("current_user") != null) {
-            model.addAttribute("message", session.getAttribute("current_user"));
+            mUser=freshUserInfo(session,model);
+            if(mUser!=null){
+                model.addAttribute("message", CommonClass2Map(mUser));
+                session.setAttribute("current_user",model.getAttribute("message"));
+            }else{
+                model.addAttribute("message", session.getAttribute("current_user"));
+            }
         }
         return "helpCenter_simple";
     }
@@ -600,7 +612,6 @@ public class GetInfoContro {
             }else{
                 model.addAttribute("message", session.getAttribute("current_user"));
             }
-            model.addAttribute("index_message", session.getAttribute("index_message"));
         }
         return "info_simple";
     }
@@ -614,7 +625,6 @@ public class GetInfoContro {
             }else{
                 model.addAttribute("message", session.getAttribute("current_user"));
             }
-            model.addAttribute("index_message", session.getAttribute("index_message"));
         }
         return "shopping_cart";
     }
@@ -628,7 +638,6 @@ public class GetInfoContro {
             }else{
                 model.addAttribute("message", session.getAttribute("current_user"));
             }
-            model.addAttribute("index_message", session.getAttribute("index_message"));
         }
         return "order_history";
     }
@@ -639,7 +648,14 @@ public class GetInfoContro {
                                    @RequestParam(defaultValue = "6") int pageSize){
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
-            model.addAttribute("message", session.getAttribute("current_user"));
+            //model.addAttribute("message", session.getAttribute("current_user"));
+            mUser=freshUserInfo(session,model);
+            if(mUser!=null){
+                model.addAttribute("message", CommonClass2Map(mUser));
+                session.setAttribute("current_user",model.getAttribute("message"));
+            }else{
+                model.addAttribute("message", session.getAttribute("current_user"));
+            }
         }
         return "orderManage";
     }
@@ -647,7 +663,14 @@ public class GetInfoContro {
     public String ProductPage(HttpServletRequest request,Model model,HttpSession session){
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
-            model.addAttribute("message", session.getAttribute("current_user"));
+            //model.addAttribute("message", session.getAttribute("current_user"));
+            mUser=freshUserInfo(session,model);
+            if(mUser!=null){
+                model.addAttribute("message", CommonClass2Map(mUser));
+                session.setAttribute("current_user",model.getAttribute("message"));
+            }else{
+                model.addAttribute("message", session.getAttribute("current_user"));
+            }
         }
         return "product";
     }
@@ -655,7 +678,14 @@ public class GetInfoContro {
     public String CommonMessagePage(HttpServletRequest request,HttpSession session,Model model){
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
-            model.addAttribute("message", session.getAttribute("current_user"));
+            //model.addAttribute("message", session.getAttribute("current_user"));
+            mUser=freshUserInfo(session,model);
+            if(mUser!=null){
+                model.addAttribute("message", CommonClass2Map(mUser));
+                session.setAttribute("current_user",model.getAttribute("message"));
+            }else{
+                model.addAttribute("message", session.getAttribute("current_user"));
+            }
         }
         return "commonMessage";
     }
@@ -663,7 +693,14 @@ public class GetInfoContro {
     public String userManagePage(HttpServletRequest request,HttpSession session,Model model){
         if (session != null && session.getAttribute("current_user") != null) {
             // Session不为空且包含"userId"属性，表示用户已登录
-            model.addAttribute("message", session.getAttribute("current_user"));
+            //model.addAttribute("message", session.getAttribute("current_user"));
+            mUser=freshUserInfo(session,model);
+            if(mUser!=null){
+                model.addAttribute("message", CommonClass2Map(mUser));
+                session.setAttribute("current_user",model.getAttribute("message"));
+            }else{
+                model.addAttribute("message", session.getAttribute("current_user"));
+            }
         }
         return "userManage";
     }
@@ -1177,13 +1214,13 @@ public class GetInfoContro {
      * @return
      */
     @RequestMapping("/test_password")
-    public Map TestPassword(@RequestParam String password){
-        Map<String,String> resultMap=new HashMap<>();
+    public String TestPassword(@RequestParam String password,Model model){
+
         //对密码加密
         String mEncryPwd = Pwd3DESUtil.encode3Des(PASSWORD_EncryKEY, password);
+        model.addAttribute("password",mEncryPwd);
         System.out.println("加密前：\n"+password+"\n加密后：\n"+mEncryPwd);
-        System.out.println("\nServer_running___"+resultMap.toString());
-        return resultMap;
+        return "test_password";
     }
     @RequestMapping("/test")
     public void Test(){
